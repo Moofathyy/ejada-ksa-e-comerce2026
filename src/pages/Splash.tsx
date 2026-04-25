@@ -15,10 +15,9 @@ const Splash = () => {
   return (
     <div className="phone-frame bg-gradient-primary flex flex-col items-center justify-center text-n8">
       <div className="animate-confetti">
-        <img src={logo} alt="Ejada" className="w-28 h-28 object-contain" />
+        <img src={logo} alt="Ejada" className="w-56 h-56 object-contain" />
       </div>
-      <h1 className="text-display mt-6 tracking-wide">Ejada</h1>
-      <p className="text-body opacity-80 mt-2">Premium Electronics · KSA</p>
+      <p className="text-body opacity-80 mt-4">Premium Electronics · KSA</p>
       <div className="absolute bottom-12 flex gap-1.5">
         {[0, 1, 2].map(i => (
           <span key={i} className="w-2 h-2 bg-n8/60 rounded-full animate-pulse" style={{ animationDelay: `${i * 0.2}s` }} />
