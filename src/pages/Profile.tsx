@@ -99,7 +99,7 @@ const Profile = () => {
             return <div key={i} className={baseCls}>{content}</div>;
           }
           return (
-            <button key={i} onClick={() => r.to && r.to !== "#" && nav(r.to)} className={cn(baseCls, "active:bg-n7 transition-colors")}>
+            <button key={i} onClick={() => r.to && nav(r.to)} className={cn(baseCls, "active:bg-n7 transition-colors")}>
               {content}
             </button>
           );
