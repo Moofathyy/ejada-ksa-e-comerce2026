@@ -1,17 +1,29 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search as SearchIcon, Mic, X, TrendingUp } from "lucide-react";
+import { Search as SearchIcon, Mic, X, TrendingUp, ArrowLeft, ArrowRight, SlidersHorizontal } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { products } from "@/lib/data";
 import { MobileShell } from "@/components/MobileShell";
 import { ProductCard } from "@/components/ProductCard";
+import { cn } from "@/lib/utils";
 
 const TRENDING = ["iPhone 15", "AirPods Pro", "PS5", "MacBook Pro", "Galaxy S24"];
+
+const CATEGORIES: { key: string; en: string; ar: string }[] = [
+  { key: "all",       en: "All",       ar: "الكل" },
+  { key: "phones",    en: "Phones",    ar: "هواتف" },
+  { key: "laptops",   en: "Laptops",   ar: "لابتوبات" },
+  { key: "tvs",       en: "TVs",       ar: "تلفزيونات" },
+  { key: "audio",     en: "Audio",     ar: "صوتيات" },
+  { key: "gaming",    en: "Gaming",    ar: "ألعاب" },
+  { key: "wearables", en: "Wearables", ar: "أجهزة ارتداء" },
+];
 
 const Search = () => {
   const nav = useNavigate();
   const { t, lang, dir } = useI18n();
   const [q, setQ] = useState("");
+  const [cat, setCat] = useState("all");
   const [recent, setRecent] = useState<string[]>(["Sony WH-1000XM5", "iPhone 15 Pro", "Apple Watch"]);
 
   const filtered = q ? products.filter(p =>
@@ -19,15 +31,66 @@ const Search = () => {
     p.brand.toLowerCase().includes(q.toLowerCase())
   ) : [];
 
+  const BackIcon = dir === "rtl" ? ArrowRight : ArrowLeft;
+
   return (
     <MobileShell>
-      <header className="sticky top-7 z-30 bg-n8 border-b border-n6 px-4 py-3 flex items-center gap-2">
-        <button onClick={() => nav(-1)} className="text-primary font-semibold text-body">{dir === "rtl" ? "←" : "←"}</button>
-        <div className="flex-1 h-11 bg-n7 rounded-full flex items-center px-4 gap-2">
-          <SearchIcon className="w-5 h-5 text-n4" />
-          <input autoFocus value={q} onChange={e => setQ(e.target.value)}
-            placeholder={t("searchPlaceholder")} className="flex-1 bg-transparent outline-none text-body" />
-          {q ? <button onClick={() => setQ("")}><X className="w-4 h-4 text-n4" /></button> : <Mic className="w-5 h-5 text-primary" />}
+      <header className="sticky top-7 z-30 bg-primary text-n8 px-4 pt-4 pb-3 rounded-b-3xl shadow-elev1 space-y-3">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => nav(-1)}
+            aria-label="Back"
+            className="w-10 h-10 rounded-input bg-n8/15 backdrop-blur flex items-center justify-center active:scale-95 transition"
+          >
+            <BackIcon className="w-5 h-5" />
+          </button>
+          <h1 className="text-h1 font-bold leading-none">{lang === "ar" ? "الفئات" : "Categories"}</h1>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="flex-1 h-11 bg-n8/15 backdrop-blur rounded-full flex items-center px-4 gap-2 border border-n8/20">
+            <SearchIcon className="w-5 h-5 text-n8/70" />
+            <input
+              autoFocus
+              value={q}
+              onChange={e => setQ(e.target.value)}
+              placeholder={t("searchPlaceholder")}
+              className="flex-1 bg-transparent outline-none text-body text-n8 placeholder:text-n8/60"
+            />
+            {q ? (
+              <button onClick={() => setQ("")} aria-label="Clear"><X className="w-4 h-4 text-n8/80" /></button>
+            ) : (
+              <Mic className="w-5 h-5 text-n8" />
+            )}
+          </div>
+          <button
+            aria-label="Filters"
+            className="w-11 h-11 rounded-input bg-n8/15 backdrop-blur border border-n8/20 flex items-center justify-center active:scale-95 transition"
+          >
+            <SlidersHorizontal className="w-5 h-5 text-n8" />
+          </button>
+        </div>
+
+        <div className="-mx-4 px-4 overflow-x-auto no-scrollbar">
+          <div className="flex gap-2 w-max pb-1">
+            {CATEGORIES.map(c => {
+              const active = cat === c.key;
+              return (
+                <button
+                  key={c.key}
+                  onClick={() => setCat(c.key)}
+                  className={cn(
+                    "px-4 h-9 rounded-full text-caption font-bold whitespace-nowrap transition",
+                    active
+                      ? "bg-n8 text-primary shadow-elev1"
+                      : "bg-n8/15 text-n8 border border-n8/20",
+                  )}
+                >
+                  {c[lang]}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </header>
 
