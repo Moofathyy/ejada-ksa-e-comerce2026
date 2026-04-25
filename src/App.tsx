@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/lib/i18n";
 import { StoreProvider } from "@/lib/store";
+import { ThemeProvider } from "@/lib/theme";
 import Splash from "./pages/Splash";
 import Onboarding from "./pages/Onboarding";
 import Auth from "./pages/Auth";
@@ -28,8 +29,9 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <I18nProvider>
-      <StoreProvider>
-        <TooltipProvider>
+      <ThemeProvider>
+        <StoreProvider>
+          <TooltipProvider>
           <Toaster />
           <Sonner position="top-center" />
           <BrowserRouter>
