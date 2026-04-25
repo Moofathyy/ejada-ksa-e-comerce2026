@@ -1,12 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
-import { Home, Search, ShoppingBag, Package, User } from "lucide-react";
+import { Home, Heart, ShoppingBag, Package, User } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const tabs = [
   { path: "/", icon: Home, key: "home" as const },
-  { path: "/search", icon: Search, key: "search" as const },
+  { path: "/wishlist", icon: Heart, key: "wishlist" as const },
   { path: "/cart", icon: ShoppingBag, key: "cart" as const },
   { path: "/orders", icon: Package, key: "orders" as const },
   { path: "/profile", icon: User, key: "profile" as const },
