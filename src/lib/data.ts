@@ -36,7 +36,7 @@ export const products: Product[] = [
   {
     id: "p2",
     name: { en: "AirPods Pro (2nd Generation)", ar: "إيربودز برو الجيل الثاني" },
-    brand: "Apple", price: 899, originalPrice: 1099, image: airpods,
+    brand: "Apple", price: 899, originalPrice: 1099, image: "/2587eac4-c062-41ae-9bf6-2a458c15b127.png",
     rating: 4.7, reviews: 892, delivery: "today", stock: 2, warranty: "1-year",
     installments: true, category: "headphones",
   },
