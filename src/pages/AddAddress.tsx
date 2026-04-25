@@ -100,10 +100,23 @@ const AddAddress = () => {
       return;
     }
     setSubmitting(true);
+    addAddress({
+      type: form.type,
+      label: form.label,
+      region: form.region,
+      city: form.city,
+      district: form.district,
+      street: form.street,
+      building: form.building,
+      postal: form.postal,
+      additional: form.additional || undefined,
+      phone: form.phone,
+      isDefault: form.setDefault,
+    });
     setTimeout(() => {
       toast.success(tr("Address saved", "تم حفظ العنوان"));
       nav(-1);
-    }, 400);
+    }, 300);
   };
 
   const types: { k: AddrType; icon: any; label: string }[] = [
