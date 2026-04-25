@@ -3,7 +3,7 @@
 import headphones from "@/assets/product-headphones.png";
 import tv from "@/assets/product-tv.png";
 import ps5 from "@/assets/product-ps5.png";
-import macbook from "@/assets/product-macbook.jpg";
+
 import watch from "@/assets/product-watch.jpg";
 
 export type Product = {
