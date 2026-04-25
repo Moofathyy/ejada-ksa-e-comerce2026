@@ -105,11 +105,37 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   const removePromo = useCallback(() => setPromo(null), []);
 
+  const addAddress = useCallback((a: Omit<Address, "id">) => {
+    const id = `addr_${Date.now()}`;
+    const next: Address = { ...a, id };
+    setAddresses(prev => {
+      // If this one is default, clear others
+      const cleaned = next.isDefault ? prev.map(x => ({ ...x, isDefault: false })) : prev;
+      // First address becomes default automatically
+      if (cleaned.length === 0) next.isDefault = true;
+      return [next, ...cleaned];
+    });
+    return next;
+  }, []);
+
+  const removeAddress = useCallback((id: string) => {
+    setAddresses(prev => {
+      const next = prev.filter(a => a.id !== id);
+      // Ensure something stays default
+      if (next.length && !next.some(a => a.isDefault)) next[0].isDefault = true;
+      return next;
+    });
+  }, []);
+
+  const setDefaultAddress = useCallback((id: string) => {
+    setAddresses(prev => prev.map(a => ({ ...a, isDefault: a.id === id })));
+  }, []);
+
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
   const cartSubtotal = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
 
   return (
-    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity }}>
+    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress }}>
       {children}
     </Ctx.Provider>
   );
