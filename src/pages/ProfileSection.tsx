@@ -62,13 +62,120 @@ const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 className="px-1 text-[11px] font-bold tracking-[0.14em] text-n3 uppercase">{children}</h3>
 );
 
-const PersonalInfo = (lang: "en" | "ar") => (
-  <Card>
-    <Field icon={User} label={lang === "ar" ? "الاسم الكامل" : "Full Name"} value="Sarah Al-Nemri" />
-    <Field icon={Mail} label={lang === "ar" ? "البريد الإلكتروني" : "Email"} value="sarah@example.com" />
-    <Field icon={Phone} label={lang === "ar" ? "رقم الجوال" : "Phone"} value="+966 5XX XXX XXX" />
-  </Card>
+const PI_KEY = "ejada_personal_info";
+type PIData = {
+  fullName: string;
+  phone: string;
+  email: string;
+  dob: string;
+  nationalId: string;
+  gender: "male" | "female" | "";
+};
+const PI_DEFAULT: PIData = {
+  fullName: "Sarah Al-Nemri",
+  phone: "+966 50 000 0000",
+  email: "sarah.alnemri@example.com",
+  dob: "1995-04-12",
+  nationalId: "1234567890",
+  gender: "female",
+};
+
+const InputRow = ({
+  icon: Icon, label, children, hint,
+}: { icon: any; label: string; children: React.ReactNode; hint?: string }) => (
+  <div className="px-4 py-3 border-b border-n6 last:border-0">
+    <label className="flex items-center gap-2 text-caption text-n3 mb-1.5">
+      <Icon className="w-4 h-4 text-primary" />
+      {label}
+    </label>
+    {children}
+    {hint && <p className="text-[11px] text-n3 mt-1.5">{hint}</p>}
+  </div>
 );
+
+const inputCls =
+  "w-full h-11 bg-n7 rounded-input px-3 text-body text-n1 font-medium border border-transparent focus:border-primary focus:outline-none placeholder:text-n4";
+
+const PersonalInfo = (lang: "en" | "ar") => {
+  const tr = (en: string, ar: string) => (lang === "ar" ? ar : en);
+  const [data, setData] = useState<PIData>(() => {
+    try {
+      const raw = localStorage.getItem(PI_KEY);
+      return raw ? { ...PI_DEFAULT, ...JSON.parse(raw) } : PI_DEFAULT;
+    } catch { return PI_DEFAULT; }
+  });
+  const set = <K extends keyof PIData>(k: K, v: PIData[K]) => setData(d => ({ ...d, [k]: v }));
+
+  const maskedId = data.nationalId
+    ? data.nationalId.slice(0, 3) + "****" + data.nationalId.slice(-3)
+    : "";
+
+  const onSave = () => {
+    if (!data.fullName.trim()) return toast.error(tr("Full name required", "الاسم الكامل مطلوب"));
+    if (!/^\+?\d[\d\s]{6,}$/.test(data.phone)) return toast.error(tr("Invalid phone", "رقم جوال غير صالح"));
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return toast.error(tr("Invalid email", "بريد غير صالح"));
+    localStorage.setItem(PI_KEY, JSON.stringify(data));
+    toast.success(tr("Changes saved", "تم حفظ التغييرات"));
+  };
+
+  return (
+    <div className="space-y-4">
+      <Card>
+        <InputRow icon={User} label={tr("Full Name", "الاسم الكامل")}>
+          <input className={inputCls} value={data.fullName}
+            onChange={e => set("fullName", e.target.value)}
+            placeholder="Sarah Al-Nemri" maxLength={80} />
+        </InputRow>
+        <InputRow icon={Phone} label={tr("Phone Number", "رقم الجوال")}>
+          <input className={cn(inputCls, "tabular")} value={data.phone}
+            onChange={e => set("phone", e.target.value)}
+            placeholder="+966 50 000 0000" inputMode="tel" maxLength={20} dir="ltr" />
+        </InputRow>
+        <InputRow icon={Mail} label={tr("Email Address", "البريد الإلكتروني")}>
+          <input className={inputCls} value={data.email}
+            onChange={e => set("email", e.target.value)}
+            placeholder="name@example.com" type="email" maxLength={120} dir="ltr" />
+        </InputRow>
+        <InputRow icon={FileText} label={tr("Date of Birth", "تاريخ الميلاد")}>
+          <input className={cn(inputCls, "tabular")} value={data.dob}
+            onChange={e => set("dob", e.target.value)} type="date" />
+        </InputRow>
+        <InputRow
+          icon={Shield}
+          label={tr("National ID", "رقم الهوية الوطنية")}
+          hint={tr("Contact support to update National ID", "تواصل مع الدعم لتحديث رقم الهوية")}
+        >
+          <input className={cn(inputCls, "tabular bg-n6 text-n3 cursor-not-allowed")}
+            value={maskedId} readOnly disabled dir="ltr" />
+        </InputRow>
+        <InputRow icon={User} label={tr("Gender", "الجنس")}>
+          <div className="grid grid-cols-2 gap-2">
+            {(["male", "female"] as const).map(g => {
+              const active = data.gender === g;
+              return (
+                <button key={g} type="button" onClick={() => set("gender", g)}
+                  className={cn(
+                    "h-11 rounded-input border text-body font-medium transition",
+                    active
+                      ? "bg-primary text-n8 border-primary"
+                      : "bg-n7 text-n1 border-n6 active:bg-n6"
+                  )}>
+                  {g === "male" ? tr("Male", "ذكر") : tr("Female", "أنثى")}
+                </button>
+              );
+            })}
+          </div>
+        </InputRow>
+      </Card>
+
+      <button onClick={onSave}
+        className="w-full h-[52px] bg-primary text-n8 rounded-full font-bold shadow-elev1 active:scale-[0.99] transition flex items-center justify-center gap-2">
+        <Check className="w-5 h-5" />
+        {tr("Save Changes", "حفظ التغييرات")}
+      </button>
+    </div>
+  );
+};
 
 const Addresses = (lang: "en" | "ar") => {
   const nav = useNavigate();
