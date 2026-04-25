@@ -42,6 +42,7 @@ const Listing = () => {
   const setCat = (id: string | null) => {
     if (id) nav(`/listing?cat=${id}`); else nav("/listing");
   };
+  const toggle = (id: string) => setQuick(qq => qq.includes(id) ? qq.filter(x => x !== id) : [...qq, id]);
 
   return (
     <MobileShell>
