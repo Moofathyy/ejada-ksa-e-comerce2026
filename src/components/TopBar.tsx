@@ -19,14 +19,16 @@ export const TopBar = ({ title, right, showBack = true, onBack, transparent }: P
   return (
     <header
       className={`sticky top-7 z-30 h-14 px-4 flex items-center justify-between ${
-        transparent ? "bg-transparent text-n1" : "bg-primary text-n8 shadow-elev1"
+        transparent
+          ? "bg-transparent text-n1"
+          : "bg-primary text-primary-foreground rounded-b-3xl shadow-elev1"
       }`}
     >
       <div className="w-10 flex items-center">
         {showBack && (
           <button
             onClick={() => (onBack ? onBack() : nav(-1))}
-            className="w-10 h-10 -ms-2 flex items-center justify-center rounded-full hover:bg-n8/15 active:scale-95 transition"
+            className="w-10 h-10 -ms-2 flex items-center justify-center rounded-full hover:bg-primary-foreground/15 active:scale-95 transition"
             aria-label="Back"
           >
             <Back className="w-6 h-6" />
