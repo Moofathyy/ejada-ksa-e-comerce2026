@@ -85,6 +85,15 @@ export const categories = [
   { id: "accessories", en: "Accessories", ar: "إكسسوارات", icon: "🔌" },
 ];
 
-export const brands = ["Apple", "Samsung", "Sony", "HP", "Dell", "Lenovo", "Xiaomi", "Huawei"];
+export const brands: { name: string; slug: string; color: string }[] = [
+  { name: "Apple",   slug: "apple",        color: "#000000" },
+  { name: "Samsung", slug: "samsung",      color: "#1428A0" },
+  { name: "Sony",    slug: "sony",         color: "#000000" },
+  { name: "HP",      slug: "hp",           color: "#0096D6" },
+  { name: "Dell",    slug: "dell",         color: "#007DB8" },
+  { name: "Lenovo",  slug: "lenovo",       color: "#E2231A" },
+  { name: "Xiaomi",  slug: "xiaomi",       color: "#FF6900" },
+  { name: "Huawei",  slug: "huawei",       color: "#FF0000" },
+];
 
 export const getProduct = (id: string) => products.find(p => p.id === id);

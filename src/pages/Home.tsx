@@ -179,9 +179,30 @@ const Home = () => {
           </div>
           <div className="flex gap-3 overflow-x-auto px-4 pb-2 scrollbar-hide">
             {brands.map(b => (
-              <div key={b} className="flex-shrink-0 w-20 h-20 bg-n8 rounded-2xl shadow-elev1 flex items-center justify-center">
-                <span className="text-body font-bold text-n1">{b}</span>
-              </div>
+              <button
+                key={b.slug}
+                onClick={() => nav(`/listing?brand=${b.slug}`)}
+                className="group flex-shrink-0 w-24 h-28 bg-n8 rounded-2xl shadow-elev1 border border-n6 flex flex-col items-center justify-center gap-2 p-2 active:scale-95 transition relative overflow-hidden"
+              >
+                <div
+                  className="absolute inset-x-0 top-0 h-1"
+                  style={{ background: b.color }}
+                />
+                <div
+                  className="w-12 h-12 rounded-xl flex items-center justify-center"
+                  style={{ background: `${b.color}14` }}
+                >
+                  <img
+                    src={`https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${b.slug}.svg`}
+                    alt={b.name}
+                    className="w-7 h-7"
+                    style={{ filter: `brightness(0) saturate(100%)`, opacity: 0.85 }}
+                    loading="lazy"
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
+                  />
+                </div>
+                <span className="text-[11px] font-bold text-n1 leading-tight">{b.name}</span>
+              </button>
             ))}
           </div>
         </section>
