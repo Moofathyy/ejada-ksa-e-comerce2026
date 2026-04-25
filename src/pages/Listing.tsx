@@ -1,11 +1,10 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowUpDown, SlidersHorizontal } from "lucide-react";
+import { ArrowUpDown, SlidersHorizontal, ArrowLeft, ArrowRight, Search as SearchIcon, Mic } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { products, categories } from "@/lib/data";
 import { MobileShell } from "@/components/MobileShell";
 import { ProductCard } from "@/components/ProductCard";
-import { TopBar } from "@/components/TopBar";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
