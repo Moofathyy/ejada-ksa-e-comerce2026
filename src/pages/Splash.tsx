@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-splash.png";
 
 const Splash = () => {
   const nav = useNavigate();
@@ -15,7 +15,7 @@ const Splash = () => {
   return (
     <div className="phone-frame bg-gradient-primary flex flex-col items-center justify-center text-n8">
       <div className="animate-confetti">
-        <img src={logo} alt="Ejada" className="w-28 h-28 rounded-3xl bg-n8/10 backdrop-blur p-3" />
+        <img src={logo} alt="Ejada" className="w-28 h-28 object-contain" />
       </div>
       <h1 className="text-display mt-6 tracking-wide">Ejada</h1>
       <p className="text-body opacity-80 mt-2">Premium Electronics · KSA</p>
