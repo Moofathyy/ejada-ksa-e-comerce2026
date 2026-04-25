@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { MobileShell } from "@/components/MobileShell";
 import { TopBar } from "@/components/TopBar";
 import { useI18n } from "@/lib/i18n";
+import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import {
   Home, Briefcase, MapPin, Building2, Hash, Mail, Phone, Plus, Check,
@@ -54,6 +55,7 @@ type FormState = z.infer<typeof schema>;
 const AddAddress = () => {
   const nav = useNavigate();
   const { lang } = useI18n();
+  const { addAddress } = useStore();
   const tr = (en: string, ar: string) => (lang === "ar" ? ar : en);
 
   const [form, setForm] = useState<FormState>({
@@ -99,10 +101,23 @@ const AddAddress = () => {
       return;
     }
     setSubmitting(true);
+    addAddress({
+      type: form.type,
+      label: form.label,
+      region: form.region,
+      city: form.city,
+      district: form.district,
+      street: form.street,
+      building: form.building,
+      postal: form.postal,
+      additional: form.additional || undefined,
+      phone: form.phone,
+      isDefault: form.setDefault,
+    });
     setTimeout(() => {
       toast.success(tr("Address saved", "تم حفظ العنوان"));
       nav(-1);
-    }, 400);
+    }, 300);
   };
 
   const types: { k: AddrType; icon: any; label: string }[] = [

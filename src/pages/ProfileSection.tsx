@@ -11,9 +11,10 @@ import {
   User, Mail, Phone, MapPin, Plus, CreditCard, Trophy, Bell, Globe, Moon,
   Lock, Smartphone, Shield, Eye, Settings as SettingsIcon, Download, Trash2,
   HelpCircle, FileText, Star, ChevronRight, Check, Sparkles, Gift, ShoppingBag,
-  MessageSquare, Share2, UserPlus, TrendingUp, ArrowUpRight,
+  MessageSquare, Share2, UserPlus, TrendingUp, ArrowUpRight, Home, Briefcase,
 } from "lucide-react";
 import { Sar } from "@/components/Sar";
+import { useStore } from "@/lib/store";
 
 type SectionConfig = {
   title: { en: string; ar: string };
@@ -71,31 +72,81 @@ const PersonalInfo = (lang: "en" | "ar") => (
 
 const Addresses = (lang: "en" | "ar") => {
   const nav = useNavigate();
+  const { addresses, removeAddress, setDefaultAddress } = useStore();
+  const tr = (en: string, ar: string) => (lang === "ar" ? ar : en);
+
+  const typeIcon = (t: string) => (t === "home" ? Home : t === "work" ? Briefcase : MapPin);
+
   return (
-  <div className="space-y-3">
-    {[
-      { name: lang === "ar" ? "المنزل" : "Home", addr: lang === "ar" ? "الرياض، حي العليا، شارع الملك فهد" : "Riyadh, Al Olaya, King Fahd Rd", def: true },
-      { name: lang === "ar" ? "العمل" : "Work", addr: lang === "ar" ? "الرياض، حي الملز، شارع صلاح الدين" : "Riyadh, Al Malaz, Salah Al-Din St" },
-    ].map((a, i) => (
-      <div key={i} className="bg-n8 rounded-card shadow-elev1 p-4">
-        <div className="flex items-start gap-3">
-          <MapPin className="w-5 h-5 text-primary mt-0.5" />
-          <div className="flex-1">
-            <div className="flex items-center gap-2">
-              <p className="text-body font-bold text-n1">{a.name}</p>
-              {a.def && <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">{lang === "ar" ? "افتراضي" : "DEFAULT"}</span>}
-            </div>
-            <p className="text-caption text-n3 mt-1">{a.addr}</p>
-          </div>
+    <div className="space-y-3">
+      {addresses.length === 0 ? (
+        <div className="bg-n8 rounded-card shadow-elev1 p-8 text-center border border-dashed border-n5">
+          <MapPin className="w-10 h-10 text-n4 mx-auto" />
+          <h3 className="text-body font-bold text-n1 mt-3">
+            {tr("No addresses yet", "لا توجد عناوين بعد")}
+          </h3>
+          <p className="text-caption text-n3 mt-1">
+            {tr("Add your first delivery address to get started.",
+                "أضف عنوان التوصيل الأول للبدء.")}
+          </p>
         </div>
-      </div>
-    ))}
-    <button onClick={() => nav("/profile/addresses/new")} className="w-full h-12 border-2 border-dashed border-n5 rounded-card flex items-center justify-center gap-2 text-primary font-semibold">
-      <Plus className="w-5 h-5" /> {lang === "ar" ? "إضافة عنوان" : "Add Address"}
-    </button>
-  </div>
+      ) : (
+        addresses.map(a => {
+          const Icon = typeIcon(a.type);
+          const fullAddr = [a.street, a.district, a.city, a.region]
+            .filter(Boolean).join(", ");
+          return (
+            <div key={a.id} className="bg-n8 rounded-card shadow-elev1 p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-5 h-5 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <p className="text-body font-bold text-n1">{a.label}</p>
+                    {a.isDefault && (
+                      <span className="text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold">
+                        {tr("DEFAULT", "افتراضي")}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-caption text-n3 mt-1 leading-relaxed">{fullAddr}</p>
+                  <p className="text-caption text-n3 mt-0.5 tabular">
+                    {tr("Bldg.", "مبنى")} {a.building}
+                    {a.additional && ` · ${a.additional}`}
+                    {` · ${a.postal}`}
+                  </p>
+                  <p className="text-caption text-n2 mt-1 font-medium tabular">{a.phone}</p>
+
+                  <div className="mt-3 flex items-center gap-2">
+                    {!a.isDefault && (
+                      <button
+                        onClick={() => { setDefaultAddress(a.id); toast.success(tr("Set as default", "تم التعيين كافتراضي")); }}
+                        className="text-caption text-primary font-semibold"
+                      >
+                        {tr("Set as default", "تعيين كافتراضي")}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => { removeAddress(a.id); toast.success(tr("Address removed", "تم حذف العنوان")); }}
+                      className="text-caption text-warning-text font-semibold ms-auto"
+                    >
+                      {tr("Remove", "حذف")}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })
+      )}
+      <button onClick={() => nav("/profile/addresses/new")} className="w-full h-12 border-2 border-dashed border-n5 rounded-card flex items-center justify-center gap-2 text-primary font-semibold">
+        <Plus className="w-5 h-5" /> {tr("Add Address", "إضافة عنوان")}
+      </button>
+    </div>
   );
 };
+
 
 const PaymentMethods = (lang: "en" | "ar") => (
   <div className="space-y-3">

@@ -11,6 +11,21 @@ export interface UserProfile {
   city: string;
 }
 
+export interface Address {
+  id: string;
+  type: "home" | "work" | "other";
+  label: string;
+  region: string;
+  city: string;
+  district: string;
+  street: string;
+  building: string;
+  postal: string;
+  additional?: string;
+  phone: string;
+  isDefault?: boolean;
+}
+
 interface StoreCtx {
   cart: CartItem[];
   wishlist: string[];
@@ -29,6 +44,10 @@ interface StoreCtx {
   signOut: () => void;
   city: string;
   setCity: (c: string) => void;
+  addresses: Address[];
+  addAddress: (a: Omit<Address, "id">) => Address;
+  removeAddress: (id: string) => void;
+  setDefaultAddress: (id: string) => void;
 }
 
 const Ctx = createContext<StoreCtx | null>(null);
@@ -43,6 +62,13 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     try { const raw = localStorage.getItem("ejada_user_profile"); return raw ? JSON.parse(raw) : null; } catch { return null; }
   });
   const [city, setCityState] = useState<string>(() => localStorage.getItem("ejada_city") || "Riyadh");
+  const [addresses, setAddresses] = useState<Address[]>(() => {
+    try { const raw = localStorage.getItem("ejada_addresses"); return raw ? JSON.parse(raw) : []; } catch { return []; }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("ejada_addresses", JSON.stringify(addresses));
+  }, [addresses]);
 
   useEffect(() => {
     if (user) localStorage.setItem("ejada_user_profile", JSON.stringify(user));
@@ -79,11 +105,37 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   }, []);
   const removePromo = useCallback(() => setPromo(null), []);
 
+  const addAddress = useCallback((a: Omit<Address, "id">) => {
+    const id = `addr_${Date.now()}`;
+    const next: Address = { ...a, id };
+    setAddresses(prev => {
+      // If this one is default, clear others
+      const cleaned = next.isDefault ? prev.map(x => ({ ...x, isDefault: false })) : prev;
+      // First address becomes default automatically
+      if (cleaned.length === 0) next.isDefault = true;
+      return [next, ...cleaned];
+    });
+    return next;
+  }, []);
+
+  const removeAddress = useCallback((id: string) => {
+    setAddresses(prev => {
+      const next = prev.filter(a => a.id !== id);
+      // Ensure something stays default
+      if (next.length && !next.some(a => a.isDefault)) next[0].isDefault = true;
+      return next;
+    });
+  }, []);
+
+  const setDefaultAddress = useCallback((id: string) => {
+    setAddresses(prev => prev.map(a => ({ ...a, isDefault: a.id === id })));
+  }, []);
+
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
   const cartSubtotal = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
 
   return (
-    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity }}>
+    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress }}>
       {children}
     </Ctx.Provider>
   );
