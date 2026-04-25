@@ -3,9 +3,6 @@
 import headphones from "@/assets/product-headphones.png";
 import tv from "@/assets/product-tv.png";
 import ps5 from "@/assets/product-ps5.png";
-
-
-
 export type Product = {
   id: string;
   name: { en: string; ar: string };
