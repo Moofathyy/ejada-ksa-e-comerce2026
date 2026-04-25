@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search as SearchIcon, MapPin, Bell, ShoppingBag, ChevronDown, Mic, ScanLine, ChevronRight, GitCompare, Star, Truck, ShieldCheck, Check, X, Shuffle } from "lucide-react";
+import { Search as SearchIcon, MapPin, Bell, ShoppingBag, ChevronDown, Mic, ScanLine, ChevronRight, GitCompare, Star, Truck, ShieldCheck, Check, X, Shuffle, Moon, Sun } from "lucide-react";
 import { Sar } from "@/components/Sar";
+import { useTheme } from "@/lib/theme";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { categories, products, brands } from "@/lib/data";
@@ -22,6 +23,7 @@ const Home = () => {
   const nav = useNavigate();
   const { t, lang, setLang, dir } = useI18n();
   const { cartCount } = useStore();
+  const { resolved, setTheme } = useTheme();
   const [bannerIdx, setBannerIdx] = useState(0);
   const [loading, setLoading] = useState(true);
   const [city] = useState(lang === "ar" ? "الرياض" : "Riyadh");
@@ -52,6 +54,13 @@ const Home = () => {
             </div>
           </div>
           <div className="flex items-center gap-1">
+            <button
+              onClick={() => setTheme(resolved === "dark" ? "light" : "dark")}
+              className="w-10 h-10 flex items-center justify-center bg-n8/15 rounded-xl"
+              aria-label="Toggle theme"
+            >
+              {resolved === "dark" ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+            </button>
             <button onClick={() => nav("/notifications")} className="relative w-10 h-10 flex items-center justify-center bg-n8/15 rounded-xl" aria-label="Notifications">
               <Bell className="w-5 h-5" />
               <span className="absolute top-2 end-2 w-2 h-2 bg-accent rounded-full" />

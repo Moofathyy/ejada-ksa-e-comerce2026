@@ -3,6 +3,7 @@ import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { TopBar } from "@/components/TopBar";
 import { useI18n } from "@/lib/i18n";
+import { useTheme, type Theme } from "@/lib/theme";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
@@ -174,8 +175,8 @@ const LanguageA11y = (lang: "en" | "ar") => {
 };
 
 const Appearance = (lang: "en" | "ar") => {
-  const [theme, setTheme] = useState("light");
-  const opts = [
+  const { theme, setTheme } = useTheme();
+  const opts: { k: Theme; l: string }[] = [
     { k: "light", l: lang === "ar" ? "فاتح" : "Light" },
     { k: "dark", l: lang === "ar" ? "داكن" : "Dark" },
     { k: "system", l: lang === "ar" ? "تلقائي" : "System" },
@@ -183,7 +184,11 @@ const Appearance = (lang: "en" | "ar") => {
   return (
     <Card>
       {opts.map(o => (
-        <button key={o.k} onClick={() => setTheme(o.k)} className="w-full flex items-center gap-3 px-4 py-3.5 border-b border-n6 last:border-0 active:bg-n7">
+        <button
+          key={o.k}
+          onClick={() => { setTheme(o.k); toast.success(lang === "ar" ? "تم تحديث المظهر" : "Appearance updated"); }}
+          className="w-full flex items-center gap-3 px-4 py-3.5 border-b border-n6 last:border-0 active:bg-n7"
+        >
           <Moon className="w-5 h-5 text-primary" />
           <span className="flex-1 text-start text-body font-medium text-n1">{o.l}</span>
           {theme === o.k && <Check className="w-5 h-5 text-success-text" />}
