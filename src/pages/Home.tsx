@@ -51,7 +51,7 @@ const Home = () => {
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <button className="relative w-10 h-10 flex items-center justify-center bg-n8/15 rounded-xl" aria-label="Notifications">
+            <button onClick={() => nav("/notifications")} className="relative w-10 h-10 flex items-center justify-center bg-n8/15 rounded-xl" aria-label="Notifications">
               <Bell className="w-5 h-5" />
               <span className="absolute top-2 end-2 w-2 h-2 bg-accent rounded-full" />
             </button>
