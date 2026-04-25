@@ -64,7 +64,7 @@ export const products: Product[] = [
   {
     id: "p6",
     name: { en: "MacBook Pro 14\" M3 Pro 512GB", ar: "ماك بوك برو 14 M3 برو 512 جيجا" },
-    brand: "Apple", price: 9499, originalPrice: 9999, image: macbook,
+    brand: "Apple", price: 9499, originalPrice: 9999, image: "/72b043fb-f4b0-4687-859c-958b8c3473de.png",
     rating: 4.9, reviews: 187, delivery: "tomorrow", stock: 3, warranty: "official",
     installments: true, category: "laptops",
   },
