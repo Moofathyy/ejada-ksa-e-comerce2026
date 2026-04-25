@@ -18,6 +18,7 @@ import OrderConfirmation from "./pages/OrderConfirmation";
 import Orders, { OrderTracking } from "./pages/Orders";
 import Wishlist from "./pages/Wishlist";
 import Profile from "./pages/Profile";
+import ProfileSection from "./pages/ProfileSection";
 import Returns from "./pages/Returns";
 import NotFound from "./pages/NotFound";
 
@@ -46,6 +47,7 @@ const App = () => (
               <Route path="/order/:id" element={<OrderTracking />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/profile/:section" element={<ProfileSection />} />
               <Route path="/returns" element={<Returns />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

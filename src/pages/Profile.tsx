@@ -41,39 +41,39 @@ const Profile = () => {
   ];
 
   const shopping: Row[] = [
-    { icon: User, label: lang === "ar" ? "المعلومات الشخصية" : "Personal Information", to: "#" },
-    { icon: MapPin, label: lang === "ar" ? "العناوين المحفوظة" : "Saved Addresses", to: "#" },
-    { icon: CreditCard, label: lang === "ar" ? "وسائل الدفع" : "Payment Methods", to: "#" },
-    { icon: Trophy, label: lang === "ar" ? "نقاط الولاء" : "Loyalty Rewards", to: "#", trailing: <span className="text-caption text-n3 tabular">2450 pts</span> },
+    { icon: User, label: lang === "ar" ? "المعلومات الشخصية" : "Personal Information", to: "/profile/personal-info" },
+    { icon: MapPin, label: lang === "ar" ? "العناوين المحفوظة" : "Saved Addresses", to: "/profile/addresses" },
+    { icon: CreditCard, label: lang === "ar" ? "وسائل الدفع" : "Payment Methods", to: "/profile/payments" },
+    { icon: Trophy, label: lang === "ar" ? "نقاط الولاء" : "Loyalty Rewards", to: "/profile/loyalty", trailing: <span className="text-caption text-n3 tabular">2450 pts</span> },
     { icon: Package, label: lang === "ar" ? "سجل الطلبات" : "Order History", to: "/orders" },
     { icon: Heart, label: t("wishlist"), to: "/wishlist", trailing: wishlist.length ? <span className="text-caption text-n3 tabular">{wishlist.length}</span> : undefined },
   ];
 
   const preferences: Row[] = [
-    { icon: Bell, label: lang === "ar" ? "الإشعارات" : "Notifications", to: "#" },
-    { icon: Globe, label: lang === "ar" ? "اللغة وإمكانية الوصول" : "Language & Accessibility", to: "#" },
-    { icon: Moon, label: lang === "ar" ? "المظهر" : "Appearance", to: "#", trailing: <span className="text-caption text-n3">{lang === "ar" ? "فاتح" : "Light"}</span> },
+    { icon: Bell, label: lang === "ar" ? "الإشعارات" : "Notifications", to: "/profile/notifications" },
+    { icon: Globe, label: lang === "ar" ? "اللغة وإمكانية الوصول" : "Language & Accessibility", to: "/profile/language" },
+    { icon: Moon, label: lang === "ar" ? "المظهر" : "Appearance", to: "/profile/appearance", trailing: <span className="text-caption text-n3">{lang === "ar" ? "فاتح" : "Light"}</span> },
   ];
 
   const security: Row[] = [
-    { icon: Lock, label: lang === "ar" ? "تغيير كلمة المرور" : "Change Password", to: "#" },
+    { icon: Lock, label: lang === "ar" ? "تغيير كلمة المرور" : "Change Password", to: "/profile/change-password" },
     { icon: Smartphone, label: lang === "ar" ? "تسجيل الدخول البيومتري" : "Biometric Login", toggle: { value: biometric, onChange: setBiometric } },
     { icon: Shield, label: lang === "ar" ? "المصادقة الثنائية" : "Two-Factor Authentication", toggle: { value: twoFA, onChange: setTwoFA } },
-    { icon: Eye, label: lang === "ar" ? "الأجهزة المرتبطة" : "Linked Devices", to: "#" },
+    { icon: Eye, label: lang === "ar" ? "الأجهزة المرتبطة" : "Linked Devices", to: "/profile/devices" },
   ];
 
   const privacy: Row[] = [
-    { icon: SettingsIcon, label: lang === "ar" ? "إعدادات الخصوصية" : "Privacy Settings", to: "#" },
-    { icon: Download, label: lang === "ar" ? "تنزيل بياناتي" : "Download My Data", to: "#" },
-    { icon: Trash2, label: lang === "ar" ? "حذف الحساب" : "Delete Account", to: "#", danger: true },
+    { icon: SettingsIcon, label: lang === "ar" ? "إعدادات الخصوصية" : "Privacy Settings", to: "/profile/privacy-settings" },
+    { icon: Download, label: lang === "ar" ? "تنزيل بياناتي" : "Download My Data", to: "/profile/download-data" },
+    { icon: Trash2, label: lang === "ar" ? "حذف الحساب" : "Delete Account", to: "/profile/delete-account", danger: true },
   ];
 
   const about: Row[] = [
-    { icon: HelpCircle, label: lang === "ar" ? "مركز المساعدة" : "Help Center", to: "#" },
-    { icon: Mail, label: lang === "ar" ? "تواصل معنا" : "Contact Us", to: "#" },
-    { icon: FileText, label: lang === "ar" ? "الشروط والأحكام" : "Terms & Conditions", to: "#" },
-    { icon: FileText, label: lang === "ar" ? "سياسة الخصوصية" : "Privacy Policy", to: "#" },
-    { icon: Star, label: lang === "ar" ? "قيّم التطبيق" : "Rate App", to: "#" },
+    { icon: HelpCircle, label: lang === "ar" ? "مركز المساعدة" : "Help Center", to: "/profile/help" },
+    { icon: Mail, label: lang === "ar" ? "تواصل معنا" : "Contact Us", to: "/profile/contact" },
+    { icon: FileText, label: lang === "ar" ? "الشروط والأحكام" : "Terms & Conditions", to: "/profile/terms" },
+    { icon: FileText, label: lang === "ar" ? "سياسة الخصوصية" : "Privacy Policy", to: "/profile/privacy" },
+    { icon: Star, label: lang === "ar" ? "قيّم التطبيق" : "Rate App", to: "/profile/rate" },
   ];
 
   const Section = ({ title, rows }: { title: string; rows: Row[] }) => (
@@ -99,7 +99,7 @@ const Profile = () => {
             return <div key={i} className={baseCls}>{content}</div>;
           }
           return (
-            <button key={i} onClick={() => r.to && r.to !== "#" && nav(r.to)} className={cn(baseCls, "active:bg-n7 transition-colors")}>
+            <button key={i} onClick={() => r.to && nav(r.to)} className={cn(baseCls, "active:bg-n7 transition-colors")}>
               {content}
             </button>
           );
