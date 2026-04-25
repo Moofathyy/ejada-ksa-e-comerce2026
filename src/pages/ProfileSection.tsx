@@ -332,9 +332,8 @@ const LoyaltyScreen = ({ lang }: { lang: "en" | "ar" }) => {
     </div>
   );
 };
-    </div>
-  );
-};
+
+
 
 const Notifications = (lang: "en" | "ar") => {
   const [s, setS] = useState({ orders: true, deals: true, push: true, email: false, sms: true });
