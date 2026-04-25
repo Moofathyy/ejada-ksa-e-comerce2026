@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { MobileShell } from "@/components/MobileShell";
 import { TopBar } from "@/components/TopBar";
 import { useI18n } from "@/lib/i18n";
+import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import {
   Home, Briefcase, MapPin, Building2, Hash, Mail, Phone, Plus, Check,
