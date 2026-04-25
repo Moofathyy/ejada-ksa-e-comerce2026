@@ -21,6 +21,7 @@ import Wishlist from "./pages/Wishlist";
 import Profile from "./pages/Profile";
 import ProfileSection from "./pages/ProfileSection";
 import Notifications from "./pages/Notifications";
+import AddAddress from "./pages/AddAddress";
 import Returns from "./pages/Returns";
 import NotFound from "./pages/NotFound";
 
