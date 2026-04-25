@@ -1,5 +1,5 @@
  const iphone = "/iphone-new.png";
-import airpods from "@/assets/product-airpods.jpg";
+// AirPods image replaced with uploaded asset
 import headphones from "@/assets/product-headphones.png";
 import tv from "@/assets/product-tv.png";
 import ps5 from "@/assets/product-ps5.png";
