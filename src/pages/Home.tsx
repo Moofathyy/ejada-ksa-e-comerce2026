@@ -180,4 +180,112 @@ const Home = () => {
     </MobileShell>
   );
 };
+
+/* ---------- Compare Section ---------- */
+type Lang = "en" | "ar";
+
+const COMPARE_POOL = ["p1", "p6", "p3", "p4", "p7", "p5"];
+
+const CompareSection = ({ lang, nav }: { lang: Lang; nav: (to: string) => void }) => {
+  const [leftId, setLeftId] = useState("p1");
+  const [rightId, setRightId] = useState("p6");
+
+  const left = products.find(p => p.id === leftId)!;
+  const right = products.find(p => p.id === rightId)!;
+
+  const swap = () => { const l = leftId; setLeftId(rightId); setRightId(l); };
+
+  const shuffle = () => {
+    const others = COMPARE_POOL.filter(id => id !== leftId && id !== rightId);
+    const next = others[Math.floor(Math.random() * others.length)];
+    setRightId(next);
+  };
+
+  const cheaper = left.price < right.price ? "left" : right.price < left.price ? "right" : null;
+  const betterRated = left.rating > right.rating ? "left" : right.rating > left.rating ? "right" : null;
+  const fasterDelivery = left.delivery === "today" && right.delivery !== "today" ? "left"
+    : right.delivery === "today" && left.delivery !== "today" ? "right" : null;
+
+  const Pill = ({ icon: Icon, label, win }: { icon: any; label: string; win: boolean }) => (
+    <div className={cn(
+      "flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold",
+      win ? "bg-success/15 text-success-text" : "bg-n7 text-n3",
+    )}>
+      <Icon className="w-3 h-3" />
+      <span className="truncate">{label}</span>
+    </div>
+  );
+
+  const Side = ({ p, side }: { p: typeof products[number]; side: "left" | "right" }) => (
+    <button
+      onClick={() => nav(`/product/${p.id}`)}
+      className="flex-1 min-w-0 bg-n8 rounded-card p-3 flex flex-col gap-2 active:scale-[0.99] transition text-start"
+    >
+      <div className="aspect-square w-full bg-n7 rounded-xl overflow-hidden flex items-center justify-center">
+        <img src={p.image} alt="" className="w-full h-full object-contain p-2" />
+      </div>
+      <p className="text-caption font-bold text-n1 line-clamp-2 leading-tight min-h-[32px]">{p.name[lang]}</p>
+      <div className="flex items-baseline gap-1">
+        <Sar className="text-primary" />
+        <span className="text-body font-bold text-n1 tabular">{p.price.toLocaleString()}</span>
+      </div>
+      <div className="flex flex-wrap gap-1">
+        <Pill icon={Sar} label={lang === "ar" ? "أرخص" : "Cheaper"} win={cheaper === side} />
+        <Pill icon={Star} label={p.rating.toFixed(1)} win={betterRated === side} />
+        <Pill
+          icon={Truck}
+          label={p.delivery === "today" ? (lang === "ar" ? "اليوم" : "Today") : (lang === "ar" ? "غداً" : "Tomorrow")}
+          win={fasterDelivery === side}
+        />
+      </div>
+      <div className="flex items-center gap-1 text-[10px] text-n3 font-medium">
+        <ShieldCheck className="w-3 h-3 text-primary" />
+        <span className="truncate">{p.warranty || (lang === "ar" ? "ضمان" : "Warranty")}</span>
+      </div>
+    </button>
+  );
+
+  return (
+    <section className="space-y-3">
+      <div className="px-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <GitCompare className="w-5 h-5 text-primary" />
+          <h3 className="text-h3 text-n1">{lang === "ar" ? "قارن المنتجات" : "Compare Products"}</h3>
+        </div>
+        <button onClick={shuffle} className="text-caption text-primary font-semibold flex items-center gap-1">
+          <Shuffle className="w-4 h-4" />
+          {lang === "ar" ? "تبديل" : "Shuffle"}
+        </button>
+      </div>
+
+      <div className="px-4">
+        <div className="bg-gradient-to-br from-primary/5 to-accent/5 border border-n6 rounded-card p-3 shadow-elev1 relative">
+          <div className="flex gap-2 items-stretch">
+            <Side p={left} side="left" />
+            <div className="flex flex-col items-center justify-center px-1">
+              <button
+                onClick={swap}
+                className="w-9 h-9 rounded-full bg-primary text-n8 font-bold text-caption shadow-elev1 flex items-center justify-center"
+                aria-label="Swap"
+              >
+                VS
+              </button>
+            </div>
+            <Side p={right} side="right" />
+          </div>
+
+          <button
+            onClick={() => nav(`/listing`)}
+            className="mt-3 w-full h-11 bg-primary text-n8 rounded-full font-bold text-caption shadow-elev1 flex items-center justify-center gap-2"
+          >
+            <GitCompare className="w-4 h-4" />
+            {lang === "ar" ? "قارن المزيد من المنتجات" : "Compare More Products"}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 export default Home;
+
