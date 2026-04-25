@@ -11,6 +11,21 @@ export interface UserProfile {
   city: string;
 }
 
+export interface Address {
+  id: string;
+  type: "home" | "work" | "other";
+  label: string;
+  region: string;
+  city: string;
+  district: string;
+  street: string;
+  building: string;
+  postal: string;
+  additional?: string;
+  phone: string;
+  isDefault?: boolean;
+}
+
 interface StoreCtx {
   cart: CartItem[];
   wishlist: string[];
@@ -29,6 +44,10 @@ interface StoreCtx {
   signOut: () => void;
   city: string;
   setCity: (c: string) => void;
+  addresses: Address[];
+  addAddress: (a: Omit<Address, "id">) => Address;
+  removeAddress: (id: string) => void;
+  setDefaultAddress: (id: string) => void;
 }
 
 const Ctx = createContext<StoreCtx | null>(null);
@@ -43,6 +62,13 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     try { const raw = localStorage.getItem("ejada_user_profile"); return raw ? JSON.parse(raw) : null; } catch { return null; }
   });
   const [city, setCityState] = useState<string>(() => localStorage.getItem("ejada_city") || "Riyadh");
+  const [addresses, setAddresses] = useState<Address[]>(() => {
+    try { const raw = localStorage.getItem("ejada_addresses"); return raw ? JSON.parse(raw) : []; } catch { return []; }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("ejada_addresses", JSON.stringify(addresses));
+  }, [addresses]);
 
   useEffect(() => {
     if (user) localStorage.setItem("ejada_user_profile", JSON.stringify(user));
