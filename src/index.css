@@ -82,6 +82,65 @@
     --shadow-cta: 0 8px 24px hsl(236 100% 25% / 0.25);
   }
 
+  .dark {
+    --background: 222 25% 8%;
+    --foreground: 0 0% 96%;
+
+    --primary: 233 75% 65%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 233 60% 72%;
+    --primary-dark: 236 60% 35%;
+    --primary-bg: 222 25% 12%;
+    --primary-disabled: 233 20% 25%;
+
+    --p2: 230 90% 70%;
+    --s1: 213 15% 30%;
+    --s1-dark: 211 18% 60%;
+    --s2: 152 70% 55%;
+
+    --success: 144 49% 53%;
+    --success-bg: 138 30% 18%;
+    --success-text: 148 60% 65%;
+
+    --warning: 47 95% 55%;
+    --warning-bg: 34 40% 18%;
+    --warning-text: 34 95% 60%;
+
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --error-bg: 0 40% 18%;
+
+    --info: 205 90% 60%;
+    --info-text: 152 65% 60%;
+
+    /* Neutrals — inverted: n8 = surface, n1 = text */
+    --n1: 0 0% 96%;
+    --n2: 0 0% 82%;
+    --n3: 0 0% 65%;
+    --n4: 240 5% 45%;
+    --n6: 222 18% 22%;
+    --n7: 222 20% 14%;
+    --n8: 222 22% 11%;
+
+    --card: 222 22% 11%;
+    --card-foreground: 0 0% 96%;
+    --popover: 222 22% 11%;
+    --popover-foreground: 0 0% 96%;
+    --secondary: 222 20% 14%;
+    --secondary-foreground: 0 0% 82%;
+    --muted: 222 20% 14%;
+    --muted-foreground: 240 5% 65%;
+    --accent: 222 25% 16%;
+    --accent-foreground: 233 75% 75%;
+    --border: 222 18% 22%;
+    --input: 222 18% 25%;
+    --ring: 233 75% 65%;
+
+    --shadow-elev1: 0 1px 4px hsl(0 0% 0% / 0.4);
+    --shadow-elev2: 0 4px 16px hsl(0 0% 0% / 0.5);
+    --shadow-cta: 0 8px 24px hsl(233 75% 65% / 0.35);
+  }
+
   * { @apply border-border; }
   html { font-family: 'Readex Pro', system-ui, sans-serif; }
   body {
