@@ -55,6 +55,7 @@ type FormState = z.infer<typeof schema>;
 const AddAddress = () => {
   const nav = useNavigate();
   const { lang } = useI18n();
+  const { addAddress } = useStore();
   const tr = (en: string, ar: string) => (lang === "ar" ? ar : en);
 
   const [form, setForm] = useState<FormState>({
