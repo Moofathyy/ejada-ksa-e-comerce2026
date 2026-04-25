@@ -1,98 +1,170 @@
 import { useNavigate } from "react-router-dom";
-import { Package, Heart, Star, MapPin, CreditCard, Settings, HelpCircle, FileText, ChevronRight, LogOut, Globe } from "lucide-react";
-import { TopBar } from "@/components/TopBar";
+import {
+  User, MapPin, CreditCard, Trophy, Package, Heart,
+  Bell, Globe, Moon,
+  Lock, Smartphone, Shield, Eye,
+  Settings as SettingsIcon, Download, Trash2,
+  HelpCircle, Mail, FileText, Star,
+  Camera, ChevronRight, LogOut, CheckCircle2,
+} from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
+import { useState } from "react";
+
+type Row = {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  to?: string;
+  trailing?: React.ReactNode;
+  danger?: boolean;
+  toggle?: { value: boolean; onChange: (v: boolean) => void };
+};
 
 const Profile = () => {
   const nav = useNavigate();
-  const { t, lang, setLang, dir } = useI18n();
+  const { t, lang, dir } = useI18n();
   const { wishlist } = useStore();
-  const userName = localStorage.getItem("ejada_user") || "Ahmed";
+  const userName = localStorage.getItem("ejada_user") || "Sarah Al-Nemri";
+  const userId = "ATEL-8892-OX";
 
-  const items = [
-    { icon: Package, label: t("myOrders"), to: "/orders" },
-    { icon: Heart, label: t("wishlist"), to: "/wishlist" },
-    { icon: MapPin, label: t("addresses"), to: "#" },
-    { icon: CreditCard, label: t("payments"), to: "#" },
-    { icon: FileText, label: "Returns & Refunds", to: "/returns" },
-    { icon: Settings, label: "Settings", to: "#" },
-    { icon: HelpCircle, label: t("helpCenter"), to: "#" },
+  const [biometric, setBiometric] = useState(false);
+  const [twoFA, setTwoFA] = useState(false);
+
+  const stats = [
+    { icon: MapPin, label: lang === "ar" ? "العناوين" : "Addresses", value: "2" },
+    { icon: CreditCard, label: lang === "ar" ? "الدفع" : "Payment", value: "Mada" },
+    { icon: Trophy, label: lang === "ar" ? "المستوى" : "Tier", value: lang === "ar" ? "ذهبي" : "Gold" },
+    { icon: CheckCircle2, label: lang === "ar" ? "الحالة" : "Status", value: lang === "ar" ? "نشط" : "Active", success: true },
   ];
+
+  const shopping: Row[] = [
+    { icon: User, label: lang === "ar" ? "المعلومات الشخصية" : "Personal Information", to: "#" },
+    { icon: MapPin, label: lang === "ar" ? "العناوين المحفوظة" : "Saved Addresses", to: "#" },
+    { icon: CreditCard, label: lang === "ar" ? "وسائل الدفع" : "Payment Methods", to: "#" },
+    { icon: Trophy, label: lang === "ar" ? "نقاط الولاء" : "Loyalty Rewards", to: "#", trailing: <span className="text-caption text-n3 tabular">2450 pts</span> },
+    { icon: Package, label: lang === "ar" ? "سجل الطلبات" : "Order History", to: "/orders" },
+    { icon: Heart, label: t("wishlist"), to: "/wishlist", trailing: wishlist.length ? <span className="text-caption text-n3 tabular">{wishlist.length}</span> : undefined },
+  ];
+
+  const preferences: Row[] = [
+    { icon: Bell, label: lang === "ar" ? "الإشعارات" : "Notifications", to: "#" },
+    { icon: Globe, label: lang === "ar" ? "اللغة وإمكانية الوصول" : "Language & Accessibility", to: "#" },
+    { icon: Moon, label: lang === "ar" ? "المظهر" : "Appearance", to: "#", trailing: <span className="text-caption text-n3">{lang === "ar" ? "فاتح" : "Light"}</span> },
+  ];
+
+  const security: Row[] = [
+    { icon: Lock, label: lang === "ar" ? "تغيير كلمة المرور" : "Change Password", to: "#" },
+    { icon: Smartphone, label: lang === "ar" ? "تسجيل الدخول البيومتري" : "Biometric Login", toggle: { value: biometric, onChange: setBiometric } },
+    { icon: Shield, label: lang === "ar" ? "المصادقة الثنائية" : "Two-Factor Authentication", toggle: { value: twoFA, onChange: setTwoFA } },
+    { icon: Eye, label: lang === "ar" ? "الأجهزة المرتبطة" : "Linked Devices", to: "#" },
+  ];
+
+  const privacy: Row[] = [
+    { icon: SettingsIcon, label: lang === "ar" ? "إعدادات الخصوصية" : "Privacy Settings", to: "#" },
+    { icon: Download, label: lang === "ar" ? "تنزيل بياناتي" : "Download My Data", to: "#" },
+    { icon: Trash2, label: lang === "ar" ? "حذف الحساب" : "Delete Account", to: "#", danger: true },
+  ];
+
+  const about: Row[] = [
+    { icon: HelpCircle, label: lang === "ar" ? "مركز المساعدة" : "Help Center", to: "#" },
+    { icon: Mail, label: lang === "ar" ? "تواصل معنا" : "Contact Us", to: "#" },
+    { icon: FileText, label: lang === "ar" ? "الشروط والأحكام" : "Terms & Conditions", to: "#" },
+    { icon: FileText, label: lang === "ar" ? "سياسة الخصوصية" : "Privacy Policy", to: "#" },
+    { icon: Star, label: lang === "ar" ? "قيّم التطبيق" : "Rate App", to: "#" },
+  ];
+
+  const Section = ({ title, rows }: { title: string; rows: Row[] }) => (
+    <section className="space-y-2">
+      <h3 className="px-1 text-[11px] font-bold tracking-[0.14em] text-n3 uppercase">{title}</h3>
+      <div className="bg-n8 rounded-card shadow-elev1 overflow-hidden">
+        {rows.map((r, i) => {
+          const Icon = r.icon;
+          const content = (
+            <>
+              <Icon className={cn("w-5 h-5 flex-shrink-0", r.danger ? "text-warning-text" : "text-primary")} />
+              <span className={cn("flex-1 text-start text-body font-medium", r.danger ? "text-warning-text" : "text-n1")}>{r.label}</span>
+              {r.trailing}
+              {r.toggle ? (
+                <Switch checked={r.toggle.value} onCheckedChange={r.toggle.onChange} />
+              ) : (
+                <ChevronRight className={cn("w-5 h-5 text-n4", dir === "rtl" && "rotate-180")} />
+              )}
+            </>
+          );
+          const baseCls = "w-full flex items-center gap-3 px-4 py-3.5 border-b border-n6 last:border-0";
+          if (r.toggle) {
+            return <div key={i} className={baseCls}>{content}</div>;
+          }
+          return (
+            <button key={i} onClick={() => r.to && r.to !== "#" && nav(r.to)} className={cn(baseCls, "active:bg-n7 transition-colors")}>
+              {content}
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
 
   return (
     <MobileShell>
-      <TopBar title={t("profile")} showBack={false} />
-
-      {/* Profile header */}
-      <div className="bg-gradient-primary px-4 pt-3 pb-6 text-n8">
-        <div className="flex items-center gap-3">
-          <div className="w-16 h-16 rounded-full bg-n8/20 backdrop-blur flex items-center justify-center text-h1 font-bold border-2 border-n8/40">
-            {userName[0]}
-          </div>
-          <div className="flex-1">
-            <p className="text-h2">{userName}</p>
-            <p className="text-caption opacity-80 tabular">+966 50 123 4567</p>
-            <span className="inline-flex items-center gap-1 mt-1 text-[11px] bg-warning text-n1 px-2 py-0.5 rounded-full font-bold">★ {t("membershipGold")}</span>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-2 mt-5">
-          {[
-            { num: 12, label: "Orders" },
-            { num: wishlist.length, label: "Wishlist" },
-            { num: 5, label: "Reviews" },
-          ].map(s => (
-            <div key={s.label} className="bg-n8/10 backdrop-blur rounded-input p-3 text-center">
-              <p className="text-h2 font-bold tabular">{s.num}</p>
-              <p className="text-caption opacity-90">{s.label}</p>
+      {/* Blue header */}
+      <header className="bg-primary text-n8 pt-6 pb-5 rounded-b-3xl shadow-elev1">
+        <div className="flex flex-col items-center px-4">
+          <div className="relative">
+            <div className="w-[88px] h-[88px] rounded-full bg-n8/15 backdrop-blur border-4 border-n8/30 flex items-center justify-center text-display font-bold overflow-hidden">
+              {userName[0]}
             </div>
-          ))}
-        </div>
-      </div>
-
-      <main className="p-4 space-y-3">
-        {/* Language */}
-        <div className="bg-n8 rounded-card shadow-elev1 p-4">
-          <div className="flex items-center gap-3 mb-3">
-            <Globe className="w-5 h-5 text-primary" />
-            <p className="text-body font-semibold text-n1 flex-1">{t("language")}</p>
+            <button aria-label="Change photo" className="absolute -bottom-1 -end-1 w-7 h-7 rounded-full bg-primary border-2 border-n8 flex items-center justify-center">
+              <Camera className="w-3.5 h-3.5 text-n8" />
+            </button>
           </div>
-          <div className="flex bg-n7 rounded-full p-1">
-            {(["en", "ar"] as const).map(l => (
-              <button key={l} onClick={() => setLang(l)}
-                className={cn("flex-1 py-2 rounded-full text-caption font-semibold transition",
-                  lang === l ? "bg-n8 text-primary shadow-elev1" : "text-n3")}>
-                {l === "en" ? "English" : "العربية"}
-              </button>
-            ))}
-          </div>
+          <h1 className="mt-3 text-h1 font-bold">{userName}</h1>
+          <p className="text-caption opacity-80 tabular tracking-wider">ID: {userId}</p>
+          <span className="mt-2 inline-flex items-center gap-1 bg-warning text-n1 px-3 py-1 rounded-full text-caption font-bold">
+            ★ {t("membershipGold")}
+          </span>
         </div>
 
-        <div className="bg-n8 rounded-card shadow-elev1 overflow-hidden">
-          {items.map((it, i) => {
-            const Icon = it.icon;
+        <div className="grid grid-cols-2 gap-2.5 px-4 mt-5">
+          {stats.map(s => {
+            const Icon = s.icon;
             return (
-              <button key={i} onClick={() => nav(it.to)}
-                className="w-full flex items-center gap-3 px-4 py-3.5 border-b border-n6 last:border-0 active:bg-n7">
-                <div className="w-9 h-9 rounded-full bg-primary-bg flex items-center justify-center"><Icon className="w-4.5 h-4.5 text-primary" /></div>
-                <span className="flex-1 text-start text-body text-n1 font-medium">{it.label}</span>
-                <ChevronRight className={cn("w-5 h-5 text-n4", dir === "rtl" && "rotate-180")} />
-              </button>
+              <div key={s.label} className="bg-n8/10 backdrop-blur rounded-input px-3 py-2.5">
+                <div className="flex items-center gap-1.5 text-[11px] opacity-80">
+                  <Icon className="w-3.5 h-3.5" />
+                  <span>{s.label}</span>
+                </div>
+                <p className={cn("text-body font-bold mt-0.5", s.success && "text-success-text")}>{s.value}</p>
+              </div>
             );
           })}
         </div>
+      </header>
 
-        <button onClick={() => { localStorage.clear(); nav("/auth", { replace: true }); }}
-          className="w-full h-[52px] border-2 border-warning-text text-warning-text rounded-full font-semibold flex items-center justify-center gap-2">
-          <LogOut className="w-4 h-4" /> {t("logout")}
+      <main className="px-4 pt-5 pb-6 space-y-5">
+        <Section title={lang === "ar" ? "التسوق" : "SHOPPING"} rows={shopping} />
+        <Section title={lang === "ar" ? "التفضيلات" : "PREFERENCES"} rows={preferences} />
+        <Section title={lang === "ar" ? "الأمان" : "SECURITY"} rows={security} />
+        <Section title={lang === "ar" ? "الخصوصية" : "PRIVACY"} rows={privacy} />
+        <Section title={lang === "ar" ? "عن التطبيق" : "ABOUT"} rows={about} />
+
+        <div className="flex items-center justify-between px-1 text-caption text-n3">
+          <span>{lang === "ar" ? "الإصدار" : "Version"}</span>
+          <span className="tabular">v2.4.1</span>
+        </div>
+
+        <button
+          onClick={() => { localStorage.clear(); nav("/auth", { replace: true }); }}
+          className="w-full h-[52px] bg-warning text-n1 rounded-full font-bold flex items-center justify-center gap-2 shadow-elev1 active:scale-[0.99] transition"
+        >
+          <LogOut className="w-5 h-5" /> {lang === "ar" ? "تسجيل الخروج" : "Sign Out"}
         </button>
-
-        <p className="text-center text-caption text-n4 pt-2">Ejada v1.0.0 · Made in KSA 🇸🇦</p>
       </main>
     </MobileShell>
   );
 };
+
 export default Profile;
