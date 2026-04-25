@@ -149,6 +149,10 @@ const Home = () => {
           </div>
         </section>
 
+        {/* Compare Products */}
+        <CompareSection lang={lang} nav={nav} />
+
+
         {/* Recommended */}
         <section className="space-y-3">
           <div className="px-4 flex justify-between items-center">
