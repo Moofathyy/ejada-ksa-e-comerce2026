@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { MobileShell } from "@/components/MobileShell";
 import { TopBar } from "@/components/TopBar";
@@ -69,7 +69,9 @@ const PersonalInfo = (lang: "en" | "ar") => (
   </Card>
 );
 
-const Addresses = (lang: "en" | "ar") => (
+const Addresses = (lang: "en" | "ar") => {
+  const nav = useNavigate();
+  return (
   <div className="space-y-3">
     {[
       { name: lang === "ar" ? "المنزل" : "Home", addr: lang === "ar" ? "الرياض، حي العليا، شارع الملك فهد" : "Riyadh, Al Olaya, King Fahd Rd", def: true },
@@ -88,11 +90,12 @@ const Addresses = (lang: "en" | "ar") => (
         </div>
       </div>
     ))}
-    <button onClick={() => toast.success(lang === "ar" ? "أضف عنواناً جديداً" : "Add new address")} className="w-full h-12 border-2 border-dashed border-n5 rounded-card flex items-center justify-center gap-2 text-primary font-semibold">
+    <button onClick={() => nav("/profile/addresses/new")} className="w-full h-12 border-2 border-dashed border-n5 rounded-card flex items-center justify-center gap-2 text-primary font-semibold">
       <Plus className="w-5 h-5" /> {lang === "ar" ? "إضافة عنوان" : "Add Address"}
     </button>
   </div>
-);
+  );
+};
 
 const PaymentMethods = (lang: "en" | "ar") => (
   <div className="space-y-3">

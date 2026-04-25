@@ -21,6 +21,7 @@ import Wishlist from "./pages/Wishlist";
 import Profile from "./pages/Profile";
 import ProfileSection from "./pages/ProfileSection";
 import Notifications from "./pages/Notifications";
+import AddAddress from "./pages/AddAddress";
 import Returns from "./pages/Returns";
 import NotFound from "./pages/NotFound";
 
@@ -53,6 +54,7 @@ const App = () => (
               <Route path="/profile/:section" element={<ProfileSection />} />
               <Route path="/returns" element={<Returns />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/profile/addresses/new" element={<AddAddress />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
