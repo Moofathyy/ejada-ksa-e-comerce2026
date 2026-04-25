@@ -42,7 +42,7 @@ const Listing = () => {
     <MobileShell>
       <TopBar title={catName || "All Products"} />
 
-      <div className="sticky top-14 z-20 bg-n8 border-b border-n6">
+      <div className="sticky top-[84px] z-20 bg-n8 border-b border-n6">
         <div className="px-4 py-2 flex gap-2 overflow-x-auto scrollbar-hide">
           {QUICK.map(q => (
             <button key={q.id} onClick={() => toggle(q.id)}

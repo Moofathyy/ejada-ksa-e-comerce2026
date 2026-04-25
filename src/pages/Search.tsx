@@ -21,7 +21,7 @@ const Search = () => {
 
   return (
     <MobileShell>
-      <header className="sticky top-0 z-30 bg-n8 border-b border-n6 px-4 py-3 flex items-center gap-2">
+      <header className="sticky top-7 z-30 bg-n8 border-b border-n6 px-4 py-3 flex items-center gap-2">
         <button onClick={() => nav(-1)} className="text-primary font-semibold text-body">{dir === "rtl" ? "←" : "←"}</button>
         <div className="flex-1 h-11 bg-n7 rounded-full flex items-center px-4 gap-2">
           <SearchIcon className="w-5 h-5 text-n4" />
