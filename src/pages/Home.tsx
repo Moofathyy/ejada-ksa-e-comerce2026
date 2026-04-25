@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search as SearchIcon, MapPin, Bell, ShoppingBag, ChevronDown, Mic, ScanLine, ChevronRight } from "lucide-react";
+import { Search as SearchIcon, MapPin, Bell, ShoppingBag, ChevronDown, Mic, ScanLine, ChevronRight, GitCompare, Star, Truck, ShieldCheck, Check, X, Shuffle } from "lucide-react";
+import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { categories, products, brands } from "@/lib/data";
