@@ -24,12 +24,14 @@ const Wishlist = () => {
           <button onClick={() => nav("/home")} className="px-8 h-[52px] bg-primary text-n8 rounded-full font-semibold">Explore Products</button>
         </div>
       ) : (
-        <main className="p-4 space-y-3">
-          <button onClick={() => { items.forEach(i => addToCart(i)); toast.success(`${items.length} items added`); }}
-            className="w-full h-11 bg-primary-bg text-primary rounded-full font-semibold text-caption">
-            Add all {items.length} items to cart
-          </button>
+        <main className="p-4 space-y-4">
           <div className="grid grid-cols-2 gap-3">{items.map(p => <ProductCard key={p.id} product={p} />)}</div>
+          <button
+            onClick={() => { items.forEach(i => addToCart(i)); toast.success(`${items.length} items added`); }}
+            className="w-full h-[52px] bg-primary text-n8 rounded-full font-bold shadow-elev1 active:scale-[0.99] transition"
+          >
+            Add all to cart
+          </button>
         </main>
       )}
     </MobileShell>
