@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Ejada E-commerce Design System - Saudi Premium Electronics */
+
+@layer base {
+  :root {
+    /* Base */
+    --background: 210 33% 98%;
+    --foreground: 0 0% 13%;
+
+    /* Primary - Ejada Deep Blue #001081 */
+    --primary: 236 100% 25%;
+    --primary-foreground: 0 0% 100%;
+    --primary-light: 233 43% 54%;
+    --primary-dark: 236 100% 15%;
+    --primary-bg: 195 35% 98%;
+    --primary-disabled: 233 43% 94%;
+
+    /* Secondary brand */
+    --p2: 240 100% 50%;            /* #0000FF links */
+    --s1: 213 22% 81%;             /* #C5CFDA */
+    --s1-dark: 211 25% 34%;        /* #42566B */
+    --s2: 152 86% 53%;             /* #1FED93 accent green */
+
+    /* Semantic */
+    --success: 144 49% 53%;
+    --success-bg: 138 56% 93%;
+    --success-text: 148 82% 26%;
+
+    --warning: 47 100% 50%;
+    --warning-bg: 156 75% 86%;
+    --warning-text: 34 100% 50%;
+
+    --destructive: 51 76% 67%;
+    --destructive-foreground: 11 19% 25%;
+    --error-bg: 0 76% 97%;
+
+    --info: 205 100% 57%;
+    --info-text: 152 81% 50%;
+
+    /* Neutrals */
+    --n1: 0 0% 13%;
+    --n2: 0 0% 26%;
+    --n3: 86 84% 32%;
+    --n4: 240 7% 66%;
+    --n6: 0 0% 90%;
+    --n7: 0 0% 95%;
+    --n8: 0 0% 100%;
+
+    /* Shadcn aliases */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 13%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 26%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 240 7% 46%;
+    --accent: 195 35% 96%;
+    --accent-foreground: 236 100% 25%;
+    --border: 0 0% 90%;
+    --input: 240 7% 80%;
+    --ring: 236 100% 25%;
+
+    --radius: 0.75rem;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(236 100% 25%), hsl(233 43% 54%));
+    --gradient-ramadan: linear-gradient(135deg, hsl(148 82% 26%), hsl(45 95% 55%));
+    --gradient-eid: linear-gradient(135deg, hsl(270 70% 45%), hsl(220 90% 55%));
+    --gradient-success: linear-gradient(135deg, hsl(152 86% 53%), hsl(144 49% 53%));
+    --gradient-onboarding: linear-gradient(160deg, hsl(233 60% 62%) 0%, hsl(252 55% 60%) 55%, hsl(265 50% 55%) 100%);
+    --gradient-onboarding-2: linear-gradient(160deg, hsl(305 80% 75%) 0%, hsl(335 85% 70%) 50%, hsl(5 90% 68%) 100%);
+    --gradient-onboarding-3: linear-gradient(160deg, hsl(180 60% 60%) 0%, hsl(160 55% 55%) 55%, hsl(140 50% 50%) 100%);
+
+    /* Shadows */
+    --shadow-elev1: 0 1px 4px hsl(236 100% 25% / 0.08);
+    --shadow-elev2: 0 4px 16px hsl(236 100% 25% / 0.12);
+    --shadow-cta: 0 8px 24px hsl(236 100% 25% / 0.25);
+  }
+
+  * { @apply border-border; }
+  html { font-family: 'Readex Pro', system-ui, sans-serif; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Readex Pro', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  [dir="rtl"] { font-family: 'Readex Pro', system-ui, sans-serif; }
+}
+
+@layer components {
+  /* Phone frame for mobile preview on desktop */
+  .phone-frame {
+    width: 100%;
+    max-width: 402px;
+    min-height: 100vh;
+    margin: 0 auto;
+    background: hsl(var(--background));
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  .skeleton-shimmer {
+    background: linear-gradient(90deg,
+      hsl(var(--n7)) 0%,
+      hsl(var(--n6)) 50%,
+      hsl(var(--n7)) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s ease-in-out infinite;
+  }
+
+  .price-sar::after {
+    content: '';
+    display: inline-block;
+    width: 0.85em;
+    height: 0.95em;
+    margin-inline-start: 0.25em;
+    vertical-align: -0.12em;
+    background-color: currentColor;
+    -webkit-mask: url("/sar.svg") no-repeat center / contain;
+    mask: url("/sar.svg") no-repeat center / contain;
+  }
+}
+
+@layer utilities {
+  .safe-bottom { padding-bottom: env(safe-area-inset-bottom, 0); }
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  @keyframes scale-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes confetti-pop {
+    0% { transform: scale(0) rotate(0deg); opacity: 0; }
+    50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
+    100% { transform: scale(1) rotate(360deg); opacity: 1; }
+  }
+  .animate-bounce-cart { animation: scale-bounce 0.4s ease; }
+  .animate-slide-up { animation: slide-up 0.3s ease-out; }
+  .animate-fade-in { animation: fade-in 0.3s ease-out; }
+  .animate-confetti { animation: confetti-pop 0.6s ease-out; }
+}

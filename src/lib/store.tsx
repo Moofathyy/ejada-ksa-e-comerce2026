@@ -1,0 +1,96 @@
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
+import { Product } from "./data";
+
+export type CartItem = { product: Product; qty: number };
+
+export interface UserProfile {
+  name: string;
+  email: string;
+  phone?: string;
+  avatar?: string;
+  city: string;
+}
+
+interface StoreCtx {
+  cart: CartItem[];
+  wishlist: string[];
+  addToCart: (p: Product, qty?: number) => void;
+  removeFromCart: (id: string) => void;
+  updateQty: (id: string, qty: number) => void;
+  clearCart: () => void;
+  toggleWishlist: (id: string) => void;
+  promo: { code: string; discount: number } | null;
+  applyPromo: (code: string) => boolean;
+  removePromo: () => void;
+  cartCount: number;
+  cartSubtotal: number;
+  user: UserProfile | null;
+  signIn: (u: UserProfile) => void;
+  signOut: () => void;
+  city: string;
+  setCity: (c: string) => void;
+}
+
+const Ctx = createContext<StoreCtx | null>(null);
+
+const PROMOS: Record<string, number> = { SAVE10: 0.1, FREESHIP: 0 };
+
+export const StoreProvider = ({ children }: { children: ReactNode }) => {
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [wishlist, setWishlist] = useState<string[]>(["p2", "p7"]);
+  const [promo, setPromo] = useState<{ code: string; discount: number } | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(() => {
+    try { const raw = localStorage.getItem("ejada_user_profile"); return raw ? JSON.parse(raw) : null; } catch { return null; }
+  });
+  const [city, setCityState] = useState<string>(() => localStorage.getItem("ejada_city") || "Riyadh");
+
+  useEffect(() => {
+    if (user) localStorage.setItem("ejada_user_profile", JSON.stringify(user));
+    else localStorage.removeItem("ejada_user_profile");
+  }, [user]);
+
+  const setCity = (c: string) => { setCityState(c); localStorage.setItem("ejada_city", c); };
+  const signIn = (u: UserProfile) => setUser(u);
+  const signOut = () => setUser(null);
+
+  const addToCart = useCallback((p: Product, qty = 1) => {
+    setCart(prev => {
+      const ex = prev.find(i => i.product.id === p.id);
+      if (ex) return prev.map(i => i.product.id === p.id ? { ...i, qty: i.qty + qty } : i);
+      return [...prev, { product: p, qty }];
+    });
+  }, []);
+
+  const removeFromCart = useCallback((id: string) => setCart(prev => prev.filter(i => i.product.id !== id)), []);
+  const updateQty = useCallback((id: string, qty: number) => {
+    if (qty <= 0) return removeFromCart(id);
+    setCart(prev => prev.map(i => i.product.id === id ? { ...i, qty } : i));
+  }, [removeFromCart]);
+  const clearCart = useCallback(() => { setCart([]); setPromo(null); }, []);
+
+  const toggleWishlist = useCallback((id: string) => {
+    setWishlist(prev => prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]);
+  }, []);
+
+  const applyPromo = useCallback((code: string) => {
+    const c = code.trim().toUpperCase();
+    if (PROMOS[c] !== undefined) { setPromo({ code: c, discount: PROMOS[c] }); return true; }
+    return false;
+  }, []);
+  const removePromo = useCallback(() => setPromo(null), []);
+
+  const cartCount = cart.reduce((s, i) => s + i.qty, 0);
+  const cartSubtotal = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
+
+  return (
+    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity }}>
+      {children}
+    </Ctx.Provider>
+  );
+};
+
+export const useStore = () => {
+  const c = useContext(Ctx);
+  if (!c) throw new Error("useStore must be used within StoreProvider");
+  return c;
+};
