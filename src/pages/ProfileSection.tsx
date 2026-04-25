@@ -10,8 +10,10 @@ import { toast } from "sonner";
 import {
   User, Mail, Phone, MapPin, Plus, CreditCard, Trophy, Bell, Globe, Moon,
   Lock, Smartphone, Shield, Eye, Settings as SettingsIcon, Download, Trash2,
-  HelpCircle, FileText, Star, ChevronRight, Check,
+  HelpCircle, FileText, Star, ChevronRight, Check, Sparkles, Gift, ShoppingBag,
+  MessageSquare, Share2, UserPlus, TrendingUp, ArrowUpRight,
 } from "lucide-react";
+import { Sar } from "@/components/Sar";
 
 type SectionConfig = {
   title: { en: string; ar: string };
@@ -113,21 +115,192 @@ const PaymentMethods = (lang: "en" | "ar") => (
   </div>
 );
 
-const Loyalty = (lang: "en" | "ar") => (
-  <>
-    <div className="bg-gradient-to-br from-warning to-warning/70 rounded-card p-6 text-n1">
-      <div className="flex items-center gap-2"><Trophy className="w-6 h-6" /><span className="font-bold">{lang === "ar" ? "عضوية ذهبية" : "Gold Membership"}</span></div>
-      <p className="text-display font-bold mt-3 tabular">2,450</p>
-      <p className="text-caption opacity-80">{lang === "ar" ? "نقاط متاحة" : "Available Points"}</p>
-      <div className="mt-4 h-2 bg-n1/20 rounded-full overflow-hidden"><div className="h-full bg-n1 w-3/5" /></div>
-      <p className="text-caption mt-2 opacity-80">{lang === "ar" ? "550 نقطة للوصول إلى البلاتيني" : "550 points to Platinum"}</p>
+const Loyalty = (lang: "en" | "ar") => {
+  const points = 2450;
+  const tier = lang === "ar" ? "ذهبي" : "Gold";
+  const nextTier = lang === "ar" ? "بلاتيني" : "Platinum";
+  const toNext = 550;
+  const pct = Math.round((points / (points + toNext)) * 100);
+  const value = (points * 0.1).toFixed(1); // 1 SAR per 10 points
+
+  const activity = [
+    { icon: ShoppingBag, label: lang === "ar" ? "شراء MacBook Pro" : "MacBook Pro purchase", date: lang === "ar" ? "قبل يومين" : "2 days ago", pts: "+950" },
+    { icon: Star,        label: lang === "ar" ? "تقييم منتج" : "Product review",            date: lang === "ar" ? "قبل 5 أيام" : "5 days ago", pts: "+50" },
+    { icon: Gift,        label: lang === "ar" ? "استبدال قسيمة" : "Voucher redeemed",        date: lang === "ar" ? "قبل أسبوع" : "1 week ago", pts: "-500" },
+    { icon: ShoppingBag, label: lang === "ar" ? "شراء AirPods Pro" : "AirPods Pro purchase",  date: lang === "ar" ? "قبل أسبوعين" : "2 weeks ago", pts: "+90" },
+  ];
+
+  const earn = [
+    { icon: ShoppingBag,   label: lang === "ar" ? "تسوق واربح" : "Shop & earn",           desc: lang === "ar" ? "10 نقاط لكل ريال" : "10 pts per SAR spent" },
+    { icon: MessageSquare, label: lang === "ar" ? "اكتب تقييمات" : "Write reviews",       desc: lang === "ar" ? "50 نقطة لكل تقييم" : "50 pts per review" },
+    { icon: UserPlus,      label: lang === "ar" ? "ادعُ صديقاً" : "Invite a friend",       desc: lang === "ar" ? "500 نقطة لكل تسجيل" : "500 pts per signup" },
+    { icon: Share2,        label: lang === "ar" ? "شارك المنتجات" : "Share products",      desc: lang === "ar" ? "25 نقطة لكل مشاركة" : "25 pts per share" },
+  ];
+
+  const rewards = [
+    { pts: 500,  label: lang === "ar" ? "خصم 50 ريال" : "SAR 50 off",   locked: false },
+    { pts: 1000, label: lang === "ar" ? "خصم 100 ريال" : "SAR 100 off", locked: false },
+    { pts: 2500, label: lang === "ar" ? "شحن مجاني" : "Free shipping",  locked: false },
+    { pts: 5000, label: lang === "ar" ? "خصم 600 ريال" : "SAR 600 off", locked: true },
+  ];
+
+  return (
+    <div className="space-y-5">
+      {/* Hero — points balance */}
+      <div className="text-center pt-2">
+        <div className="w-24 h-24 mx-auto rounded-full bg-warning/15 flex items-center justify-center">
+          <Trophy className="w-11 h-11 text-warning-text" />
+        </div>
+        <h2 className="text-h1 text-n1 mt-4">{lang === "ar" ? `عضوية ${tier}ية` : `${tier} Member`}</h2>
+        <p className="text-caption text-n3 mt-1">{lang === "ar" ? "استمر في التسوق لربح المزيد" : "Keep shopping to earn more"}</p>
+      </div>
+
+      {/* Points summary card */}
+      <div className="bg-n8 rounded-card shadow-elev1 p-5 space-y-4">
+        <div className="flex items-baseline justify-between">
+          <div>
+            <p className="text-caption text-n3 font-semibold">{lang === "ar" ? "النقاط المتاحة" : "Available Points"}</p>
+            <p className="text-display font-bold text-n1 tabular leading-tight mt-1">{points.toLocaleString()}</p>
+          </div>
+          <div className="text-end">
+            <p className="text-caption text-n3 font-semibold">{lang === "ar" ? "القيمة" : "Value"}</p>
+            <p className="text-h2 text-success-text tabular flex items-center gap-1">
+              <Sar /> {value}
+            </p>
+          </div>
+        </div>
+
+        <div>
+          <div className="flex justify-between text-caption mb-1.5">
+            <span className="text-n3">{tier}</span>
+            <span className="text-n3">{nextTier}</span>
+          </div>
+          <div className="h-2.5 bg-n7 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-warning to-warning-text rounded-full transition-all"
+              style={{ width: `${pct}%` }}
+            />
+          </div>
+          <p className="text-caption text-n3 mt-2">
+            {lang === "ar" ? `${toNext} نقطة للوصول إلى ${nextTier}` : `${toNext} points to ${nextTier}`}
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 gap-2 pt-1">
+          <button onClick={() => toast.success(lang === "ar" ? "قريباً" : "Coming soon")}
+            className="h-11 bg-primary text-primary-foreground rounded-full font-bold text-caption shadow-elev1">
+            {lang === "ar" ? "استبدال النقاط" : "Redeem"}
+          </button>
+          <button onClick={() => toast.success(lang === "ar" ? "قريباً" : "Coming soon")}
+            className="h-11 border border-primary text-primary rounded-full font-bold text-caption">
+            {lang === "ar" ? "إرسال نقاط" : "Send Points"}
+          </button>
+        </div>
+      </div>
+
+      {/* Earning hero */}
+      <div className="rounded-card overflow-hidden bg-gradient-to-br from-warning to-warning-text text-n1 p-5 relative">
+        <Sparkles className="absolute end-3 top-3 w-20 h-20 opacity-20" />
+        <div className="flex items-center gap-2">
+          <Star className="w-5 h-5 fill-n1" />
+          <span className="text-[11px] font-bold tracking-[0.14em] uppercase">{lang === "ar" ? "اربح المزيد" : "Earn More"}</span>
+        </div>
+        <p className="text-h1 font-bold mt-2 leading-tight">
+          {lang === "ar" ? "ضاعف نقاطك هذا الأسبوع" : "Double points this week"}
+        </p>
+        <p className="text-caption opacity-90 mt-1">
+          {lang === "ar" ? "على جميع طلبات الإلكترونيات" : "On all electronics orders"}
+        </p>
+        <button onClick={() => toast.success(lang === "ar" ? "ابدأ التسوق" : "Start shopping")}
+          className="mt-3 inline-flex items-center gap-1 text-caption font-bold underline underline-offset-2">
+          {lang === "ar" ? "تسوق الآن" : "Shop now"} <ArrowUpRight className="w-4 h-4" />
+        </button>
+      </div>
+
+      {/* Recent Activity */}
+      <div>
+        <SectionTitle>{lang === "ar" ? "النشاط الأخير" : "Recent Activity"}</SectionTitle>
+        <div className="mt-2">
+          <Card>
+            {activity.map((a, i) => {
+              const Icon = a.icon;
+              const positive = a.pts.startsWith("+");
+              return (
+                <div key={i} className="flex items-center gap-3 px-4 py-3.5 border-b border-n6 last:border-0">
+                  <div className={cn("w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0",
+                    positive ? "bg-success/15" : "bg-warning/15")}>
+                    <Icon className={cn("w-4 h-4", positive ? "text-success-text" : "text-warning-text")} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-body text-n1 font-medium truncate">{a.label}</p>
+                    <p className="text-caption text-n3">{a.date}</p>
+                  </div>
+                  <span className={cn("text-body font-bold tabular",
+                    positive ? "text-success-text" : "text-warning-text")}>{a.pts}</span>
+                </div>
+              );
+            })}
+          </Card>
+        </div>
+      </div>
+
+      {/* Available Rewards */}
+      <div>
+        <SectionTitle>{lang === "ar" ? "المكافآت المتاحة" : "Available Rewards"}</SectionTitle>
+        <div className="mt-2 grid grid-cols-2 gap-3">
+          {rewards.map((r, i) => {
+            const canRedeem = !r.locked && points >= r.pts;
+            return (
+              <button
+                key={i}
+                disabled={!canRedeem}
+                onClick={() => toast.success(lang === "ar" ? "تم الاستبدال" : "Redeemed!")}
+                className={cn(
+                  "bg-n8 rounded-card shadow-elev1 p-4 text-start border transition active:scale-95",
+                  canRedeem ? "border-primary/30" : "border-n6 opacity-60",
+                )}
+              >
+                <Gift className={cn("w-6 h-6", canRedeem ? "text-primary" : "text-n4")} />
+                <p className="text-body font-bold text-n1 mt-2">{r.label}</p>
+                <p className="text-caption text-n3 mt-0.5 tabular">{r.pts.toLocaleString()} {lang === "ar" ? "نقطة" : "pts"}</p>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Ways to earn */}
+      <div>
+        <SectionTitle>{lang === "ar" ? "طرق ربح النقاط" : "Ways to Earn"}</SectionTitle>
+        <div className="mt-2">
+          <Card>
+            {earn.map((e, i) => {
+              const Icon = e.icon;
+              return (
+                <div key={i} className="flex items-center gap-3 px-4 py-3.5 border-b border-n6 last:border-0">
+                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-4 h-4 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-body text-n1 font-medium">{e.label}</p>
+                    <p className="text-caption text-n3">{e.desc}</p>
+                  </div>
+                  <TrendingUp className="w-4 h-4 text-success-text" />
+                </div>
+              );
+            })}
+          </Card>
+        </div>
+      </div>
+
+      {/* Footer actions */}
+      <Card>
+        <ActionRow icon={FileText} label={lang === "ar" ? "سجل النقاط الكامل" : "Full Points History"} onClick={() => {}} />
+        <ActionRow icon={HelpCircle} label={lang === "ar" ? "كيف يعمل البرنامج؟" : "How the program works"} onClick={() => {}} />
+      </Card>
     </div>
-    <Card>
-      <ActionRow icon={Star} label={lang === "ar" ? "استبدال النقاط" : "Redeem Points"} onClick={() => toast.success("Coming soon")} />
-      <ActionRow icon={FileText} label={lang === "ar" ? "سجل النقاط" : "Points History"} onClick={() => {}} />
-    </Card>
-  </>
-);
+  );
+};
 
 const Notifications = (lang: "en" | "ar") => {
   const [s, setS] = useState({ orders: true, deals: true, push: true, email: false, sms: true });
