@@ -18,7 +18,7 @@ export const TopBar = ({ title, right, showBack = true, onBack, transparent }: P
 
   return (
     <header
-      className={`sticky top-0 z-30 h-14 px-4 flex items-center justify-between ${
+      className={`sticky top-7 z-30 h-14 px-4 flex items-center justify-between ${
         transparent ? "bg-transparent text-n1" : "bg-primary text-n8 shadow-elev1"
       }`}
     >
