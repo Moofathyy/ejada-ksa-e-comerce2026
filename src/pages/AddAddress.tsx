@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import {
   Home, Briefcase, MapPin, Building2, Hash, Mail, Phone, Plus, Check,
 } from "lucide-react";
+import { formatSaudiMobile, parseSaudiMobile } from "@/lib/ksa";
 
 type AddrType = "home" | "work" | "other";
 
@@ -270,19 +271,41 @@ const AddAddress = () => {
         </Field>
 
         {/* Phone */}
-        <Field
-          label={tr("Phone Number", "رقم الجوال")}
-          hint={tr("e.g., +966 50 000 0000", "مثل: +966 50 000 0000")}
-          error={errors.phone}
-        >
-          <Input
-            value={form.phone}
-            onChange={e => set("phone", e.target.value)}
-            inputMode="tel"
-            placeholder="+966500000000"
-            maxLength={13}
-          />
-        </Field>
+        <label className="block">
+          <span className="text-label text-n1 font-bold">{tr("Phone Number", "رقم الجوال")}</span>
+          <div
+            className={cn(
+              "mt-2 flex items-stretch h-[52px] rounded-input border bg-n8 transition overflow-hidden",
+              errors.phone
+                ? "border-ksa-red border-2"
+                : "border-n4 focus-within:border-primary focus-within:border-2",
+            )}
+            dir="ltr"
+          >
+            <div className="flex items-center gap-1.5 px-3 bg-n7 border-e border-n6 text-n1">
+              <span className="text-lg leading-none" aria-hidden>🇸🇦</span>
+              <span className="text-body font-bold tabular">+966</span>
+            </div>
+            <input
+              type="tel"
+              inputMode="numeric"
+              autoComplete="tel-national"
+              value={formatSaudiMobile(form.phone.replace(/^\+?966/, ""))}
+              onChange={e => set("phone", `+966${parseSaudiMobile(e.target.value)}`)}
+              placeholder="XXX XXX XXXX"
+              maxLength={12}
+              aria-label={tr("Phone Number", "رقم الجوال")}
+              className="flex-1 h-full px-3 outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular tracking-wide"
+            />
+          </div>
+          {errors.phone ? (
+            <p className="mt-1 text-caption font-medium text-ksa-red" role="alert">{errors.phone}</p>
+          ) : (
+            <p className="mt-1 text-caption text-[#616161]">
+              {tr("We'll use this number for delivery updates", "سنستخدم هذا الرقم لتحديثات التوصيل")}
+            </p>
+          )}
+        </label>
 
         {/* Default */}
         <button
