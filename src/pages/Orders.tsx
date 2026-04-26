@@ -416,7 +416,7 @@ export const OrderTracking = () => {
         {/* Return CTA */}
         <button
           onClick={() => nav(`/returns/${orderId}`)}
-          className="w-full h-12 rounded-full bg-warning-bg text-warning-text font-bold flex items-center justify-center gap-2 active:scale-[0.99] transition"
+          className="w-full h-12 rounded-full bg-primary text-n8 font-bold flex items-center justify-center gap-2 active:scale-[0.99] transition"
         >
           <RotateCcw className="w-4 h-4" />
           {tr("Request Return", "طلب إرجاع")}
