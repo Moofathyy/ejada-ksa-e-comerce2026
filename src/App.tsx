@@ -23,6 +23,7 @@ import Notifications from "./pages/Notifications";
 import AddAddress from "./pages/AddAddress";
 import AddCard from "./pages/AddCard";
 import Returns from "./pages/Returns";
+import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -54,6 +55,7 @@ const App = () => (
               <Route path="/returns" element={<Returns />} />
               <Route path="/returns/:orderId" element={<Returns />} />
               <Route path="/notifications" element={<Notifications />} />
+              <Route path="/compare" element={<Compare />} />
               <Route path="/profile/addresses/new" element={<AddAddress />} />
               <Route path="/profile/payments/new" element={<AddCard />} />
               <Route path="*" element={<NotFound />} />
