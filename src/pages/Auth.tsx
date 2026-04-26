@@ -311,17 +311,48 @@ const Auth = () => {
 
         {/* SIGN UP — Step 3: Password */}
         {mode === "signup" && step === "password" && (
-          <Field label={t("password")}>
-            <input
-              type={showPwd ? "text" : "password"} autoComplete="new-password"
-              value={password} onChange={e => setPassword(e.target.value)}
-              placeholder={t("enterPassword")} dir="ltr"
-              className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-            />
-            <button type="button" onClick={() => setShowPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle password">
-              {showPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-            </button>
-          </Field>
+          <div className="space-y-5">
+            <div>
+              <Field label={t("password")}>
+                <input
+                  type={showPwd ? "text" : "password"} autoComplete="new-password"
+                  value={password} onChange={e => setPassword(e.target.value)}
+                  placeholder={t("enterPassword")} dir="ltr"
+                  className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+                />
+                <button type="button" onClick={() => setShowPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle password">
+                  {showPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </Field>
+              <p className="text-caption text-info-text mt-1">
+                {lang === "ar" ? "يجب أن تكون 6 أحرف على الأقل" : "Must be at least 6 characters"}
+              </p>
+            </div>
+
+            <div>
+              <Field label={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"}>
+                <input
+                  type={showConfirmPwd ? "text" : "password"} autoComplete="new-password"
+                  value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)}
+                  placeholder={lang === "ar" ? "أعد إدخال كلمة المرور" : "Re-enter password"} dir="ltr"
+                  className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+                />
+                <button type="button" onClick={() => setShowConfirmPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle confirm password">
+                  {showConfirmPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </Field>
+              {confirmPwd.length > 0 && password !== confirmPwd && (
+                <p className="text-caption text-destructive font-medium mt-1">
+                  {lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match"}
+                </p>
+              )}
+              {confirmPwd.length > 0 && password === confirmPwd && password.length >= 6 && (
+                <p className="text-caption text-info-text mt-1">
+                  {lang === "ar" ? "كلمتا المرور متطابقتان" : "Passwords match"}
+                </p>
+              )}
+            </div>
+          </div>
         )}
 
         {/* Primary CTA */}
