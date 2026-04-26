@@ -24,7 +24,7 @@ const Listing = () => {
   const [q, setQ] = useState("");
 
   const catName = categories.find(c => c.id === cat)?.[lang];
-  const title = catName || (lang === "ar" ? "الفئات" : "Categories");
+  const title = catName || (lang === "ar" ? "كل المنتجات" : "All Products");
   const BackIcon = dir === "rtl" ? ArrowRight : ArrowLeft;
 
   const list = useMemo(() => {
