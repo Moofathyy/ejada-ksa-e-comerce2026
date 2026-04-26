@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Check, ArrowLeft, ArrowRight, Mail } from "lucide-react";
+import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Mail } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { toast } from "sonner";
@@ -8,6 +8,26 @@ import { cn } from "@/lib/utils";
 
 type Mode = "signin" | "signup";
 type SignupStep = "info" | "otp" | "password";
+
+const getPasswordChecks = (pwd: string) => ({
+  length: pwd.length >= 8,
+  upper: /[A-Z]/.test(pwd),
+  lower: /[a-z]/.test(pwd),
+  number: /\d/.test(pwd),
+  special: /[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]~`';]/.test(pwd),
+});
+
+const isPasswordValid = (pwd: string) =>
+  Object.values(getPasswordChecks(pwd)).every(Boolean);
+
+const getPasswordStrength = (pwd: string) => {
+  const passed = Object.values(getPasswordChecks(pwd)).filter(Boolean).length;
+  if (pwd.length === 0) return { score: 0, label: "", color: "" };
+  if (passed <= 2) return { score: 1, label: "weak", color: "bg-destructive" };
+  if (passed === 3) return { score: 2, label: "fair", color: "bg-warning" };
+  if (passed === 4) return { score: 3, label: "good", color: "bg-info" };
+  return { score: 4, label: "strong", color: "bg-success" };
+};
 
 const Auth = () => {
   const nav = useNavigate();
@@ -89,7 +109,10 @@ const Auth = () => {
       return;
     }
     // password step → finalize
-    if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
+    if (!isPasswordValid(password)) {
+      toast.error(lang === "ar" ? "كلمة المرور لا تستوفي جميع المتطلبات" : "Password does not meet all requirements");
+      return;
+    }
     if (password !== confirmPwd) {
       toast.error(lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match");
       return;
@@ -310,50 +333,114 @@ const Auth = () => {
         )}
 
         {/* SIGN UP — Step 3: Password */}
-        {mode === "signup" && step === "password" && (
-          <div className="space-y-5">
-            <div>
-              <Field label={t("password")}>
-                <input
-                  type={showPwd ? "text" : "password"} autoComplete="new-password"
-                  value={password} onChange={e => setPassword(e.target.value)}
-                  placeholder={t("enterPassword")} dir="ltr"
-                  className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-                />
-                <button type="button" onClick={() => setShowPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle password">
-                  {showPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </Field>
-              <p className="text-caption text-info-text mt-1">
-                {lang === "ar" ? "يجب أن تكون 6 أحرف على الأقل" : "Must be at least 6 characters"}
-              </p>
-            </div>
+        {mode === "signup" && step === "password" && (() => {
+          const checks = getPasswordChecks(password);
+          const strength = getPasswordStrength(password);
+          const rules: { key: keyof typeof checks; en: string; ar: string }[] = [
+            { key: "length",  en: "At least 8 characters",         ar: "8 أحرف على الأقل" },
+            { key: "upper",   en: "One uppercase letter (A-Z)",    ar: "حرف كبير واحد (A-Z)" },
+            { key: "lower",   en: "One lowercase letter (a-z)",    ar: "حرف صغير واحد (a-z)" },
+            { key: "number",  en: "One number (0-9)",              ar: "رقم واحد (0-9)" },
+            { key: "special", en: "One special character (!@#…)",  ar: "رمز خاص واحد (!@#…)" },
+          ];
+          return (
+            <div className="space-y-5">
+              <div>
+                <Field label={t("password")}>
+                  <input
+                    type={showPwd ? "text" : "password"} autoComplete="new-password"
+                    value={password} onChange={e => setPassword(e.target.value)}
+                    placeholder={t("enterPassword")} dir="ltr"
+                    className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+                  />
+                  <button type="button" onClick={() => setShowPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle password">
+                    {showPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </Field>
 
-            <div>
-              <Field label={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"}>
-                <input
-                  type={showConfirmPwd ? "text" : "password"} autoComplete="new-password"
-                  value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)}
-                  placeholder={lang === "ar" ? "أعد إدخال كلمة المرور" : "Re-enter password"} dir="ltr"
-                  className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-                />
-                <button type="button" onClick={() => setShowConfirmPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle confirm password">
-                  {showConfirmPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </Field>
-              {confirmPwd.length > 0 && password !== confirmPwd && (
-                <p className="text-caption text-destructive font-medium mt-1">
-                  {lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match"}
-                </p>
-              )}
-              {confirmPwd.length > 0 && password === confirmPwd && password.length >= 6 && (
-                <p className="text-caption text-info-text mt-1">
-                  {lang === "ar" ? "كلمتا المرور متطابقتان" : "Passwords match"}
-                </p>
-              )}
+                {/* Strength meter */}
+                {password.length > 0 && (
+                  <div className="mt-2">
+                    <div className="flex gap-1.5">
+                      {[1, 2, 3, 4].map(i => (
+                        <div
+                          key={i}
+                          className={cn(
+                            "h-1 flex-1 rounded-full transition-colors",
+                            i <= strength.score ? strength.color : "bg-n6",
+                          )}
+                        />
+                      ))}
+                    </div>
+                    {strength.label && (
+                      <p className={cn(
+                        "text-caption font-semibold mt-1.5 capitalize",
+                        strength.score === 1 && "text-destructive",
+                        strength.score === 2 && "text-warning-text",
+                        strength.score === 3 && "text-info-text",
+                        strength.score === 4 && "text-success-text",
+                      )}>
+                        {lang === "ar"
+                          ? ({ weak: "ضعيفة", fair: "مقبولة", good: "جيدة", strong: "قوية" } as Record<string, string>)[strength.label]
+                          : strength.label}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Rules checklist */}
+                <ul className="mt-3 space-y-1.5">
+                  {rules.map(r => {
+                    const ok = checks[r.key];
+                    return (
+                      <li key={r.key} className="flex items-center gap-2">
+                        <span className={cn(
+                          "w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition",
+                          ok ? "bg-success" : "bg-n6",
+                        )}>
+                          {ok
+                            ? <Check className="w-3 h-3 text-n8" strokeWidth={3} />
+                            : <X className="w-3 h-3 text-n4" strokeWidth={3} />}
+                        </span>
+                        <span className={cn(
+                          "text-caption transition",
+                          ok ? "text-success-text font-medium" : "text-info-text",
+                        )}>
+                          {lang === "ar" ? r.ar : r.en}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+
+              <div>
+                <Field label={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"}>
+                  <input
+                    type={showConfirmPwd ? "text" : "password"} autoComplete="new-password"
+                    value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)}
+                    placeholder={lang === "ar" ? "أعد إدخال كلمة المرور" : "Re-enter password"} dir="ltr"
+                    className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+                  />
+                  <button type="button" onClick={() => setShowConfirmPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle confirm password">
+                    {showConfirmPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </Field>
+                {confirmPwd.length > 0 && password !== confirmPwd && (
+                  <p className="text-caption text-destructive font-medium mt-1">
+                    {lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match"}
+                  </p>
+                )}
+                {confirmPwd.length > 0 && password === confirmPwd && isPasswordValid(password) && (
+                  <p className="text-caption text-success-text font-medium mt-1 flex items-center gap-1">
+                    <Check className="w-3.5 h-3.5" strokeWidth={3} />
+                    {lang === "ar" ? "كلمتا المرور متطابقتان" : "Passwords match"}
+                  </p>
+                )}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Primary CTA */}
         <button
