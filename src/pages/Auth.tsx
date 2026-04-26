@@ -58,7 +58,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="phone-frame bg-n8 flex flex-col overflow-y-auto">
+    <div className="phone-frame bg-background flex flex-col overflow-y-auto">
       {/* Deep blue header */}
       <header className="bg-primary text-n8 px-6 pt-10 pb-10">
         <h1 className="text-display font-bold">
