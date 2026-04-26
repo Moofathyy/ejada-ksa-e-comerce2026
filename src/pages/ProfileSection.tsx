@@ -14,6 +14,7 @@ import {
   MessageSquare, Share2, UserPlus, TrendingUp, ArrowUpRight, Home, Briefcase, ArrowLeft, ArrowRight,
 } from "lucide-react";
 import { Sar } from "@/components/Sar";
+import { CardVisual } from "@/components/CardVisual";
 import { useStore } from "@/lib/store";
 
 type SectionConfig = {
