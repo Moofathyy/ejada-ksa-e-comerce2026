@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, Share2, Star, ChevronLeft, ChevronRight, X, Plus, Minus, ShoppingCart, Check, Sparkles, ShieldCheck, BadgeCheck, Zap, Truck, RefreshCw } from "lucide-react";
+import { Heart, Share2, Star, ChevronLeft, ChevronRight, ArrowLeft, X, Plus, Minus, ShoppingCart, Check, Sparkles, ShieldCheck, BadgeCheck, Zap, Truck, RefreshCw } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
@@ -48,7 +48,7 @@ const PDP = () => {
           className="absolute top-4 start-4 w-10 h-10 rounded-xl bg-n8 shadow-elev2 flex items-center justify-center active:scale-95 transition"
           aria-label="Back"
         >
-          <ArrowLeftIcon className={cn("w-5 h-5 text-n1", dir === "rtl" && "rotate-180")} />
+          <ArrowLeft className={cn("w-5 h-5 text-n1", dir === "rtl" && "rotate-180")} />
         </button>
         <div className="absolute top-4 end-4 flex gap-2">
           <button
