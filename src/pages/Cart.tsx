@@ -242,6 +242,66 @@ const Cart = () => {
         </div>,
         document.body
       )}
+
+      {/* Edit warranty bottom sheet */}
+      <Sheet open={!!editingWarrantyFor} onOpenChange={(o) => !o && setEditingWarrantyFor(null)}>
+        <SheetContent
+          side="bottom"
+          className="rounded-t-3xl max-h-[85vh] p-0 inset-x-0 mx-auto max-w-[402px] bg-n8 border-t-0"
+        >
+          <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-n6" />
+          <SheetHeader className="px-5 pt-4 pb-2">
+            <SheetTitle className="text-h2 text-n1">
+              {lang === "ar" ? "تغيير الضمان" : "Change Warranty"}
+            </SheetTitle>
+          </SheetHeader>
+          <div className="px-5 pb-6 pt-2 space-y-2">
+            {WARRANTY_OPTIONS.map((w) => {
+              const active = editingWarrantyFor?.currentId === w.id;
+              return (
+                <button
+                  key={w.id}
+                  onClick={() => {
+                    if (!editingWarrantyFor) return;
+                    const next: CartWarranty | undefined =
+                      w.price > 0 ? { id: w.id, label: w.label, price: w.price } : undefined;
+                    updateWarranty(editingWarrantyFor.productId, next);
+                    setEditingWarrantyFor(null);
+                    toast.success(lang === "ar" ? "تم تحديث الضمان" : "Warranty updated");
+                  }}
+                  className={cn(
+                    "w-full text-start p-4 rounded-input border-2 transition flex items-center gap-3 active:scale-[0.99]",
+                    active
+                      ? "border-primary bg-primary-bg"
+                      : "border-n6 bg-n8 hover:border-primary/40",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "w-10 h-10 rounded-full flex items-center justify-center shrink-0",
+                      active ? "bg-primary text-n8" : "bg-n7 text-n3",
+                    )}
+                  >
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-body font-bold text-n1">{w.label[lang]}</span>
+                      <span className="text-caption font-bold text-primary tabular shrink-0">
+                        {w.price === 0
+                          ? (lang === "ar" ? "مجاني" : "Free")
+                          : <>+{w.price.toLocaleString()} <Sar /></>}
+                      </span>
+                    </div>
+                    <p className="text-caption text-n3">{w.sub[lang]}</p>
+                  </div>
+                  {active && <Check className="w-5 h-5 text-primary shrink-0" />}
+                </button>
+              );
+            })}
+          </div>
+        </SheetContent>
+      </Sheet>
     </MobileShell>
   );
 };
