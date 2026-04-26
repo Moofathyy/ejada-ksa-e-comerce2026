@@ -102,16 +102,59 @@ const PDP = () => {
           </div>
         </div>
 
-        {/* Trust badge pills */}
+        {/* Social proof + fast delivery cutoff */}
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-caption">
+          <div className="flex items-center gap-1">
+            <Star className="w-4 h-4 fill-ksa-yellow text-ksa-yellow" />
+            <span className="font-bold text-n1 tabular">{product.rating}</span>
+            <span className="text-n4">({product.reviews})</span>
+          </div>
+          <span className="text-n4">·</span>
+          <span className="text-n2 tabular font-semibold">{sold.toLocaleString()} {lang === "ar" ? "مُباع هذا الشهر" : "sold this month"}</span>
+          {cutoff && (
+            <span className="w-full inline-flex items-center gap-1.5 text-success-text font-bold mt-1">
+              <Zap className="w-3.5 h-3.5 fill-current" />
+              {lang === "ar"
+                ? `يصل غداً إذا طلبت خلال ${cutoff.hours}س ${cutoff.minutes}د`
+                : `Tomorrow if you order within ${cutoff.hours}h ${cutoff.minutes}m`}
+            </span>
+          )}
+        </div>
+
+        {/* Tabby + Tamara installment calculator */}
+        {product.installments && (
+          <div className="mt-3 rounded-2xl border border-n6 bg-gradient-to-br from-tabby/40 to-tamara/40 p-3 space-y-2">
+            <p className="text-[11px] font-extrabold tracking-wider text-n2 uppercase">{t("payInInstallments")}</p>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="bg-tabby text-tabby-text px-2 py-0.5 rounded text-caption font-extrabold">tabby</span>
+                <span className="text-body text-n1">4 × <span className="tabular price-sar font-extrabold">{tabby.toLocaleString()}</span></span>
+              </div>
+              <span className="text-[10px] text-n3 font-semibold">{lang === "ar" ? "بدون فوائد" : "0% interest"}</span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="bg-tamara text-tamara-text px-2 py-0.5 rounded text-caption font-extrabold">tamara</span>
+                <span className="text-body text-n1">3 × <span className="tabular price-sar font-extrabold">{tamara.toLocaleString()}</span></span>
+              </div>
+              <span className="text-[10px] text-n3 font-semibold">{lang === "ar" ? "بدون فوائد" : "0% interest"}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Trust badge pills — KSA */}
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-success-text bg-success-bg px-3 py-1.5 rounded-full">
-            <Check className="w-3.5 h-3.5" /> Authorized Reseller
+          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-ksa-green bg-success-bg px-3 py-1.5 rounded-full">
+            <BadgeCheck className="w-3.5 h-3.5" /> {t("authorizedDealer")}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-primary bg-primary-bg px-3 py-1.5 rounded-full">
-            <ShieldCheck className="w-3.5 h-3.5" /> Official Warranty
+          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-primary bg-primary-bg px-3 py-1.5 rounded-full">
+            <ShieldCheck className="w-3.5 h-3.5" /> {t("officialWarranty")}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-warning-text bg-warning-bg/60 px-3 py-1.5 rounded-full">
-            <Sparkles className="w-3.5 h-3.5" /> Certified Refurbished Available
+          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-success-text bg-success-bg px-3 py-1.5 rounded-full">
+            <Truck className="w-3.5 h-3.5" /> {t("saudiStocked")}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-tamara-text bg-tamara px-3 py-1.5 rounded-full">
+            <RefreshCw className="w-3.5 h-3.5" /> {t("freeReturns")}
           </span>
         </div>
 
