@@ -257,20 +257,128 @@ export const OrderTracking = () => {
 
         {/* Action buttons */}
         <div className="grid grid-cols-2 gap-3 pt-1">
-          <button
-            onClick={() => toast(tr("Calling support…", "جارٍ الاتصال بالدعم…"))}
-            className="h-12 rounded-full border-2 border-primary text-primary font-bold flex items-center justify-center gap-2 active:bg-primary/5 transition"
-          >
-            <Phone className="w-4 h-4" />
-            {tr("Contact", "اتصال")}
-          </button>
-          <button
-            onClick={() => toast(tr("Opening order details", "فتح تفاصيل الطلب"))}
-            className="h-12 rounded-full border-2 border-primary text-primary font-bold flex items-center justify-center gap-2 active:bg-primary/5 transition"
-          >
-            <FileText className="w-4 h-4" />
-            {tr("Details", "التفاصيل")}
-          </button>
+          {/* Contact / Support sheet */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="h-12 rounded-full border-2 border-primary text-primary font-bold flex items-center justify-center gap-2 active:bg-primary/5 transition">
+                <Phone className="w-4 h-4" />
+                {tr("Contact", "اتصال")}
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-3xl bg-n8">
+              <SheetHeader className="text-start">
+                <SheetTitle className="text-h2 text-n1">
+                  {tr("Contact Support", "تواصل مع الدعم")}
+                </SheetTitle>
+                <p className="text-caption text-n3">
+                  {tr("We're here to help with your order.", "نحن هنا للمساعدة في طلبك.")}
+                </p>
+              </SheetHeader>
+
+              <div className="py-4 space-y-2">
+                <SupportRow
+                  icon={Phone}
+                  label={tr("Call Driver", "اتصل بالسائق")}
+                  value="+966 50 123 4567"
+                  onClick={() => { window.location.href = "tel:+966501234567"; }}
+                />
+                <SupportRow
+                  icon={MessageSquare}
+                  label={tr("Chat with Driver", "محادثة السائق")}
+                  value={tr("Usually replies in 2 min", "يرد عادة خلال دقيقتين")}
+                  onClick={() => toast.success(tr("Opening chat…", "جارٍ فتح المحادثة…"))}
+                />
+                <div className="my-2 h-px bg-n6" />
+                <SupportRow
+                  icon={HelpCircle}
+                  label={tr("Help Center", "مركز المساعدة")}
+                  value={tr("FAQs & guides", "الأسئلة والأدلة")}
+                  onClick={() => nav("/profile/help")}
+                />
+                <SupportRow
+                  icon={Mail}
+                  label={tr("Email Support", "البريد الإلكتروني")}
+                  value="support@ejada.sa"
+                  onClick={() => { window.location.href = "mailto:support@ejada.sa"; }}
+                />
+                <SupportRow
+                  icon={Phone}
+                  label={tr("24/7 Hotline", "الخط الساخن 24/7")}
+                  value="920000000"
+                  onClick={() => { window.location.href = "tel:920000000"; }}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          {/* Order Details sheet */}
+          <Sheet>
+            <SheetTrigger asChild>
+              <button className="h-12 rounded-full border-2 border-primary text-primary font-bold flex items-center justify-center gap-2 active:bg-primary/5 transition">
+                <FileText className="w-4 h-4" />
+                {tr("Details", "التفاصيل")}
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-3xl bg-n8 max-h-[85vh] overflow-y-auto">
+              <SheetHeader className="text-start">
+                <SheetTitle className="text-h2 text-n1">
+                  {tr("Order Details", "تفاصيل الطلب")}
+                </SheetTitle>
+                <p className="text-caption text-n3 tabular">#{orderId}</p>
+              </SheetHeader>
+
+              <div className="py-4 space-y-4">
+                {/* Items */}
+                <div>
+                  <p className="text-caption font-bold text-n3 uppercase tracking-wider mb-2">
+                    {tr("Items", "العناصر")} (2)
+                  </p>
+                  <div className="space-y-2">
+                    {[
+                      { name: tr("AirPods Pro (2nd Gen)", "إيربودز برو الجيل الثاني"), qty: 1, price: 999 },
+                      { name: tr("MagSafe Charger 15W", "شاحن ماج سيف 15 واط"), qty: 1, price: 249 },
+                    ].map((it, i) => (
+                      <div key={i} className="flex items-center gap-3 bg-n7 rounded-input p-3">
+                        <div className="w-10 h-10 rounded-input bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Package className="w-5 h-5 text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-body text-n1 font-semibold truncate">{it.name}</p>
+                          <p className="text-caption text-n3">{tr("Qty", "الكمية")}: {it.qty}</p>
+                        </div>
+                        <span className="text-body font-bold text-n1 tabular">
+                          {it.price} <Sar />
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Totals */}
+                <div className="bg-n7 rounded-card p-4 space-y-2">
+                  <DetailRow label={tr("Subtotal", "المجموع الفرعي")} value="1,248" />
+                  <DetailRow label={tr("Shipping", "الشحن")} value={tr("Free", "مجاني")} accent />
+                  <DetailRow label={tr("VAT (15%)", "ضريبة (15%)")} value="187" />
+                  <div className="h-px bg-n6 my-1" />
+                  <DetailRow label={tr("Total", "الإجمالي")} value="1,435" bold />
+                </div>
+
+                {/* Payment & address */}
+                <div className="bg-n7 rounded-card p-4 space-y-3">
+                  <div>
+                    <p className="text-caption text-n3">{tr("Payment Method", "طريقة الدفع")}</p>
+                    <p className="text-body font-bold text-n1">Mada •••• 4521</p>
+                  </div>
+                  <div className="h-px bg-n6" />
+                  <div>
+                    <p className="text-caption text-n3">{tr("Delivery Address", "عنوان التوصيل")}</p>
+                    <p className="text-body font-semibold text-n1">{tr("King Fahd Road, Building 1234", "طريق الملك فهد، مبنى 1234")}</p>
+                    <p className="text-caption text-n2">{tr("Al Olaya, Riyadh — 12213", "العليا، الرياض — 12213")}</p>
+                  </div>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
 
         {/* Return CTA */}
