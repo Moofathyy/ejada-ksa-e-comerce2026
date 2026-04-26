@@ -109,7 +109,10 @@ const Auth = () => {
       return;
     }
     // password step → finalize
-    if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
+    if (!isPasswordValid(password)) {
+      toast.error(lang === "ar" ? "كلمة المرور لا تستوفي جميع المتطلبات" : "Password does not meet all requirements");
+      return;
+    }
     if (password !== confirmPwd) {
       toast.error(lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match");
       return;
