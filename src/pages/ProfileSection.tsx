@@ -753,7 +753,7 @@ const SECTIONS: Record<string, SectionConfig> = {
   "personal-info": { title: { en: "Personal Information", ar: "المعلومات الشخصية" }, render: PersonalInfo },
   addresses: { title: { en: "Saved Addresses", ar: "العناوين المحفوظة" }, render: Addresses },
   payments: { title: { en: "Payment Methods", ar: "وسائل الدفع" }, render: PaymentMethods },
-  loyalty: { title: { en: "Loyalty Rewards", ar: "نقاط الولاء" }, render: Loyalty },
+  loyalty: { title: { en: "Loyalty Rewards", ar: "نقاط الولاء" }, render: Loyalty, hideTopBar: true },
   notifications: { title: { en: "Notifications", ar: "الإشعارات" }, render: Notifications },
   language: { title: { en: "Language & Accessibility", ar: "اللغة وإمكانية الوصول" }, render: LanguageA11y },
   appearance: { title: { en: "Appearance", ar: "المظهر" }, render: Appearance },
