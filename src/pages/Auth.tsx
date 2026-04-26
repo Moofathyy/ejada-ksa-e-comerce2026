@@ -5,6 +5,15 @@ import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  formatSaudiMobile,
+  isValidSaudiMobile,
+  maskSaudiMobile,
+  parseSaudiMobile,
+  toE164Saudi,
+  toLatinDigits,
+  formatHijri,
+} from "@/lib/ksa";
 
 type Mode = "signin" | "signup";
 type SignupStep = "info" | "otp" | "password";
