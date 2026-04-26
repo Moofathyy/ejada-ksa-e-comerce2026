@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Check } from "lucide-react";
+import { Eye, EyeOff, Check, ArrowLeft, ArrowRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { toast } from "sonner";
@@ -10,7 +10,7 @@ type Mode = "signin" | "signup";
 
 const Auth = () => {
   const nav = useNavigate();
-  const { t, lang } = useI18n();
+  const { t, lang, dir } = useI18n();
   const { signIn, city } = useStore();
   const [mode, setMode] = useState<Mode>("signin");
   const [name, setName] = useState("");
@@ -57,16 +57,36 @@ const Auth = () => {
     nav("/home", { replace: true });
   };
 
+  const BackIcon = dir === "rtl" ? ArrowRight : ArrowLeft;
+
   return (
     <div className="phone-frame bg-background flex flex-col overflow-y-auto">
-      {/* Deep blue header */}
-      <header className="bg-primary text-n8 px-6 pt-10 pb-10">
-        <h1 className="text-display font-bold">
-          {mode === "signin" ? t("welcomeBack") : t("createYourAccount")}
-        </h1>
-        <p className="text-body opacity-90 mt-1.5">
-          {mode === "signin" ? t("signInToContinue") : t("joinEjada")}
-        </p>
+      {/* Sticky primary header — matches Home style */}
+      <header className="sticky top-0 z-30 bg-primary text-n8 rounded-b-3xl shadow-elev1">
+        <div className="px-4 pt-4 pb-2 flex items-center gap-3">
+          <button
+            onClick={() => nav(-1)}
+            aria-label="Back"
+            className="w-11 h-11 rounded-full bg-n8/15 backdrop-blur flex items-center justify-center border border-n8/20 active:scale-95 transition"
+          >
+            <BackIcon className="w-5 h-5" />
+          </button>
+          <div className="leading-tight flex-1 min-w-0">
+            <p className="text-[10px] font-semibold tracking-[0.12em] opacity-80 uppercase">
+              {mode === "signin"
+                ? (lang === "ar" ? "تسجيل الدخول" : "Sign In")
+                : (lang === "ar" ? "حساب جديد" : "Create Account")}
+            </p>
+            <p className="text-h1 font-bold truncate">
+              {mode === "signin" ? t("welcomeBack") : t("createYourAccount")}
+            </p>
+          </div>
+        </div>
+        <div className="px-4 pb-4">
+          <p className="text-caption opacity-90">
+            {mode === "signin" ? t("signInToContinue") : t("joinEjada")}
+          </p>
+        </div>
       </header>
 
       <div className="px-6 pt-6 pb-8 flex-1 space-y-5">
