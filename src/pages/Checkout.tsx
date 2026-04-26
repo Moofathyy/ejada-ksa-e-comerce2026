@@ -236,6 +236,17 @@ const Checkout = () => {
         {/* Order Summary */}
         <section className="rounded-card p-4 space-y-2.5 border border-n6 bg-n8">
           <h3 className="text-body font-bold text-n1 mb-2">{lang === "ar" ? "ملخص الطلب" : "Order Summary"}</h3>
+
+          <div className="flex items-center gap-2 -mt-1 mb-1 p-2.5 rounded-input bg-success-bg/60">
+            <CalendarDays className="w-4 h-4 text-success-text shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-caption font-extrabold text-success-text leading-tight">
+                {t("estimatedArrival")} · {formatGregorian(etaDate, lang)}
+              </p>
+              <p className="text-[10px] text-n3 tabular">{t("hijri")}: {formatHijri(etaDate, lang)}</p>
+            </div>
+          </div>
+
           <div className="flex justify-between text-body text-n2">
             <span>{t("subtotal")}</span>
             <span className="tabular price-sar">{cartSubtotal.toFixed(2)}</span>
@@ -252,13 +263,19 @@ const Checkout = () => {
             </span>
             <span className="tabular price-sar">{shipping.toFixed(2)}</span>
           </div>
+          {codFee > 0 && (
+            <div className="flex justify-between text-body text-ksa-red">
+              <span>{lang === "ar" ? "رسوم الدفع عند الاستلام" : "COD service fee"}</span>
+              <span className="tabular price-sar">{codFee.toFixed(2)}</span>
+            </div>
+          )}
           <div className="flex justify-between text-body text-n2">
             <span>{t("vat")}</span>
             <span className="tabular price-sar">{vat.toFixed(2)}</span>
           </div>
           <div className="border-t border-n6 pt-2.5 mt-1 flex justify-between items-center">
             <span className="text-h2 font-bold text-n1">{t("total")}</span>
-            <span className="text-h1 font-bold text-primary tabular price-sar">{total.toFixed(2)}</span>
+            <span className="text-h1 font-extrabold text-primary tabular price-sar">{total.toFixed(2)}</span>
           </div>
         </section>
       </main>
