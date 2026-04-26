@@ -3,6 +3,7 @@
 import headphones from "@/assets/product-headphones.png";
 import tv from "@/assets/product-tv.png";
 import ps5 from "@/assets/product-ps5.png";
+import appleWatch from "@/assets/product-apple-watch.png";
 export type Product = {
   id: string;
   name: { en: string; ar: string };
@@ -68,7 +69,7 @@ export const products: Product[] = [
   {
     id: "p7",
     name: { en: "Apple Watch Series 9 GPS 45mm", ar: "آبل واتش سيريز 9 GPS 45 مم" },
-    brand: "Apple", price: 1799, originalPrice: 1999, image: "/lovable-uploads/5f650d62-6d42-4ea2-ba14-346d3ca7749d.png",
+    brand: "Apple", price: 1799, originalPrice: 1999, image: appleWatch,
     rating: 4.7, reviews: 643, delivery: "today", stock: 14, warranty: "1-year",
     installments: true, category: "wearables",
   },
