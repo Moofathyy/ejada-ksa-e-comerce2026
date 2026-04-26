@@ -25,9 +25,10 @@ const FREE_THRESHOLD = 500;
 const Cart = () => {
   const nav = useNavigate();
   const { t, lang } = useI18n();
-  const { cart, updateQty, removeFromCart, clearCart, cartSubtotal, promo, applyPromo, removePromo } = useStore();
+  const { cart, updateQty, updateWarranty, removeFromCart, clearCart, cartSubtotal, promo, applyPromo, removePromo } = useStore();
   const [code, setCode] = useState("");
   const [codeError, setCodeError] = useState(false);
+  const [editingWarrantyFor, setEditingWarrantyFor] = useState<{ productId: string; currentId: string } | null>(null);
 
   if (cart.length === 0) {
     return (
