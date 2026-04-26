@@ -31,7 +31,7 @@ const PDP = () => {
   const handleAdd = () => { addToCart(product, qty); toast.success(t("addedToCart")); };
 
   return (
-    <div className="phone-frame bg-n8 pb-28">
+    <div className="phone-frame bg-background pb-28">
       {/* Dark hero image with floating controls */}
       <div className="relative h-[380px] flex items-center justify-center overflow-hidden bg-primary-bg">
         <img src={product.image} alt={product.name[lang]} className="max-w-[80%] max-h-[85%] object-contain" />

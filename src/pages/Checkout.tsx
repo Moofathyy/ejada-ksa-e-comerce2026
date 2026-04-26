@@ -79,7 +79,7 @@ const Checkout = () => {
   const BackIcon = dir === "rtl" ? ArrowRight : ArrowLeft;
 
   return (
-    <div className="phone-frame bg-n7 pb-32">
+    <div className="phone-frame bg-background pb-32">
       {/* Deep blue header */}
       <header className="bg-primary text-n8 px-4 pt-5 pb-7">
         <div className="flex items-center gap-3">
