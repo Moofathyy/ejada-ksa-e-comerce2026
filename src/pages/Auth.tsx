@@ -9,6 +9,26 @@ import { cn } from "@/lib/utils";
 type Mode = "signin" | "signup";
 type SignupStep = "info" | "otp" | "password";
 
+const getPasswordChecks = (pwd: string) => ({
+  length: pwd.length >= 8,
+  upper: /[A-Z]/.test(pwd),
+  lower: /[a-z]/.test(pwd),
+  number: /\d/.test(pwd),
+  special: /[!@#$%^&*(),.?":{}|<>_\-+=/\\[\]~`';]/.test(pwd),
+});
+
+const isPasswordValid = (pwd: string) =>
+  Object.values(getPasswordChecks(pwd)).every(Boolean);
+
+const getPasswordStrength = (pwd: string) => {
+  const passed = Object.values(getPasswordChecks(pwd)).filter(Boolean).length;
+  if (pwd.length === 0) return { score: 0, label: "", color: "" };
+  if (passed <= 2) return { score: 1, label: "weak", color: "bg-destructive" };
+  if (passed === 3) return { score: 2, label: "fair", color: "bg-warning" };
+  if (passed === 4) return { score: 3, label: "good", color: "bg-info" };
+  return { score: 4, label: "strong", color: "bg-success" };
+};
+
 const Auth = () => {
   const nav = useNavigate();
   const { t, lang, dir } = useI18n();
