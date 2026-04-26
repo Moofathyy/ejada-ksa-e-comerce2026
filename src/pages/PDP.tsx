@@ -362,9 +362,10 @@ const PDP = () => {
 
         {/* Compare with suggested item */}
         {(() => {
-          const suggestions = products
-            .filter(p => p.id !== product.id && p.category === product.category)
-            .slice(0, 3);
+          const sameCategory = products.filter(p => p.id !== product.id && p.category === product.category);
+          const sameBrand = products.filter(p => p.id !== product.id && p.brand === product.brand && p.category !== product.category);
+          const others = products.filter(p => p.id !== product.id);
+          const suggestions = (sameCategory.length > 0 ? sameCategory : sameBrand.length > 0 ? sameBrand : others).slice(0, 3);
           if (suggestions.length === 0) return null;
           return (
             <div className="mt-6 border-t border-n6 pt-4">
