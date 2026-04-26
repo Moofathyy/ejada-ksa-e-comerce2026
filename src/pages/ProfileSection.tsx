@@ -528,7 +528,7 @@ const LoyaltyScreen = ({ lang }: { lang: "en" | "ar" }) => {
                   disabled={!canRedeem}
                   onClick={() => toast.success(tr("Redeemed!", "تم الاستبدال!"))}
                   className={cn(
-                    "mt-3 h-10 rounded-full text-caption font-bold transition active:scale-95",
+                    "mt-3 h-10 px-2 rounded-full text-[11px] font-bold leading-tight transition active:scale-95 truncate",
                     canRedeem
                       ? "bg-primary text-primary-foreground shadow-elev1"
                       : "bg-n7 text-n3 cursor-not-allowed",
@@ -536,7 +536,7 @@ const LoyaltyScreen = ({ lang }: { lang: "en" | "ar" }) => {
                 >
                   {canRedeem
                     ? tr("Redeem", "استبدل")
-                    : tr(`Need ${need} more points`, `تحتاج ${need} نقطة إضافية`)}
+                    : tr(`Need ${need.toLocaleString()} pts`, `تحتاج ${need.toLocaleString()} نقطة`)}
                 </button>
               </div>
             );
