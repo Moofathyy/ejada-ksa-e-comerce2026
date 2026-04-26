@@ -240,12 +240,6 @@ const Auth = () => {
             <p className="text-h1 font-bold truncate">{headerTitle}</p>
           </div>
         </div>
-        <div className="px-4 pb-4 flex items-center justify-between gap-3">
-          <p className="text-caption opacity-90 flex-1 min-w-0">{headerSub}</p>
-          <span className="text-[10px] font-semibold opacity-75 tabular whitespace-nowrap">
-            {formatHijri(new Date(), lang)}
-          </span>
-        </div>
       </header>
 
       <div className="px-6 pt-6 pb-8 flex-1 space-y-5">
