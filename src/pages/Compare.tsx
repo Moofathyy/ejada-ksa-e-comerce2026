@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, X, Star, Zap, ShieldCheck, Check, Minus, ShoppingBag } from "lucide-react";
+import { ArrowLeft, ArrowRight, X, Star, Zap, ShieldCheck, Check, Minus, ShoppingBag } from "lucide-react";
 import { MobileShell } from "@/components/MobileShell";
 import { useStore } from "@/lib/store";
 import { useI18n } from "@/lib/i18n";
@@ -11,7 +11,8 @@ import { cn } from "@/lib/utils";
 const Compare = () => {
   const nav = useNavigate();
   const { compareList, removeCompare, clearCompare, addToCart } = useStore();
-  const { lang, t } = useI18n();
+  const { lang, t, dir } = useI18n();
+  const ChevronBack = dir === "rtl" ? ArrowRight : ArrowLeft;
 
   const items = compareList.map(getProduct).filter(Boolean) as NonNullable<ReturnType<typeof getProduct>>[];
 
@@ -38,14 +39,26 @@ const Compare = () => {
 
   return (
     <MobileShell hideNav>
-      <header className="sticky top-0 z-20 bg-n8/95 backdrop-blur border-b border-n6">
-        <div className="flex items-center gap-3 px-4 h-14">
-          <button onClick={() => nav(-1)} aria-label="Back" className="w-9 h-9 -ms-2 flex items-center justify-center text-n1 active:scale-90 transition">
-            <ArrowLeft className="w-5 h-5 rtl:rotate-180" />
+      <header className="bg-primary text-n8 px-4 pt-5 pb-6 rounded-b-3xl shadow-elev1 mb-2">
+        <div className="flex items-center gap-3">
+          <button
+            aria-label="Back"
+            onClick={() => nav(-1)}
+            className="w-10 h-10 rounded-xl bg-n8/15 backdrop-blur flex items-center justify-center active:scale-95 transition"
+          >
+            <ChevronBack className="w-5 h-5" />
           </button>
-          <h1 className="text-h2 font-bold flex-1">{lang === "ar" ? "مقارنة المنتجات" : "Compare Products"}</h1>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-h1 font-bold leading-tight">{lang === "ar" ? "مقارنة المنتجات" : "Compare Products"}</h1>
+            <p className="text-caption opacity-80 tabular">
+              {items.length} {lang === "ar" ? "منتجات" : "items"}
+            </p>
+          </div>
           {items.length > 0 && (
-            <button onClick={() => { clearCompare(); nav(-1); }} className="text-[12px] text-n3 font-semibold">
+            <button
+              onClick={() => { clearCompare(); nav(-1); }}
+              className="h-9 px-3 rounded-xl bg-n8/15 backdrop-blur text-caption font-semibold active:scale-95 transition"
+            >
               {lang === "ar" ? "مسح" : "Clear"}
             </button>
           )}
@@ -68,7 +81,7 @@ const Compare = () => {
         <main className="pb-8">
           {/* Header cards */}
           <div
-            className="grid divide-x divide-n6 border-b border-n6 sticky top-14 bg-n8 z-10"
+            className="grid divide-x divide-n6 border-b border-n6 bg-n8"
             style={{ gridTemplateColumns: `88px repeat(${items.length}, minmax(0, 1fr))` }}
           >
             <div className="bg-n7" />
