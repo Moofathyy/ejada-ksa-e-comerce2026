@@ -16,7 +16,7 @@ export const CompareTray = () => {
   const canCompare = items.length >= 2;
 
   return (
-    <div className="fixed bottom-[72px] inset-x-0 z-30 mx-auto max-w-[402px] px-3 pb-2 animate-slide-in-bottom">
+    <div className="fixed bottom-[72px] inset-x-0 z-30 mx-auto max-w-[402px] px-3 pb-2 animate-fade-in">
       <div className="bg-n8 border border-n6 rounded-2xl shadow-elev3 overflow-hidden">
         <div className="flex items-center justify-between px-3 pt-2.5 pb-1.5">
           <div className="flex items-center gap-1.5 text-n1">
