@@ -4,6 +4,8 @@ import { Truck, ShieldCheck, Check, MapPin, ShoppingBag, ArrowLeft, ArrowRight }
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import langEn from "@/assets/lang-en.png";
+import langAr from "@/assets/lang-ar.png";
 
 type Step = 0 | 1 | 2 | 3 | 4; // 0-2 slides, 3 language, 4 city
 
@@ -108,24 +110,34 @@ const Onboarding = () => {
           <p className="text-body text-n2 mb-8">{t("chooseLanguageDesc")}</p>
           <div className="space-y-3">
             {([
-              { code: "en" as const, label: "English", sub: "Left-to-right" },
-              { code: "ar" as const, label: "العربية", sub: "من اليمين إلى اليسار" },
+              { code: "en" as const, label: "English", sub: "Left-to-right", logo: langEn },
+              { code: "ar" as const, label: "العربية", sub: "من اليمين إلى اليسار", logo: langAr },
             ]).map(opt => (
               <button
                 key={opt.code}
                 onClick={() => { setPickedLang(opt.code); setLang(opt.code); }}
                 className={cn(
-                  "w-full flex items-center justify-between p-4 rounded-2xl border-2 transition",
+                  "w-full flex items-center gap-3 p-4 rounded-2xl border-2 transition",
                   pickedLang === opt.code ? "border-primary bg-primary-bg" : "border-n6 bg-n8"
                 )}
               >
-                <div className="text-start">
-                  <div className="text-h3 text-n1 font-semibold">{opt.label}</div>
-                  <div className="text-caption text-n3 mt-0.5">{opt.sub}</div>
+                <div className="w-12 h-12 rounded-full overflow-hidden ring-1 ring-n6 bg-n8 shrink-0 flex items-center justify-center">
+                  <img
+                    src={opt.logo}
+                    alt={`${opt.label} flag`}
+                    width={48}
+                    height={48}
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="text-start flex-1 min-w-0">
+                  <div className="text-h3 text-n1 font-semibold truncate">{opt.label}</div>
+                  <div className="text-caption text-n3 mt-0.5 truncate">{opt.sub}</div>
                 </div>
                 <div className={cn(
-                  "w-6 h-6 rounded-full flex items-center justify-center border-2",
-                  pickedLang === opt.code ? "bg-primary border-primary" : "border-n5"
+                  "w-6 h-6 rounded-full flex items-center justify-center border-2 shrink-0",
+                  pickedLang === opt.code ? "bg-primary border-primary" : "border-n4"
                 )}>
                   {pickedLang === opt.code && <Check className="w-4 h-4 text-n8" strokeWidth={3} />}
                 </div>
