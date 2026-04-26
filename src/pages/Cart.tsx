@@ -133,7 +133,7 @@ const Cart = () => {
                     {oos && <span className="text-[10px] bg-n6 text-n2 px-2 py-0.5 rounded-full font-semibold">{t("outOfStock")}</span>}
                     {low && <span className="text-[10px] bg-warning-bg text-warning-text px-2 py-0.5 rounded-full font-semibold">{t("onlyXLeft", { x: p.stock })}</span>}
                     {onSale && <span className="text-[10px] bg-warning-text text-n8 px-2 py-0.5 rounded-full font-bold">{Math.round((1 - p.price / p.originalPrice!) * 100)}% {t("off")}</span>}
-                    
+                    {p.warranty && <span className="text-[10px] bg-primary-bg text-primary px-2 py-0.5 rounded-full font-semibold flex items-center gap-1"><ShieldCheck className="w-2.5 h-2.5" />{t("officialWarranty")}</span>}
                     {p.installments && <span className="text-[10px] bg-accent text-primary px-2 py-0.5 rounded-full font-semibold">Tabby/Tamara</span>}
                     {p.topSeller && <span className="text-[10px] bg-warning text-n1 px-2 py-0.5 rounded-full font-semibold">🔥 {t("topSeller")}</span>}
                   </div>
