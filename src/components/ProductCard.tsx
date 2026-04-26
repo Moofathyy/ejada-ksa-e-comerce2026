@@ -1,8 +1,10 @@
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, Zap, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Product } from "@/lib/data";
 import { useStore } from "@/lib/store";
 import { useI18n } from "@/lib/i18n";
+import { Sar } from "@/components/Sar";
+import { tabbyInstallment, soldThisMonth } from "@/lib/ksa";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -13,67 +15,104 @@ export const ProductCard = ({ product, compact }: { product: Product; compact?: 
   const fav = wishlist.includes(product.id);
   const discount = product.originalPrice ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
   const lowStock = product.stock > 0 && product.stock <= 3;
+  const sold = soldThisMonth(product.id);
+  const tabby = tabbyInstallment(product.price);
 
   return (
     <div
       onClick={() => nav(`/product/${product.id}`)}
       className={cn(
-        "bg-n8 rounded-card shadow-elev1 overflow-hidden cursor-pointer active:scale-[0.98] transition relative",
-        compact ? "min-w-[160px]" : "w-full"
+        "bg-n8 rounded-card shadow-elev1 overflow-hidden cursor-pointer active:scale-[0.98] transition relative border border-n6/60",
+        compact ? "min-w-[170px] w-[170px]" : "w-full",
       )}
     >
       <div className="relative aspect-square bg-n7">
         <img src={product.image} alt={product.name[lang]} className="w-full h-full object-contain p-3" loading="lazy" />
+
+        {/* Discount badge — Noon-style yellow */}
         {discount > 0 && (
-          <span className="absolute top-2 start-2 bg-warning-text text-n8 text-[10px] font-bold px-2 py-0.5 rounded-full">
+          <span className="absolute top-2 start-2 bg-ksa-yellow text-n1 text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-sm">
             -{discount}%
           </span>
         )}
+
+        {/* Top-seller / sold ribbon */}
+        {product.topSeller && (
+          <span className="absolute bottom-2 start-2 bg-ksa-red text-n8 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-sm">
+            🔥 {lang === "ar" ? "الأكثر مبيعاً" : "Bestseller"}
+          </span>
+        )}
+
         {product.stock === 0 && (
           <div className="absolute inset-0 bg-n8/70 flex items-center justify-center">
             <span className="bg-n2 text-n8 text-caption font-semibold px-3 py-1 rounded-full">{t("outOfStock")}</span>
           </div>
         )}
-        {lowStock && (
-          <span className="absolute bottom-2 start-2 bg-warning-text/95 text-n8 text-[10px] font-semibold px-2 py-0.5 rounded-full">
+        {lowStock && !product.topSeller && (
+          <span className="absolute bottom-2 start-2 bg-ksa-red/95 text-n8 text-[10px] font-semibold px-2 py-0.5 rounded-md">
             {t("onlyXLeft", { x: product.stock })}
           </span>
         )}
+
         <button
           onClick={(e) => { e.stopPropagation(); toggleWishlist(product.id); }}
-          className="absolute top-2 end-2 w-8 h-8 rounded-full bg-n8/90 backdrop-blur flex items-center justify-center shadow-elev1 active:scale-90 transition"
+          className="absolute top-2 end-2 w-8 h-8 rounded-full bg-n8/95 backdrop-blur flex items-center justify-center shadow-elev1 active:scale-90 transition"
           aria-label="Wishlist"
         >
-          <Heart className={cn("w-4 h-4", fav ? "fill-warning-text text-warning-text" : "text-n2")} />
+          <Heart className={cn("w-4 h-4", fav ? "fill-ksa-red text-ksa-red" : "text-n2")} />
         </button>
       </div>
 
-      <div className="p-3 space-y-1.5">
-        <p className="text-[10px] text-n4 uppercase tracking-wide">{product.brand}</p>
-        <h3 className="text-body text-n1 line-clamp-2 leading-tight min-h-[40px]">{product.name[lang]}</h3>
+      <div className="p-2.5 space-y-1">
+        <p className="text-[10px] text-n4 uppercase tracking-wide font-semibold">{product.brand}</p>
+        <h3 className="text-caption text-n1 line-clamp-2 leading-tight min-h-[34px] font-medium">{product.name[lang]}</h3>
 
-        <div className="flex items-center gap-1 text-caption">
-          <Star className="w-3.5 h-3.5 fill-warning text-warning" />
-          <span className="text-n2 font-semibold tabular">{product.rating}</span>
-          <span className="text-n4">({product.reviews})</span>
-        </div>
-
-        <div className="flex items-baseline gap-2 pt-1">
-          <span className="text-h3 text-primary font-bold tabular price-sar">{product.price.toLocaleString()}</span>
+        {/* Price block */}
+        <div className="flex items-baseline gap-1.5 pt-0.5">
+          <span className="text-h3 text-n1 font-extrabold tabular price-sar">{product.price.toLocaleString()}</span>
           {product.originalPrice && (
-            <span className="text-caption text-n4 line-through tabular">{product.originalPrice.toLocaleString()}</span>
+            <span className="text-[11px] text-n4 line-through tabular">{product.originalPrice.toLocaleString()}</span>
           )}
         </div>
 
-        <div className="flex items-center gap-1 pt-0.5">
-          <span className={cn(
-            "text-[10px] font-medium px-1.5 py-0.5 rounded",
-            product.delivery === "today" ? "bg-success-bg text-success-text" : "bg-n7 text-n2"
-          )}>
-            {product.delivery === "today" ? t("arrivedToday") : t("arrivedTomorrow")}
-          </span>
+        {/* Tabby installment */}
+        {product.installments && (
+          <div className="flex items-center gap-1 text-[10px] font-semibold">
+            <span className="bg-tabby text-tabby-text px-1.5 py-0.5 rounded">tabby</span>
+            <span className="text-n2">4 × <span className="tabular price-sar font-bold">{tabby.toLocaleString()}</span></span>
+          </div>
+        )}
+
+        {/* Rating + sold (social proof) */}
+        <div className="flex items-center gap-1.5 text-[11px]">
+          <div className="flex items-center gap-0.5">
+            <Star className="w-3 h-3 fill-ksa-yellow text-ksa-yellow" />
+            <span className="text-n2 font-bold tabular">{product.rating}</span>
+          </div>
+          <span className="text-n4">·</span>
+          <span className="text-n4 tabular">{sold.toLocaleString()} {lang === "ar" ? "مُباع" : "sold"}</span>
         </div>
 
+        {/* Fast delivery chip */}
+        <div className="flex items-center gap-1 pt-0.5">
+          {product.delivery === "today" ? (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-success-bg text-success-text">
+              <Zap className="w-2.5 h-2.5 fill-current" />
+              {t("arrivedToday")}
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded bg-primary-bg text-primary">
+              {t("arrivedTomorrow")}
+            </span>
+          )}
+          {product.warranty && !compact && (
+            <span className="inline-flex items-center gap-0.5 text-[10px] text-n3">
+              <ShieldCheck className="w-2.5 h-2.5" />
+            </span>
+          )}
+        </div>
+
+        {/* CTA */}
         {!compact && product.stock > 0 && (
           <button
             onClick={(e) => {
@@ -81,7 +120,7 @@ export const ProductCard = ({ product, compact }: { product: Product; compact?: 
               addToCart(product);
               toast.success(t("addedToCart"));
             }}
-            className="w-full mt-2 h-9 bg-primary-bg text-primary text-caption font-semibold rounded-full hover:bg-primary hover:text-n8 transition"
+            className="w-full mt-1.5 h-9 bg-ksa-yellow text-n1 text-caption font-extrabold rounded-full hover:bg-ksa-yellow-dark active:scale-[0.97] transition shadow-sm"
           >
             {t("addToCart")}
           </button>
