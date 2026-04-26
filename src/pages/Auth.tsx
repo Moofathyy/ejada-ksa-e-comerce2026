@@ -582,7 +582,7 @@ const SaudiPhoneField = ({
           autoComplete="tel-national"
           value={display}
           onChange={e => onChange(e.target.value)}
-          placeholder="5XX XXX XXXX"
+          placeholder="XXX XXX XXXX"
           maxLength={12} // "5XX XXX XXXX" = 12 chars
           aria-label={label}
           className="flex-1 h-full px-3 outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular tracking-wide"
