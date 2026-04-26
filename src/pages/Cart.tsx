@@ -116,7 +116,7 @@ const Cart = () => {
                       <p className="text-[10px] text-n4 uppercase">{p.brand}</p>
                       <h3 className="text-body text-n1 line-clamp-2 leading-tight">{p.name[lang]}</h3>
                     </div>
-                    <button onClick={() => removeFromCart(p.id)} aria-label="Remove" className="text-error -mt-1"><Trash2 className="w-4 h-4" /></button>
+                    <button onClick={() => removeFromCart(p.id)} aria-label="Remove" className="text-destructive -mt-1"><Trash2 className="w-4 h-4" /></button>
                   </div>
 
                   {/* Smart badges */}
