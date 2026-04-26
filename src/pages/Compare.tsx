@@ -181,19 +181,30 @@ const Compare = () => {
             style={{ gridTemplateColumns: `88px repeat(${items.length}, minmax(0, 1fr))` }}
           >
             <div />
-            {items.map(p => (
-              <button
-                key={p.id}
-                disabled={p.stock === 0}
-                onClick={() => { addToCart(p); toast.success(t("addedToCart")); }}
-                className={cn(
-                  "h-10 rounded-full text-[11px] font-extrabold transition",
-                  p.stock === 0 ? "bg-n6 text-n4" : "bg-gradient-primary text-n8 active:scale-[0.97] shadow-sm"
-                )}
-              >
-                {p.stock === 0 ? t("outOfStock") : t("addToCart")}
-              </button>
-            ))}
+            {items.map(p => {
+              const compact = items.length >= 3;
+              return (
+                <button
+                  key={p.id}
+                  disabled={p.stock === 0}
+                  onClick={() => { addToCart(p); toast.success(t("addedToCart")); }}
+                  aria-label={t("addToCart")}
+                  className={cn(
+                    "h-10 rounded-full font-extrabold transition flex items-center justify-center gap-1 px-1 min-w-0",
+                    compact ? "text-[10px]" : "text-[11px]",
+                    p.stock === 0 ? "bg-n6 text-n4" : "bg-gradient-primary text-n8 active:scale-[0.97] shadow-sm"
+                  )}
+                >
+                  {p.stock === 0 ? (
+                    <span className="truncate">{t("outOfStock")}</span>
+                  ) : compact ? (
+                    <ShoppingBag className="w-4 h-4" />
+                  ) : (
+                    <span className="truncate">{t("addToCart")}</span>
+                  )}
+                </button>
+              );
+            })}
           </div>
         </main>
       )}
