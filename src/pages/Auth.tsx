@@ -61,6 +61,12 @@ const Auth = () => {
   const otpRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [resendIn, setResendIn] = useState(0);
 
+  // Inline field errors
+  type FieldErrors = Partial<Record<"name" | "phone" | "email" | "password" | "confirmPwd" | "otp", string>>;
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const clearError = (k: keyof FieldErrors) =>
+    setErrors(prev => (prev[k] ? { ...prev, [k]: undefined } : prev));
+
   useEffect(() => {
     if (resendIn <= 0) return;
     const id = setInterval(() => setResendIn(s => Math.max(0, s - 1)), 1000);
@@ -87,8 +93,11 @@ const Auth = () => {
 
   // ---- Sign in ----
   const submitSignin = () => {
-    if (!validatePhone(phone)) { toast.error(ksaPhoneError); return; }
-    if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
+    const next: FieldErrors = {};
+    if (!validatePhone(phone)) next.phone = ksaPhoneError;
+    if (password.length < 6) next.password = String(t("passwordTooShort"));
+    setErrors(next);
+    if (Object.keys(next).length) return;
     setLoading(true);
     setTimeout(() => {
       signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${toE164Saudi(phone)}@phone.local`, city });
@@ -102,12 +111,12 @@ const Auth = () => {
   // ---- Sign up steps ----
   const goNextSignup = () => {
     if (step === "info") {
-      if (name.trim().length < 2) { toast.error(lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name"); return; }
-      if (!validatePhone(phone)) { toast.error(ksaPhoneError); return; }
-      if (!validateEmail(email)) {
-        toast.error(lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email");
-        return;
-      }
+      const next: FieldErrors = {};
+      if (name.trim().length < 2) next.name = lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name";
+      if (!validatePhone(phone)) next.phone = ksaPhoneError;
+      if (!validateEmail(email)) next.email = lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email";
+      setErrors(next);
+      if (Object.keys(next).length) return;
       setStep("otp");
       setResendIn(45);
       setTimeout(() => otpRefs.current[0]?.focus(), 50);
@@ -115,21 +124,23 @@ const Auth = () => {
     }
     if (step === "otp") {
       if (otp.some(d => d.length !== 1)) {
-        toast.error(lang === "ar" ? "أدخل رمز التحقق" : "Enter the verification code");
+        setErrors({ otp: lang === "ar" ? "أدخل رمز التحقق المكون من 4 أرقام" : "Enter the 4-digit verification code" });
         return;
       }
+      setErrors({});
       setStep("password");
       return;
     }
     // password step → finalize
+    const next: FieldErrors = {};
     if (!isPasswordValid(password)) {
-      toast.error(lang === "ar" ? "كلمة المرور لا تستوفي جميع المتطلبات" : "Password does not meet all requirements");
-      return;
+      next.password = lang === "ar" ? "كلمة المرور لا تستوفي جميع المتطلبات" : "Password does not meet all requirements";
     }
     if (password !== confirmPwd) {
-      toast.error(lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match");
-      return;
+      next.confirmPwd = lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match";
     }
+    setErrors(next);
+    if (Object.keys(next).length) return;
     setLoading(true);
     setTimeout(() => {
       signIn({ name: name.trim(), email: email.trim() || `${toE164Saudi(phone)}@phone.local`, city });
@@ -249,14 +260,15 @@ const Auth = () => {
             <SaudiPhoneField
               label={t("phoneNumber")}
               value={phone}
-              onChange={onPhoneChange}
+              onChange={(v) => { onPhoneChange(v); clearError("phone"); }}
               lang={lang}
+              error={errors.phone}
             />
 
-            <Field label={t("password")}>
+            <Field label={t("password")} error={errors.password}>
               <input
                 type={showPwd ? "text" : "password"} autoComplete="current-password"
-                value={password} onChange={e => setPassword(e.target.value)}
+                value={password} onChange={e => { setPassword(e.target.value); clearError("password"); }}
                 placeholder={t("enterPassword")} dir="ltr"
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
               />
@@ -289,9 +301,9 @@ const Auth = () => {
         {/* SIGN UP — Step 1: Personal info */}
         {mode === "signup" && step === "info" && (
           <>
-            <Field label={t("fullName")}>
+            <Field label={t("fullName")} error={errors.name}>
               <input
-                value={name} onChange={e => setName(e.target.value)}
+                value={name} onChange={e => { setName(e.target.value); clearError("name"); }}
                 placeholder={lang === "ar" ? "أحمد العتيبي" : "Ahmed Al-Otaibi"}
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
               />
@@ -299,14 +311,15 @@ const Auth = () => {
             <SaudiPhoneField
               label={t("phoneNumber")}
               value={phone}
-              onChange={onPhoneChange}
+              onChange={(v) => { onPhoneChange(v); clearError("phone"); }}
               lang={lang}
+              error={errors.phone}
             />
-            <Field label={lang === "ar" ? "البريد الإلكتروني" : "Email"}>
+            <Field label={lang === "ar" ? "البريد الإلكتروني" : "Email"} error={errors.email}>
               <Mail className="w-5 h-5 text-n4" />
               <input
                 type="email" inputMode="email" autoComplete="email"
-                value={email} onChange={e => setEmail(e.target.value)}
+                value={email} onChange={e => { setEmail(e.target.value); clearError("email"); }}
                 placeholder={lang === "ar" ? "name@example.com" : "name@example.com"}
                 dir="ltr"
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
@@ -324,14 +337,20 @@ const Auth = () => {
                   key={i}
                   ref={el => (otpRefs.current[i] = el)}
                   value={d}
-                  onChange={e => setOtpAt(i, e.target.value)}
+                  onChange={e => { setOtpAt(i, e.target.value); clearError("otp"); }}
                   onKeyDown={e => onOtpKeyDown(i, e)}
                   inputMode="numeric"
                   maxLength={1}
-                  className="w-14 h-16 text-center text-h1 font-bold rounded-input border-2 border-n4 focus:border-primary focus:outline-none bg-n8 text-n1 tabular"
+                  className={cn(
+                    "w-14 h-16 text-center text-h1 font-bold rounded-input border-2 focus:outline-none bg-n8 text-n1 tabular",
+                    errors.otp ? "border-destructive" : "border-n4 focus:border-primary",
+                  )}
                 />
               ))}
             </div>
+            {errors.otp && (
+              <p className="text-center text-caption text-destructive font-medium" role="alert">{errors.otp}</p>
+            )}
             <div className="text-center text-caption text-n3">
               {resendIn > 0 ? (
                 <span>
@@ -364,10 +383,10 @@ const Auth = () => {
           return (
             <div className="space-y-5">
               <div>
-                <Field label={t("password")}>
+                <Field label={t("password")} error={errors.password}>
                   <input
                     type={showPwd ? "text" : "password"} autoComplete="new-password"
-                    value={password} onChange={e => setPassword(e.target.value)}
+                    value={password} onChange={e => { setPassword(e.target.value); clearError("password"); }}
                     placeholder={t("enterPassword")} dir="ltr"
                     className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
                   />
@@ -409,10 +428,10 @@ const Auth = () => {
               </div>
 
               <div>
-                <Field label={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"}>
+                <Field label={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"} error={errors.confirmPwd}>
                   <input
                     type={showConfirmPwd ? "text" : "password"} autoComplete="new-password"
-                    value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)}
+                    value={confirmPwd} onChange={e => { setConfirmPwd(e.target.value); clearError("confirmPwd"); }}
                     placeholder={lang === "ar" ? "أعد إدخال كلمة المرور" : "Re-enter password"} dir="ltr"
                     className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
                   />
@@ -517,28 +536,42 @@ const Auth = () => {
   );
 };
 
-const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
+const Field = ({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) => (
   <label className="block">
     <span className="text-label text-n1 font-bold">{label}</span>
-    <div className="mt-2 flex items-center gap-2 h-[52px] px-4 rounded-input border border-n4 focus-within:border-primary focus-within:border-2 bg-n8 transition">
+    <div className={cn(
+      "mt-2 flex items-center gap-2 h-[52px] px-4 rounded-input border bg-n8 transition",
+      error
+        ? "border-destructive border-2"
+        : "border-n4 focus-within:border-primary focus-within:border-2",
+    )}>
       {children}
     </div>
+    {error && (
+      <p className="mt-1 text-caption text-destructive font-medium" role="alert">{error}</p>
+    )}
   </label>
 );
 
 const SaudiPhoneField = ({
-  label, value, onChange, lang,
+  label, value, onChange, lang, error,
 }: {
   label: string;
   value: string;
   onChange: (raw: string) => void;
   lang: "en" | "ar";
+  error?: string;
 }) => {
   const display = formatSaudiMobile(value);
   return (
     <label className="block">
       <span className="text-label text-n1 font-bold">{label}</span>
-      <div className="mt-2 flex items-stretch h-[52px] rounded-input border border-n4 focus-within:border-primary focus-within:border-2 bg-n8 transition overflow-hidden" dir="ltr">
+      <div className={cn(
+        "mt-2 flex items-stretch h-[52px] rounded-input border bg-n8 transition overflow-hidden",
+        error
+          ? "border-destructive border-2"
+          : "border-n4 focus-within:border-primary focus-within:border-2",
+      )} dir="ltr">
         <div className="flex items-center gap-1.5 px-3 bg-n7 border-e border-n6 text-n1">
           <span className="text-lg leading-none" aria-hidden>🇸🇦</span>
           <span className="text-body font-bold tabular">+966</span>
@@ -555,9 +588,13 @@ const SaudiPhoneField = ({
           className="flex-1 h-full px-3 outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular tracking-wide"
         />
       </div>
-      <p className="mt-1 text-caption text-[#616161]">
-        {lang === "ar" ? "نرسل رمز التحقق عبر رسالة نصية" : "We'll text you a verification code"}
-      </p>
+      {error ? (
+        <p className="mt-1 text-caption text-destructive font-medium" role="alert">{error}</p>
+      ) : (
+        <p className="mt-1 text-caption text-[#616161]">
+          {lang === "ar" ? "نرسل رمز التحقق عبر رسالة نصية" : "We'll text you a verification code"}
+        </p>
+      )}
     </label>
   );
 };
