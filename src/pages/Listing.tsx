@@ -142,30 +142,21 @@ const Listing = () => {
           </Sheet>
         </div>
 
-        {/* Category chips */}
+        {/* Quick filter chips */}
         <div className="-mx-4 px-4 overflow-x-auto no-scrollbar">
           <div className="flex gap-2 w-max pb-1">
-            <button
-              onClick={() => setCat(null)}
-              className={cn(
-                "px-4 h-9 rounded-full text-caption font-bold whitespace-nowrap transition",
-                !cat ? "bg-n8 text-primary shadow-elev1" : "bg-n8/15 text-n8 border border-n8/20",
-              )}
-            >
-              {lang === "ar" ? "الكل" : "All"}
-            </button>
-            {categories.map(c => {
-              const active = cat === c.id;
+            {QUICK.map(qf => {
+              const active = quick.includes(qf.id);
               return (
                 <button
-                  key={c.id}
-                  onClick={() => setCat(c.id)}
+                  key={qf.id}
+                  onClick={() => toggle(qf.id)}
                   className={cn(
                     "px-4 h-9 rounded-full text-caption font-bold whitespace-nowrap transition",
                     active ? "bg-n8 text-primary shadow-elev1" : "bg-n8/15 text-n8 border border-n8/20",
                   )}
                 >
-                  {c[lang]}
+                  {qf[lang]}
                 </button>
               );
             })}
@@ -173,18 +164,9 @@ const Listing = () => {
         </div>
       </header>
 
-      {/* Quick filters + count/sort */}
+      {/* Count/sort */}
       <div className="bg-n8 border-b border-n6">
-        <div className="px-4 py-2 flex gap-2 overflow-x-auto no-scrollbar">
-          {QUICK.map(qf => (
-            <button key={qf.id} onClick={() => toggle(qf.id)}
-              className={cn("flex-shrink-0 px-3.5 py-2 rounded-full text-caption font-semibold border",
-                quick.includes(qf.id) ? "bg-primary text-n8 border-primary" : "bg-n8 text-n2 border-n6")}>
-              {qf[lang]}
-            </button>
-          ))}
-        </div>
-        <div className="px-4 py-2 flex justify-between items-center border-t border-n6">
+        <div className="px-4 py-2 flex justify-between items-center">
           <span className="text-caption text-n3">{list.length} {lang === "ar" ? "عنصر" : "items"}</span>
           <Sheet>
             <SheetTrigger asChild>
