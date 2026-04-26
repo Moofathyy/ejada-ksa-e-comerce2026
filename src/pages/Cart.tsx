@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Minus, Trash2, Tag, ShieldCheck, Truck, Clock, X, ShoppingBag } from "lucide-react";
+import { TrustModule } from "@/components/TrustModule";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
@@ -171,6 +172,9 @@ const Cart = () => {
             </div>
           )}
         </div>
+
+        {/* Trust module — compact reassurance row */}
+        <TrustModule variant="compact" />
 
         {/* Summary */}
         <div className="bg-n8 rounded-card shadow-elev1 p-4 space-y-2">

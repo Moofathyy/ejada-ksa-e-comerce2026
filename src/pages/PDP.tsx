@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, Share2, Star, ChevronLeft, ChevronRight, ArrowLeft, X, Plus, Minus, ShoppingCart, Check, Sparkles, ShieldCheck, BadgeCheck, Zap, Truck, RefreshCw } from "lucide-react";
+import { Heart, Share2, Star, ChevronLeft, ChevronRight, ArrowLeft, X, Plus, Minus, ShoppingCart, Check, Sparkles, Zap } from "lucide-react";
+import { TrustModule } from "@/components/TrustModule";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
@@ -142,21 +143,8 @@ const PDP = () => {
           </div>
         )}
 
-        {/* Trust badge pills — KSA */}
-        <div className="mt-4 flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-ksa-green bg-success-bg px-3 py-1.5 rounded-full">
-            <BadgeCheck className="w-3.5 h-3.5" /> {t("authorizedDealer")}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-primary bg-primary-bg px-3 py-1.5 rounded-full">
-            <ShieldCheck className="w-3.5 h-3.5" /> {t("officialWarranty")}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-success-text bg-success-bg px-3 py-1.5 rounded-full">
-            <Truck className="w-3.5 h-3.5" /> {t("saudiStocked")}
-          </span>
-          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-tamara-text bg-tamara px-3 py-1.5 rounded-full">
-            <RefreshCw className="w-3.5 h-3.5" /> {t("freeReturns")}
-          </span>
-        </div>
+        {/* Trust module — KSA: warranty, authenticity, delivery, returns */}
+        <TrustModule variant="detailed" className="mt-4" />
 
         {/* Storage selector */}
         <div className="mt-5">

@@ -6,6 +6,7 @@ import { useStore } from "@/lib/store";
 import { formatHijri, formatGregorian } from "@/lib/ksa";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { TrustModule } from "@/components/TrustModule";
 
 type DeliveryId = "std" | "exp";
 type PayId = "mada" | "applepay" | "stcpay" | "tabby" | "tamara" | "cod";
@@ -278,6 +279,9 @@ const Checkout = () => {
             <span className="text-h1 font-extrabold text-primary tabular price-sar">{total.toFixed(2)}</span>
           </div>
         </section>
+
+        {/* Trust module — secure checkout, buyer protection, tracked delivery */}
+        <TrustModule variant="checkout" />
       </main>
 
       {/* Sticky Place Order CTA */}
