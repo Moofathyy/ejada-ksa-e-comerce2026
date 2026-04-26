@@ -11,7 +11,7 @@ import {
   User, Mail, Phone, MapPin, Plus, CreditCard, Trophy, Bell, Globe, Moon,
   Lock, Smartphone, Shield, Eye, Settings as SettingsIcon, Download, Trash2,
   HelpCircle, FileText, Star, ChevronRight, Check, Sparkles, Gift, ShoppingBag,
-  MessageSquare, Share2, UserPlus, TrendingUp, ArrowUpRight, Home, Briefcase,
+  MessageSquare, Share2, UserPlus, TrendingUp, ArrowUpRight, Home, Briefcase, ArrowLeft, ArrowRight,
 } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { useStore } from "@/lib/store";
