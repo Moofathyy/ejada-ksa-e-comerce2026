@@ -297,7 +297,7 @@ export const OrderTracking = () => {
                 {tr("Contact", "اتصال")}
               </button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="rounded-t-3xl bg-n8">
+            <SheetContent side="bottom" className="rounded-t-3xl bg-n8 inset-x-auto left-1/2 -translate-x-1/2 w-full max-w-[430px]">
               <SheetHeader className="text-start">
                 <SheetTitle className="text-h2 text-n1">
                   {tr("Contact Support", "تواصل مع الدعم")}
@@ -351,7 +351,7 @@ export const OrderTracking = () => {
                 {tr("Details", "التفاصيل")}
               </button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="rounded-t-3xl bg-n8 max-h-[85vh] overflow-y-auto">
+            <SheetContent side="bottom" className="rounded-t-3xl bg-n8 max-h-[85vh] overflow-y-auto inset-x-auto left-1/2 -translate-x-1/2 w-full max-w-[430px]">
               <SheetHeader className="text-start">
                 <SheetTitle className="text-h2 text-n1">
                   {tr("Order Details", "تفاصيل الطلب")}
