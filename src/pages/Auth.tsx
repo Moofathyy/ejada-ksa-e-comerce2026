@@ -260,14 +260,15 @@ const Auth = () => {
             <SaudiPhoneField
               label={t("phoneNumber")}
               value={phone}
-              onChange={onPhoneChange}
+              onChange={(v) => { onPhoneChange(v); clearError("phone"); }}
               lang={lang}
+              error={errors.phone}
             />
 
-            <Field label={t("password")}>
+            <Field label={t("password")} error={errors.password}>
               <input
                 type={showPwd ? "text" : "password"} autoComplete="current-password"
-                value={password} onChange={e => setPassword(e.target.value)}
+                value={password} onChange={e => { setPassword(e.target.value); clearError("password"); }}
                 placeholder={t("enterPassword")} dir="ltr"
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
               />
