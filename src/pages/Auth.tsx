@@ -555,7 +555,7 @@ const SaudiPhoneField = ({
           className="flex-1 h-full px-3 outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular tracking-wide"
         />
       </div>
-      <p className="mt-1 text-caption text-n3">
+      <p className="mt-1 text-caption text-[#616161]">
         {lang === "ar" ? "نرسل رمز التحقق عبر رسالة نصية" : "We'll text you a verification code"}
       </p>
     </label>
