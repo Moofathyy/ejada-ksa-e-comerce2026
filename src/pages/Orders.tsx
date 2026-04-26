@@ -108,7 +108,7 @@ export const OrderTracking = () => {
   return (
     <MobileShell>
       {/* Hero header */}
-      <header className="bg-primary text-n8 px-4 pt-5 pb-8 rounded-b-3xl shadow-elev1">
+      <header className="bg-primary text-n8 px-4 pt-5 pb-6 rounded-b-3xl shadow-elev1 mb-2">
         <div className="flex items-center gap-3">
           <button
             aria-label="Back"
