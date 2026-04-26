@@ -45,10 +45,10 @@ const PDP = () => {
         {/* Floating top controls */}
         <button
           onClick={() => nav(-1)}
-          className="absolute top-4 start-4 w-11 h-11 rounded-full bg-n8 shadow-elev2 flex items-center justify-center active:scale-95 transition"
+          className="absolute top-4 start-4 w-10 h-10 rounded-xl bg-n8 shadow-elev2 flex items-center justify-center active:scale-95 transition"
           aria-label="Back"
         >
-          <Back className="w-5 h-5 text-n1" />
+          <ArrowLeftIcon className={cn("w-5 h-5 text-n1", dir === "rtl" && "rotate-180")} />
         </button>
         <div className="absolute top-4 end-4 flex gap-2">
           <button

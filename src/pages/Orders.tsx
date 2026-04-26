@@ -145,7 +145,7 @@ export const OrderTracking = () => {
           <button
             aria-label="Back"
             onClick={() => nav(-1)}
-            className="w-10 h-10 rounded-full bg-n8/15 backdrop-blur flex items-center justify-center active:scale-95 transition"
+            className="w-10 h-10 rounded-xl bg-n8/15 backdrop-blur flex items-center justify-center active:scale-95 transition"
           >
             <ChevronBack className="w-5 h-5" />
           </button>
