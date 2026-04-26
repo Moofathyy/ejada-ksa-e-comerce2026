@@ -87,11 +87,11 @@ const Auth = () => {
 
   // ---- Sign in ----
   const submitSignin = () => {
-    if (!validatePhone(phone)) { toast.error(t("invalidPhone")); return; }
+    if (!validatePhone(phone)) { toast.error(ksaPhoneError); return; }
     if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
     setLoading(true);
     setTimeout(() => {
-      signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${phone.trim()}@phone.local`, city });
+      signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${toE164Saudi(phone)}@phone.local`, city });
       localStorage.setItem("ejada_user", lang === "ar" ? "أحمد" : "Ahmed");
       toast.success(t("welcomeBack"));
       setLoading(false);
@@ -103,7 +103,7 @@ const Auth = () => {
   const goNextSignup = () => {
     if (step === "info") {
       if (name.trim().length < 2) { toast.error(lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name"); return; }
-      if (!validatePhone(phone)) { toast.error(t("invalidPhone")); return; }
+      if (!validatePhone(phone)) { toast.error(ksaPhoneError); return; }
       if (!validateEmail(email)) {
         toast.error(lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email");
         return;
@@ -132,7 +132,7 @@ const Auth = () => {
     }
     setLoading(true);
     setTimeout(() => {
-      signIn({ name: name.trim(), email: email.trim() || `${phone.trim()}@phone.local`, city });
+      signIn({ name: name.trim(), email: email.trim() || `${toE164Saudi(phone)}@phone.local`, city });
       localStorage.setItem("ejada_user", name.trim());
       toast.success(t("accountCreated"));
       setLoading(false);
