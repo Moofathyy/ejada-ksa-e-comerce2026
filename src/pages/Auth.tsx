@@ -149,7 +149,7 @@ const Auth = () => {
   };
 
   const setOtpAt = (i: number, val: string) => {
-    const v = val.replace(/\D/g, "").slice(-1);
+    const v = toLatinDigits(val).replace(/\D/g, "").slice(-1);
     setOtp(prev => {
       const next = [...prev];
       next[i] = v;
@@ -201,7 +201,7 @@ const Auth = () => {
       : step === "info"
         ? (lang === "ar" ? "أخبرنا قليلاً عن نفسك" : "Tell us a bit about yourself")
         : step === "otp"
-          ? (lang === "ar" ? `أرسلنا رمزاً مكوناً من 4 أرقام إلى ${phone}` : `We sent a 4-digit code to ${phone}`)
+          ? (lang === "ar" ? `أرسلنا رمزاً مكوناً من 4 أرقام إلى ${maskSaudiMobile(phone)}` : `We sent a 4-digit code to ${maskSaudiMobile(phone)}`)
           : (lang === "ar" ? "اختر كلمة مرور آمنة" : "Choose a secure password");
 
   const ctaLabel =
