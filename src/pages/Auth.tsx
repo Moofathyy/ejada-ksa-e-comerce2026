@@ -299,14 +299,12 @@ const Auth = () => {
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
               />
             </Field>
-            <Field label={t("phoneNumber")}>
-              <input
-                type="tel" inputMode="tel" autoComplete="tel"
-                value={phone} onChange={e => setPhone(e.target.value)}
-                placeholder={t("enterPhone")} dir="ltr"
-                className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-              />
-            </Field>
+            <SaudiPhoneField
+              label={t("phoneNumber")}
+              value={phone}
+              onChange={onPhoneChange}
+              lang={lang}
+            />
             <Field label={lang === "ar" ? "البريد الإلكتروني" : "Email"}>
               <Mail className="w-5 h-5 text-n4" />
               <input
