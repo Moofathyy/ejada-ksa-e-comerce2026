@@ -94,6 +94,20 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     if (qty <= 0) return removeFromCart(id);
     setCart(prev => prev.map(i => i.product.id === id ? { ...i, qty } : i));
   }, [removeFromCart]);
+  const updateWarranty = useCallback((id: string, warranty?: CartWarranty) => {
+    setCart(prev => {
+      // Replace warranty on the matching product line; merge if a sibling line with same target warranty exists.
+      const target = prev.find(i => i.product.id === id);
+      if (!target) return prev;
+      const sibling = prev.find(i => i.product.id === id && (i.warranty?.id ?? "") === (warranty?.id ?? "") && i !== target);
+      if (sibling) {
+        return prev
+          .filter(i => i !== target)
+          .map(i => i === sibling ? { ...i, qty: i.qty + target.qty } : i);
+      }
+      return prev.map(i => i === target ? { ...i, warranty } : i);
+    });
+  }, []);
   const clearCart = useCallback(() => { setCart([]); setPromo(null); }, []);
 
   const toggleWishlist = useCallback((id: string) => {
