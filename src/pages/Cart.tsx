@@ -146,9 +146,18 @@ const Cart = () => {
                           {lang === "ar" ? "ضمان " : "Warranty: "}{warranty.label[lang]}
                         </span>
                       </div>
-                      <span className="text-[11px] font-bold text-primary tabular shrink-0">
-                        +{warranty.price.toLocaleString()} <Sar />
-                      </span>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className="text-[11px] font-bold text-primary tabular">
+                          +{warranty.price.toLocaleString()} <Sar />
+                        </span>
+                        <button
+                          onClick={() => setEditingWarrantyFor({ productId: p.id, currentId: warranty.id })}
+                          aria-label={lang === "ar" ? "تعديل الضمان" : "Edit warranty"}
+                          className="w-6 h-6 rounded-full bg-n8 border border-primary/20 flex items-center justify-center text-primary active:scale-95 transition"
+                        >
+                          <Pencil className="w-3 h-3" />
+                        </button>
+                      </div>
                     </div>
                   )}
 
