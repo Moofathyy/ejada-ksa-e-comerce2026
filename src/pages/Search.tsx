@@ -45,7 +45,7 @@ const Search = () => {
           >
             <BackIcon className="w-5 h-5" />
           </button>
-          <h1 className="text-h1 font-bold leading-none">{lang === "ar" ? "الفئات" : "Categories"}</h1>
+          <h1 className="text-h1 font-bold leading-none">{lang === "ar" ? "بحث" : "Search"}</h1>
         </div>
 
         <div className="flex items-center gap-2">
