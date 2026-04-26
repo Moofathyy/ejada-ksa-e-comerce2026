@@ -89,7 +89,7 @@ const Home = () => {
 
       </header>
 
-      <main className="pb-4 space-y-5">
+      <main className="pb-4 space-y-5 mt-[24px]">
         {/* Fast-delivery / cutoff banner — Saudi behavior cue */}
         <FastDeliveryBanner lang={lang} />
 
