@@ -40,7 +40,11 @@ const PDP = () => {
   const warrantyForCart = selectedWarranty.price > 0
     ? { id: selectedWarranty.id, label: selectedWarranty.label, price: selectedWarranty.price }
     : undefined;
-  const handleAdd = () => { addToCart(product, qty, warrantyForCart); toast.success(t("addedToCart")); };
+  const handleAdd = () => {
+    addToCart(product, qty, warrantyForCart);
+    toast.success(t("addedToCart"));
+    setTimeout(() => nav("/home"), 1000);
+  };
   const handleBuyNow = () => { addToCart(product, qty, warrantyForCart); nav("/checkout"); };
   const sold = soldThisMonth(product.id);
   const tabby = tabbyInstallment(product.price);
