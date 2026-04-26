@@ -1,7 +1,8 @@
 import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from "react";
 import { Product } from "./data";
 
-export type CartItem = { product: Product; qty: number };
+export type CartWarranty = { id: string; label: { en: string; ar: string }; price: number };
+export type CartItem = { product: Product; qty: number; warranty?: CartWarranty };
 
 export interface UserProfile {
   name: string;
@@ -29,7 +30,7 @@ export interface Address {
 interface StoreCtx {
   cart: CartItem[];
   wishlist: string[];
-  addToCart: (p: Product, qty?: number) => void;
+  addToCart: (p: Product, qty?: number, warranty?: CartWarranty) => void;
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
   clearCart: () => void;
@@ -79,11 +80,11 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const signIn = (u: UserProfile) => setUser(u);
   const signOut = () => setUser(null);
 
-  const addToCart = useCallback((p: Product, qty = 1) => {
+  const addToCart = useCallback((p: Product, qty = 1, warranty?: CartWarranty) => {
     setCart(prev => {
-      const ex = prev.find(i => i.product.id === p.id);
-      if (ex) return prev.map(i => i.product.id === p.id ? { ...i, qty: i.qty + qty } : i);
-      return [...prev, { product: p, qty }];
+      const ex = prev.find(i => i.product.id === p.id && (i.warranty?.id ?? "") === (warranty?.id ?? ""));
+      if (ex) return prev.map(i => i === ex ? { ...i, qty: i.qty + qty } : i);
+      return [...prev, { product: p, qty, warranty }];
     });
   }, []);
 
@@ -132,7 +133,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
-  const cartSubtotal = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
+  const cartSubtotal = cart.reduce((s, i) => s + (i.product.price + (i.warranty?.price ?? 0)) * i.qty, 0);
 
   return (
     <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress }}>
