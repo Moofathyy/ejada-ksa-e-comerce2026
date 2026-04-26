@@ -67,7 +67,7 @@ const Auth = () => {
           <button
             onClick={() => nav(-1)}
             aria-label="Back"
-            className="w-11 h-11 rounded-full bg-n8/15 backdrop-blur flex items-center justify-center border border-n8/20 active:scale-95 transition"
+            className="w-11 h-11 rounded-xl bg-n8/15 backdrop-blur flex items-center justify-center border border-n8/20 active:scale-95 transition"
           >
             <BackIcon className="w-5 h-5" />
           </button>
