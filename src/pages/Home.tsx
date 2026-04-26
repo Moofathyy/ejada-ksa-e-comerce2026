@@ -149,17 +149,17 @@ const Home = () => {
           </div>
         </section>
 
-        {/* Mega Deals strip — yellow Noon-style */}
+        {/* Mega Deals strip */}
         <section>
-          <div className="mx-4 rounded-card overflow-hidden bg-gradient-to-r from-ksa-yellow to-ksa-yellow-dark p-3 flex items-center gap-3 shadow-elev1">
-            <div className="w-12 h-12 rounded-full bg-n1 flex items-center justify-center shrink-0">
-              <Tag className="w-6 h-6 text-ksa-yellow" />
+          <div className="mx-4 rounded-card overflow-hidden bg-gradient-primary p-3 flex items-center gap-3 shadow-elev1">
+            <div className="w-12 h-12 rounded-full bg-n8 flex items-center justify-center shrink-0">
+              <Tag className="w-6 h-6 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-h3 font-extrabold text-n1 leading-tight">{t("megaDeals")}</p>
-              <p className="text-caption text-n1/80 font-semibold">{t("saveBig")} · {t("trustedByKsa")}</p>
+              <p className="text-h3 font-extrabold text-n8 leading-tight">{t("megaDeals")}</p>
+              <p className="text-caption text-n8/85 font-semibold">{t("saveBig")} · {t("trustedByKsa")}</p>
             </div>
-            <button onClick={() => nav("/listing")} className="bg-n1 text-ksa-yellow rounded-full h-9 px-4 text-caption font-extrabold shrink-0">
+            <button onClick={() => nav("/listing")} className="bg-n8 text-primary rounded-full h-9 px-4 text-caption font-extrabold shrink-0">
               {t("shopNow")}
             </button>
           </div>

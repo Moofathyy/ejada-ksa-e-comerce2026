@@ -333,7 +333,7 @@ const PDP = () => {
         <button
           onClick={handleBuyNow}
           disabled={product.stock === 0}
-          className="flex-1 h-14 bg-ksa-yellow text-n1 rounded-full font-extrabold text-body flex items-center justify-center gap-2 shadow-cta disabled:opacity-50 active:scale-[0.98] transition"
+          className="flex-1 h-14 bg-gradient-primary text-n8 rounded-full font-extrabold text-body flex items-center justify-center gap-2 shadow-cta disabled:opacity-50 active:scale-[0.98] transition"
         >
           <Zap className="w-5 h-5 fill-current" />
           <span>{t("buyNowAction")}</span>

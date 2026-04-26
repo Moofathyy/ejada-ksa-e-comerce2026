@@ -120,7 +120,7 @@ export const ProductCard = ({ product, compact }: { product: Product; compact?: 
               addToCart(product);
               toast.success(t("addedToCart"));
             }}
-            className="w-full mt-1.5 h-9 bg-ksa-yellow text-n1 text-caption font-extrabold rounded-full hover:bg-ksa-yellow-dark active:scale-[0.97] transition shadow-sm"
+            className="w-full mt-1.5 h-9 bg-gradient-primary text-n8 text-caption font-extrabold rounded-full active:scale-[0.97] transition shadow-sm"
           >
             {t("addToCart")}
           </button>
