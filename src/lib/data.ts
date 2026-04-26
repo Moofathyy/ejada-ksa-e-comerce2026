@@ -68,7 +68,7 @@ export const products: Product[] = [
   {
     id: "p7",
     name: { en: "Apple Watch Series 9 GPS 45mm", ar: "آبل واتش سيريز 9 GPS 45 مم" },
-    brand: "Apple", price: 1799, originalPrice: 1999, image: "/lovable-uploads/9f6ac512-ba45-43ce-a94d-5596e33013de.png",
+    brand: "Apple", price: 1799, originalPrice: 1999, image: "/lovable-uploads/787115df-57b0-4331-aec9-b1408b453782.png",
     rating: 4.7, reviews: 643, delivery: "today", stock: 14, warranty: "1-year",
     installments: true, category: "wearables",
   },
