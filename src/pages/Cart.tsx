@@ -96,7 +96,7 @@ const Cart = () => {
       </div>
 
       {/* Items */}
-      <main className="p-4 space-y-3">
+      <main className="p-4 space-y-3 pb-40">
         {cart.map(({ product: p, qty, warranty }) => {
           const oos = p.stock === 0;
           const low = p.stock > 0 && p.stock <= 3;
