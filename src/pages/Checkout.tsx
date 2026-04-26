@@ -1,15 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Truck, Zap, Check, DollarSign, Smartphone, CalendarDays, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ArrowRight, Truck, Zap, Check, DollarSign, Smartphone, CalendarDays, ShieldCheck, CalendarClock, ChevronRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { formatHijri, formatGregorian } from "@/lib/ksa";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { TrustModule } from "@/components/TrustModule";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 
 type DeliveryId = "std" | "exp";
-type PayId = "mada" | "applepay" | "stcpay" | "tabby" | "tamara" | "cod";
+type PayId = "mada" | "applepay" | "stcpay" | "cod" | "installments";
 
 const Checkout = () => {
   const nav = useNavigate();
