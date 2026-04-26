@@ -1,4 +1,4 @@
-import { Heart, Star, Zap, ShieldCheck } from "lucide-react";
+import { Heart, Star, Zap, ShieldCheck, GitCompareArrows } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Product } from "@/lib/data";
 import { useStore } from "@/lib/store";
@@ -114,16 +114,28 @@ export const ProductCard = ({ product, compact }: { product: Product; compact?: 
 
         {/* CTA */}
         {!compact && product.stock > 0 && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(product);
-              toast.success(t("addedToCart"));
-            }}
-            className="w-full mt-1.5 h-9 bg-gradient-primary text-n8 text-caption font-extrabold rounded-full active:scale-[0.97] transition shadow-sm"
-          >
-            {t("addToCart")}
-          </button>
+          <div className="flex items-center gap-1.5 mt-1.5">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                addToCart(product);
+                toast.success(t("addedToCart"));
+              }}
+              className="flex-1 h-9 bg-gradient-primary text-n8 text-caption font-extrabold rounded-full active:scale-[0.97] transition shadow-sm"
+            >
+              {t("addToCart")}
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                nav(`/listing?compare=${product.id}`);
+              }}
+              aria-label="Compare"
+              className="w-9 h-9 shrink-0 rounded-full bg-n7 border border-n6 flex items-center justify-center text-n2 active:scale-90 transition"
+            >
+              <GitCompareArrows className="w-4 h-4" />
+            </button>
+          </div>
         )}
       </div>
     </div>
