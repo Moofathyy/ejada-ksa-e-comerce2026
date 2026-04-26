@@ -528,28 +528,42 @@ const Auth = () => {
   );
 };
 
-const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
+const Field = ({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) => (
   <label className="block">
     <span className="text-label text-n1 font-bold">{label}</span>
-    <div className="mt-2 flex items-center gap-2 h-[52px] px-4 rounded-input border border-n4 focus-within:border-primary focus-within:border-2 bg-n8 transition">
+    <div className={cn(
+      "mt-2 flex items-center gap-2 h-[52px] px-4 rounded-input border bg-n8 transition",
+      error
+        ? "border-destructive border-2"
+        : "border-n4 focus-within:border-primary focus-within:border-2",
+    )}>
       {children}
     </div>
+    {error && (
+      <p className="mt-1 text-caption text-destructive font-medium" role="alert">{error}</p>
+    )}
   </label>
 );
 
 const SaudiPhoneField = ({
-  label, value, onChange, lang,
+  label, value, onChange, lang, error,
 }: {
   label: string;
   value: string;
   onChange: (raw: string) => void;
   lang: "en" | "ar";
+  error?: string;
 }) => {
   const display = formatSaudiMobile(value);
   return (
     <label className="block">
       <span className="text-label text-n1 font-bold">{label}</span>
-      <div className="mt-2 flex items-stretch h-[52px] rounded-input border border-n4 focus-within:border-primary focus-within:border-2 bg-n8 transition overflow-hidden" dir="ltr">
+      <div className={cn(
+        "mt-2 flex items-stretch h-[52px] rounded-input border bg-n8 transition overflow-hidden",
+        error
+          ? "border-destructive border-2"
+          : "border-n4 focus-within:border-primary focus-within:border-2",
+      )} dir="ltr">
         <div className="flex items-center gap-1.5 px-3 bg-n7 border-e border-n6 text-n1">
           <span className="text-lg leading-none" aria-hidden>🇸🇦</span>
           <span className="text-body font-bold tabular">+966</span>
@@ -566,9 +580,13 @@ const SaudiPhoneField = ({
           className="flex-1 h-full px-3 outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular tracking-wide"
         />
       </div>
-      <p className="mt-1 text-caption text-[#616161]">
-        {lang === "ar" ? "نرسل رمز التحقق عبر رسالة نصية" : "We'll text you a verification code"}
-      </p>
+      {error ? (
+        <p className="mt-1 text-caption text-destructive font-medium" role="alert">{error}</p>
+      ) : (
+        <p className="mt-1 text-caption text-[#616161]">
+          {lang === "ar" ? "نرسل رمز التحقق عبر رسالة نصية" : "We'll text you a verification code"}
+        </p>
+      )}
     </label>
   );
 };
