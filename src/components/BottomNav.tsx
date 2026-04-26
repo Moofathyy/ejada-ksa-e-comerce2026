@@ -5,7 +5,7 @@ import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
 const tabs = [
-  { path: "/", icon: Home, key: "home" as const },
+  { path: "/home", icon: Home, key: "home" as const },
   { path: "/wishlist", icon: Heart, key: "wishlist" as const },
   { path: "/cart", icon: ShoppingBag, key: "cart" as const },
   { path: "/orders", icon: Package, key: "orders" as const },
