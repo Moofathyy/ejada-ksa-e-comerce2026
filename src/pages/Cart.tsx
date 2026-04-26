@@ -59,7 +59,7 @@ const Cart = () => {
         right={
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className="text-caption text-warning-text font-semibold">{t("clearAll")}</button>
+              <button className="text-caption text-n8 font-semibold whitespace-nowrap">{t("clearAll")}</button>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
