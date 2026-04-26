@@ -54,6 +54,38 @@ type Step = {
   status: "done" | "active" | "pending";
 };
 
+const SupportRow = ({
+  icon: Icon, label, value, onClick,
+}: { icon: any; label: string; value: string; onClick: () => void }) => (
+  <button
+    onClick={onClick}
+    className="w-full flex items-center gap-3 p-3 rounded-input bg-n7 active:bg-n6 transition text-start"
+  >
+    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+      <Icon className="w-5 h-5 text-primary" />
+    </div>
+    <div className="flex-1 min-w-0">
+      <p className="text-body font-bold text-n1">{label}</p>
+      <p className="text-caption text-n3 truncate">{value}</p>
+    </div>
+  </button>
+);
+
+const DetailRow = ({
+  label, value, bold, accent,
+}: { label: string; value: string; bold?: boolean; accent?: boolean }) => (
+  <div className="flex items-center justify-between">
+    <span className={cn("text-caption", bold ? "text-n1 font-bold" : "text-n3")}>{label}</span>
+    <span className={cn(
+      "tabular",
+      bold ? "text-h3 text-n1 font-bold" : "text-body font-semibold",
+      accent ? "text-success-text" : "text-n1",
+    )}>
+      {value}{!accent && <> <Sar /></>}
+    </span>
+  </div>
+);
+
 export const OrderTracking = () => {
   const nav = useNavigate();
   const { id } = useParams();
