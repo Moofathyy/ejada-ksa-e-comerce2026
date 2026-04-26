@@ -140,7 +140,7 @@ export const dict: Dict = {
   cashOnDelivery: { en: "Cash on Delivery", ar: "الدفع عند الاستلام" },
   codFee: { en: "+15 SAR fee", ar: "+15 ر.س رسوم" },
   stcPay: { en: "STC Pay", ar: "STC Pay" },
-  buyNow: { en: "Buy Now", ar: "اشترِ الآن" },
+  buyNowAction: { en: "Buy Now", ar: "اشترِ الآن" },
   saudiStocked: { en: "In stock in KSA", ar: "متوفر في السعودية" },
   freeReturns: { en: "Free returns within 15 days", ar: "إرجاع مجاني خلال 15 يوم" },
   authorizedDealer: { en: "Authorized Saudi Dealer", ar: "وكيل معتمد في السعودية" },
