@@ -212,7 +212,7 @@ const Cart = () => {
       </main>
 
       {/* Sticky checkout */}
-      <div className="fixed bottom-[72px] inset-x-0 mx-auto max-w-[402px] bg-n8 border-t border-n6 p-3 safe-bottom">
+      <div className="fixed bottom-[72px] inset-x-0 mx-auto max-w-[402px] bg-n8 border-t border-n6 p-3 safe-bottom my-[4px]">
         <button onClick={() => nav("/checkout")}
           className="w-full h-[52px] bg-gradient-primary text-n8 rounded-full font-semibold text-h3 shadow-cta active:scale-[0.98] flex items-center justify-center gap-2">
           🔒 {t("secureCheckout")} · {total.toLocaleString(undefined, { maximumFractionDigits: 0 })} <Sar />
