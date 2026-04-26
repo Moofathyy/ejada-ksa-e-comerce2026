@@ -251,6 +251,36 @@ const Home = () => {
   );
 };
 
+/* ---------- Fast-delivery cutoff banner ---------- */
+const FastDeliveryBanner = ({ lang }: { lang: "en" | "ar" }) => {
+  const [left, setLeft] = useState(fastDeliveryCutoff());
+  useEffect(() => {
+    const id = setInterval(() => setLeft(fastDeliveryCutoff()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+  if (!left) return null;
+  return (
+    <div className="px-4">
+      <div className="rounded-card bg-gradient-to-r from-success-bg to-tabby border border-success/20 p-3 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-success flex items-center justify-center shrink-0">
+          <Zap className="w-5 h-5 text-n8 fill-n8" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-caption font-extrabold text-success-text leading-tight">
+            {lang === "ar"
+              ? `يصل غداً إذا طلبت خلال ${left.hours}س ${left.minutes}د`
+              : `Get it tomorrow — order within ${left.hours}h ${left.minutes}m`}
+          </p>
+          <p className="text-[10px] text-n3 mt-0.5 flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            {lang === "ar" ? "نوقف التوصيل أثناء أوقات الصلاة" : "Delivery pauses during prayer times"}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 /* ---------- Compare Section ---------- */
 type Lang = "en" | "ar";
 
