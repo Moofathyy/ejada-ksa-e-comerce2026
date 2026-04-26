@@ -35,14 +35,20 @@ const Checkout = () => {
   ];
 
   const shipping = delivery === "exp" ? 45 : 0;
+  const codFee = pay === "cod" ? 15 : 0;
   const discount = promo ? cartSubtotal * promo.discount : 0;
   const vat = (cartSubtotal - discount + shipping) * 0.15;
-  const total = cartSubtotal - discount + shipping + vat;
+  const total = cartSubtotal - discount + shipping + vat + codFee;
+
+  // Delivery ETA — Saudi: today/tomorrow with Hijri date
+  const etaDate = new Date();
+  etaDate.setDate(etaDate.getDate() + (delivery === "exp" ? 1 : 4));
 
   const payments: { id: PayId; name: string; sub?: string; icon: React.ReactNode; iconBg: string }[] = [
     {
       id: "mada", name: lang === "ar" ? "مدى" : "Mada",
-      icon: <span className="text-body font-bold text-n8">م</span>,
+      sub: lang === "ar" ? "البطاقة الأكثر استخداماً" : "Most used in KSA",
+      icon: <span className="text-body font-extrabold text-n8">م</span>,
       iconBg: "bg-primary",
     },
     {
@@ -51,15 +57,28 @@ const Checkout = () => {
       iconBg: "bg-n1",
     },
     {
-      id: "cod", name: lang === "ar" ? "الدفع عند الاستلام" : "Cash on Delivery",
-      icon: <DollarSign className="w-4 h-4 text-n2" />,
-      iconBg: "bg-n7",
+      id: "stcpay", name: "STC Pay",
+      sub: lang === "ar" ? "محفظة سعودية" : "Saudi wallet",
+      icon: <Smartphone className="w-4 h-4 text-n8" />,
+      iconBg: "bg-[#4F1F8F]",
     },
     {
-      id: "tamara", name: lang === "ar" ? "ادفع لاحقاً" : "Pay Later",
-      sub: lang === "ar" ? "أقساط بدون فوائد" : "Interest-free installments",
-      icon: <span className="text-body font-bold text-[#9333EA]">T</span>,
-      iconBg: "bg-[#F3E8FF]",
+      id: "tabby", name: "Tabby",
+      sub: lang === "ar" ? "قسّمها على 4 دفعات بدون فوائد" : "Pay in 4 — interest-free",
+      icon: <span className="text-[10px] font-extrabold text-tabby-text">4×</span>,
+      iconBg: "bg-tabby",
+    },
+    {
+      id: "tamara", name: "Tamara",
+      sub: lang === "ar" ? "قسّمها على 3 دفعات" : "Split in 3 payments",
+      icon: <span className="text-[10px] font-extrabold text-tamara-text">3×</span>,
+      iconBg: "bg-tamara",
+    },
+    {
+      id: "cod", name: lang === "ar" ? "الدفع عند الاستلام" : "Cash on Delivery",
+      sub: lang === "ar" ? "+15 ر.س رسوم" : "+15 SAR service fee",
+      icon: <DollarSign className="w-4 h-4 text-n8" />,
+      iconBg: "bg-ksa-red",
     },
   ];
 
