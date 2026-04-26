@@ -149,7 +149,19 @@ const Auth = () => {
   };
 
   const setOtpAt = (i: number, val: string) => {
-    const v = toLatinDigits(val).replace(/\D/g, "").slice(-1);
+    const cleaned = toLatinDigits(val).replace(/\D/g, "");
+    // Paste support: if user pasted multiple digits, fill from current index
+    if (cleaned.length > 1) {
+      setOtp(prev => {
+        const next = [...prev];
+        for (let k = 0; k < cleaned.length && i + k < 4; k++) next[i + k] = cleaned[k];
+        return next;
+      });
+      const lastIdx = Math.min(i + cleaned.length - 1, 3);
+      otpRefs.current[lastIdx]?.focus();
+      return;
+    }
+    const v = cleaned.slice(-1);
     setOtp(prev => {
       const next = [...prev];
       next[i] = v;
