@@ -337,14 +337,20 @@ const Auth = () => {
                   key={i}
                   ref={el => (otpRefs.current[i] = el)}
                   value={d}
-                  onChange={e => setOtpAt(i, e.target.value)}
+                  onChange={e => { setOtpAt(i, e.target.value); clearError("otp"); }}
                   onKeyDown={e => onOtpKeyDown(i, e)}
                   inputMode="numeric"
                   maxLength={1}
-                  className="w-14 h-16 text-center text-h1 font-bold rounded-input border-2 border-n4 focus:border-primary focus:outline-none bg-n8 text-n1 tabular"
+                  className={cn(
+                    "w-14 h-16 text-center text-h1 font-bold rounded-input border-2 focus:outline-none bg-n8 text-n1 tabular",
+                    errors.otp ? "border-destructive" : "border-n4 focus:border-primary",
+                  )}
                 />
               ))}
             </div>
+            {errors.otp && (
+              <p className="text-center text-caption text-destructive font-medium" role="alert">{errors.otp}</p>
+            )}
             <div className="text-center text-caption text-n3">
               {resendIn > 0 ? (
                 <span>
