@@ -36,14 +36,16 @@ export const CompareTray = () => {
         <div className="flex items-center gap-2 px-3 pb-3">
           <div className="flex gap-1.5 flex-1 overflow-x-auto no-scrollbar">
             {items.map(p => (
-              <div key={p!.id} className="relative shrink-0 w-12 h-12 rounded-lg bg-n7 border border-n6 overflow-hidden">
-                <img src={p!.image} alt={p!.name[lang]} className="w-full h-full object-contain p-1" />
+              <div key={p!.id} className="relative shrink-0 w-12 h-12 pt-1.5 pe-1.5">
+                <div className="w-full h-full rounded-lg bg-n7 border border-n6 overflow-hidden">
+                  <img src={p!.image} alt={p!.name[lang]} className="w-full h-full object-contain p-1" />
+                </div>
                 <button
                   onClick={() => removeCompare(p!.id)}
-                  className="absolute -top-1 -end-1 w-4 h-4 rounded-full bg-n1 text-n8 flex items-center justify-center shadow-elev1 active:scale-90 transition"
+                  className="absolute top-0 end-0 w-5 h-5 rounded-full bg-n1 text-n8 flex items-center justify-center shadow-elev2 active:scale-90 transition ring-2 ring-n8"
                   aria-label="Remove"
                 >
-                  <X className="w-2.5 h-2.5" strokeWidth={3} />
+                  <X className="w-3 h-3" strokeWidth={3} />
                 </button>
               </div>
             ))}
