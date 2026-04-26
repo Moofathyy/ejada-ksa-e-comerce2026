@@ -1,11 +1,12 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Copy, MapPin, Navigation, CheckCircle2, Phone, MessageSquare, RotateCcw, FileText } from "lucide-react";
+import { ArrowLeft, ArrowRight, Copy, MapPin, Navigation, CheckCircle2, Phone, MessageSquare, RotateCcw, FileText, Mail, HelpCircle, Package } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { TopBar } from "@/components/TopBar";
 import { MobileShell } from "@/components/MobileShell";
 import { useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const ORDERS = [
   { id: "SA-2024-849021", date: "Today", status: "out", items: 2, total: 1899 },
