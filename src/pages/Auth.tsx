@@ -301,9 +301,9 @@ const Auth = () => {
         {/* SIGN UP — Step 1: Personal info */}
         {mode === "signup" && step === "info" && (
           <>
-            <Field label={t("fullName")}>
+            <Field label={t("fullName")} error={errors.name}>
               <input
-                value={name} onChange={e => setName(e.target.value)}
+                value={name} onChange={e => { setName(e.target.value); clearError("name"); }}
                 placeholder={lang === "ar" ? "أحمد العتيبي" : "Ahmed Al-Otaibi"}
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
               />
@@ -311,14 +311,15 @@ const Auth = () => {
             <SaudiPhoneField
               label={t("phoneNumber")}
               value={phone}
-              onChange={onPhoneChange}
+              onChange={(v) => { onPhoneChange(v); clearError("phone"); }}
               lang={lang}
+              error={errors.phone}
             />
-            <Field label={lang === "ar" ? "البريد الإلكتروني" : "Email"}>
+            <Field label={lang === "ar" ? "البريد الإلكتروني" : "Email"} error={errors.email}>
               <Mail className="w-5 h-5 text-n4" />
               <input
                 type="email" inputMode="email" autoComplete="email"
-                value={email} onChange={e => setEmail(e.target.value)}
+                value={email} onChange={e => { setEmail(e.target.value); clearError("email"); }}
                 placeholder={lang === "ar" ? "name@example.com" : "name@example.com"}
                 dir="ltr"
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
