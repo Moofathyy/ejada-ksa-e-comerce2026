@@ -256,26 +256,61 @@ const Addresses = (lang: "en" | "ar") => {
 };
 
 
-const PaymentMethods = (lang: "en" | "ar") => (
-  <div className="space-y-3">
-    {[
-      { brand: "Mada", last4: "4521", exp: "08/27" },
-      { brand: "Visa", last4: "1248", exp: "11/26" },
-    ].map((c, i) => (
-      <div key={i} className="bg-gradient-to-br from-primary to-primary/80 text-n8 rounded-card shadow-elev1 p-5">
-        <div className="flex justify-between items-start">
-          <CreditCard className="w-8 h-8" />
-          <span className="text-body font-bold">{c.brand}</span>
+const PaymentMethods = (lang: "en" | "ar") => <PaymentMethodsScreen lang={lang} />;
+
+const PaymentMethodsScreen = ({ lang }: { lang: "en" | "ar" }) => {
+  const nav = useNavigate();
+  const tr = (en: string, ar: string) => (lang === "ar" ? ar : en);
+  const cards: Array<{
+    brand: "mada" | "visa" | "mastercard";
+    number: string;   // last4 padded for preview
+    holder: string;
+    exp: string;
+    isDefault?: boolean;
+  }> = [
+    { brand: "mada", number: "•••• •••• •••• 4521", holder: "AHMED AL-OTAIBI", exp: "08/27", isDefault: true },
+    { brand: "visa", number: "•••• •••• •••• 1248", holder: "AHMED AL-OTAIBI", exp: "11/26" },
+  ];
+
+  return (
+    <div className="space-y-4">
+      {cards.map((c, i) => (
+        <div key={i} className="relative">
+          <CardVisual
+            number={c.number}
+            holder={c.holder}
+            expiry={c.exp}
+            brand={c.brand}
+            lang={lang}
+          />
+          <div className="mt-2 flex items-center justify-between px-1">
+            <div className="flex items-center gap-2">
+              {c.isDefault && (
+                <span className="text-caption font-bold text-primary bg-primary-bg px-2 py-0.5 rounded-full">
+                  {tr("Default", "افتراضية")}
+                </span>
+              )}
+              <span className="text-caption text-n3 capitalize">{c.brand}</span>
+            </div>
+            <button
+              onClick={() => toast.success(tr("Card removed", "تم حذف البطاقة"))}
+              className="text-caption text-warning-text font-semibold"
+            >
+              {tr("Remove", "إزالة")}
+            </button>
+          </div>
         </div>
-        <p className="text-h2 tabular tracking-widest mt-6">•••• {c.last4}</p>
-        <p className="text-caption opacity-80 mt-1">{lang === "ar" ? "الانتهاء" : "Expires"} {c.exp}</p>
-      </div>
-    ))}
-    <button onClick={() => toast.success(lang === "ar" ? "إضافة بطاقة جديدة" : "Add new card")} className="w-full h-12 border-2 border-dashed border-n5 rounded-card flex items-center justify-center gap-2 text-primary font-semibold">
-      <Plus className="w-5 h-5" /> {lang === "ar" ? "إضافة بطاقة" : "Add Card"}
-    </button>
-  </div>
-);
+      ))}
+      <button
+        onClick={() => nav("/profile/payments/new")}
+        className="w-full h-14 border-2 border-dashed border-n5 rounded-card flex items-center justify-center gap-2 text-primary font-semibold active:scale-[0.99] transition"
+      >
+        <Plus className="w-5 h-5" />
+        {tr("Add New Card", "إضافة بطاقة جديدة")}
+      </button>
+    </div>
+  );
+};
 
 const Loyalty = (lang: "en" | "ar") => <LoyaltyScreen lang={lang} />;
 
