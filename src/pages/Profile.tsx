@@ -137,7 +137,7 @@ const Profile = () => {
                   <Icon className="w-3.5 h-3.5" />
                   <span>{s.label}</span>
                 </div>
-                <p className={cn("text-body font-bold mt-0.5", s.success && "text-success")}>{s.value}</p>
+                <p className="font-bold mt-0.5 text-n8">{s.value}</p>
               </div>
             );
           })}
