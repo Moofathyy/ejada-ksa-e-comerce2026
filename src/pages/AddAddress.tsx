@@ -325,8 +325,8 @@ const Field = ({
     <label className="text-caption text-n2 font-bold">{label}</label>
     {children}
     {error
-      ? <p className="text-caption text-warning-text mt-1">{error}</p>
-      : hint && <p className="text-caption text-n3 mt-1">{hint}</p>}
+      ? <p className="text-caption text-destructive mt-1 font-medium">{error}</p>
+      : hint && <p className="text-caption text-info-text mt-1">{hint}</p>}
   </div>
 );
 
