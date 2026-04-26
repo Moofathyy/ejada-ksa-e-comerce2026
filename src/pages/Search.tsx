@@ -5,6 +5,7 @@ import { useI18n } from "@/lib/i18n";
 import { products } from "@/lib/data";
 import { MobileShell } from "@/components/MobileShell";
 import { ProductCard } from "@/components/ProductCard";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 
 const TRENDING = ["iPhone 15", "AirPods Pro", "PS5", "MacBook Pro", "Galaxy S24"];
@@ -63,12 +64,26 @@ const Search = () => {
               <Mic className="w-5 h-5 text-n8" />
             )}
           </div>
-          <button
-            aria-label="Filters"
-            className="w-11 h-11 rounded-input bg-n8/15 backdrop-blur border border-n8/20 flex items-center justify-center active:scale-95 transition"
-          >
-            <SlidersHorizontal className="w-5 h-5 text-n8" />
-          </button>
+          <Sheet>
+            <SheetTrigger asChild>
+              <button
+                aria-label="Filters"
+                className="w-11 h-11 rounded-input bg-n8/15 backdrop-blur border border-n8/20 flex items-center justify-center active:scale-95 transition"
+              >
+                <SlidersHorizontal className="w-5 h-5 text-n8" />
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="rounded-t-3xl max-h-[85vh]">
+              <SheetHeader><SheetTitle>{lang === "ar" ? "تصفية" : "Filter"}</SheetTitle></SheetHeader>
+              <div className="space-y-4 py-4">
+                <div><h4 className="text-h3 mb-2">{lang === "ar" ? "السعر" : "Price"}</h4><input type="range" min={0} max={10000} className="w-full" /></div>
+                <div><h4 className="text-h3 mb-2">{lang === "ar" ? "الماركة" : "Brand"}</h4>
+                  <div className="flex flex-wrap gap-2">{["Apple", "Samsung", "Sony"].map(b => <span key={b} className="px-3 py-1.5 bg-n7 rounded-full text-caption">{b}</span>)}</div>
+                </div>
+                <div><h4 className="text-h3 mb-2">{lang === "ar" ? "التقييم" : "Rating"}</h4><div className="flex gap-2">{[5,4,3].map(r => <span key={r} className="px-3 py-1.5 bg-n7 rounded-full text-caption">{r}★+</span>)}</div></div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
 
         <div className="-mx-4 px-4 overflow-x-auto no-scrollbar">
