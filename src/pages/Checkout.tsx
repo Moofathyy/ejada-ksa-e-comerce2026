@@ -225,6 +225,41 @@ const Checkout = () => {
               );
             })}
           </div>
+
+          {/* Installments CTA */}
+          <button
+            type="button"
+            onClick={() => setShowInstallSheet(true)}
+            className={cn(
+              "w-full mt-1 bg-n8 rounded-card p-3.5 flex items-center gap-3 border-2 transition text-start",
+              pay === "installments" ? "border-primary shadow-elev1" : "border-n6 border-dashed",
+            )}
+          >
+            <div className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 bg-gradient-primary">
+              <CalendarClock className="w-4 h-4 text-n8" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-body font-bold text-n1">
+                {lang === "ar" ? "الدفع بالتقسيط" : "Pay in Installments"}
+              </p>
+              <p className="text-caption text-n3">
+                {pay === "installments"
+                  ? (lang === "ar"
+                      ? `${installPlan} دفعات × ${(total / installPlan).toFixed(2)} ر.س`
+                      : `${installPlan} payments × ${(total / installPlan).toFixed(2)} SAR`)
+                  : (lang === "ar"
+                      ? "قسّم المبلغ على عدة دفعات بدون فوائد"
+                      : "Split your total — interest-free options")}
+              </p>
+            </div>
+            {pay === "installments" ? (
+              <span className="text-caption font-bold text-primary shrink-0">
+                {lang === "ar" ? "تعديل" : "Edit"}
+              </span>
+            ) : (
+              <ChevronRight className={cn("w-5 h-5 text-n3 shrink-0", dir === "rtl" && "rotate-180")} />
+            )}
+          </button>
         </section>
 
         {/* Order Summary */}
