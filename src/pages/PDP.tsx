@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, Share2, Star, ChevronLeft, ChevronRight, X, Plus, Minus, ShoppingCart, Check, Sparkles, ShieldCheck, BadgeCheck } from "lucide-react";
+import { Heart, Share2, Star, ChevronLeft, ChevronRight, X, Plus, Minus, ShoppingCart, Check, Sparkles, ShieldCheck, BadgeCheck, Zap, Truck, RefreshCw } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { getProduct, products } from "@/lib/data";
 import { ProductCard } from "@/components/ProductCard";
+import { tabbyInstallment, tamaraInstallment, soldThisMonth, fastDeliveryCutoff } from "@/lib/ksa";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -29,6 +30,11 @@ const PDP = () => {
   const connOpts = ["Wi-Fi 7", "5G", "Bluetooth 5.3"];
 
   const handleAdd = () => { addToCart(product, qty); toast.success(t("addedToCart")); };
+  const handleBuyNow = () => { addToCart(product, qty); nav("/checkout"); };
+  const sold = soldThisMonth(product.id);
+  const tabby = tabbyInstallment(product.price);
+  const tamara = tamaraInstallment(product.price);
+  const cutoff = fastDeliveryCutoff();
 
   return (
     <div className="phone-frame bg-background pb-28">
@@ -96,16 +102,59 @@ const PDP = () => {
           </div>
         </div>
 
-        {/* Trust badge pills */}
+        {/* Social proof + fast delivery cutoff */}
+        <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 text-caption">
+          <div className="flex items-center gap-1">
+            <Star className="w-4 h-4 fill-ksa-yellow text-ksa-yellow" />
+            <span className="font-bold text-n1 tabular">{product.rating}</span>
+            <span className="text-n4">({product.reviews})</span>
+          </div>
+          <span className="text-n4">·</span>
+          <span className="text-n2 tabular font-semibold">{sold.toLocaleString()} {lang === "ar" ? "مُباع هذا الشهر" : "sold this month"}</span>
+          {cutoff && (
+            <span className="w-full inline-flex items-center gap-1.5 text-success-text font-bold mt-1">
+              <Zap className="w-3.5 h-3.5 fill-current" />
+              {lang === "ar"
+                ? `يصل غداً إذا طلبت خلال ${cutoff.hours}س ${cutoff.minutes}د`
+                : `Tomorrow if you order within ${cutoff.hours}h ${cutoff.minutes}m`}
+            </span>
+          )}
+        </div>
+
+        {/* Tabby + Tamara installment calculator */}
+        {product.installments && (
+          <div className="mt-3 rounded-2xl border border-n6 bg-gradient-to-br from-tabby/40 to-tamara/40 p-3 space-y-2">
+            <p className="text-[11px] font-extrabold tracking-wider text-n2 uppercase">{t("payInInstallments")}</p>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="bg-tabby text-tabby-text px-2 py-0.5 rounded text-caption font-extrabold">tabby</span>
+                <span className="text-body text-n1">4 × <span className="tabular price-sar font-extrabold">{tabby.toLocaleString()}</span></span>
+              </div>
+              <span className="text-[10px] text-n3 font-semibold">{lang === "ar" ? "بدون فوائد" : "0% interest"}</span>
+            </div>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <span className="bg-tamara text-tamara-text px-2 py-0.5 rounded text-caption font-extrabold">tamara</span>
+                <span className="text-body text-n1">3 × <span className="tabular price-sar font-extrabold">{tamara.toLocaleString()}</span></span>
+              </div>
+              <span className="text-[10px] text-n3 font-semibold">{lang === "ar" ? "بدون فوائد" : "0% interest"}</span>
+            </div>
+          </div>
+        )}
+
+        {/* Trust badge pills — KSA */}
         <div className="mt-4 flex flex-wrap gap-2">
-          <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-success-text bg-success-bg px-3 py-1.5 rounded-full">
-            <Check className="w-3.5 h-3.5" /> Authorized Reseller
+          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-ksa-green bg-success-bg px-3 py-1.5 rounded-full">
+            <BadgeCheck className="w-3.5 h-3.5" /> {t("authorizedDealer")}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-primary bg-primary-bg px-3 py-1.5 rounded-full">
-            <ShieldCheck className="w-3.5 h-3.5" /> Official Warranty
+          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-primary bg-primary-bg px-3 py-1.5 rounded-full">
+            <ShieldCheck className="w-3.5 h-3.5" /> {t("officialWarranty")}
           </span>
-          <span className="inline-flex items-center gap-1.5 text-caption font-semibold text-warning-text bg-warning-bg/60 px-3 py-1.5 rounded-full">
-            <Sparkles className="w-3.5 h-3.5" /> Certified Refurbished Available
+          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-success-text bg-success-bg px-3 py-1.5 rounded-full">
+            <Truck className="w-3.5 h-3.5" /> {t("saudiStocked")}
+          </span>
+          <span className="inline-flex items-center gap-1.5 text-caption font-bold text-tamara-text bg-tamara px-3 py-1.5 rounded-full">
+            <RefreshCw className="w-3.5 h-3.5" /> {t("freeReturns")}
           </span>
         </div>
 
@@ -271,15 +320,23 @@ const PDP = () => {
         </div>
       </main>
 
-      {/* Fixed Add to Cart bar */}
-      <div className="fixed bottom-0 inset-x-0 mx-auto max-w-[402px] bg-n8 border-t border-n6 px-5 pt-3 safe-bottom shadow-elev2 z-40 pb-[24px] py-[16px] my-0">
+      {/* Fixed Add to Cart + Buy Now bar */}
+      <div className="fixed bottom-0 inset-x-0 mx-auto max-w-[402px] bg-n8 border-t border-n6 px-4 pt-3 pb-[20px] safe-bottom shadow-elev2 z-40 flex gap-2.5">
         <button
           onClick={handleAdd}
           disabled={product.stock === 0}
-          className="w-full h-14 bg-gradient-to-r from-primary to-primary-light text-n8 rounded-full font-semibold flex items-center justify-center gap-2 shadow-cta disabled:opacity-50 active:scale-[0.99] transition"
+          className="flex-1 h-14 bg-primary text-n8 rounded-full font-bold text-body flex items-center justify-center gap-2 shadow-elev1 disabled:opacity-50 active:scale-[0.98] transition"
         >
           <ShoppingCart className="w-5 h-5" />
           <span>{t("addToCart")}</span>
+        </button>
+        <button
+          onClick={handleBuyNow}
+          disabled={product.stock === 0}
+          className="flex-1 h-14 bg-ksa-yellow text-n1 rounded-full font-extrabold text-body flex items-center justify-center gap-2 shadow-cta disabled:opacity-50 active:scale-[0.98] transition"
+        >
+          <Zap className="w-5 h-5 fill-current" />
+          <span>{t("buyNowAction")}</span>
         </button>
       </div>
     </div>

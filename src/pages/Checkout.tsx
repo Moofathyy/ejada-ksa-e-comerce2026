@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Truck, Zap, Check, DollarSign } from "lucide-react";
+import { ArrowLeft, ArrowRight, Truck, Zap, Check, DollarSign, Smartphone, CalendarDays } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
+import { formatHijri, formatGregorian } from "@/lib/ksa";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 type DeliveryId = "std" | "exp";
-type PayId = "mada" | "applepay" | "cod" | "tamara";
+type PayId = "mada" | "applepay" | "stcpay" | "tabby" | "tamara" | "cod";
 
 const Checkout = () => {
   const nav = useNavigate();
@@ -34,14 +35,20 @@ const Checkout = () => {
   ];
 
   const shipping = delivery === "exp" ? 45 : 0;
+  const codFee = pay === "cod" ? 15 : 0;
   const discount = promo ? cartSubtotal * promo.discount : 0;
   const vat = (cartSubtotal - discount + shipping) * 0.15;
-  const total = cartSubtotal - discount + shipping + vat;
+  const total = cartSubtotal - discount + shipping + vat + codFee;
+
+  // Delivery ETA — Saudi: today/tomorrow with Hijri date
+  const etaDate = new Date();
+  etaDate.setDate(etaDate.getDate() + (delivery === "exp" ? 1 : 4));
 
   const payments: { id: PayId; name: string; sub?: string; icon: React.ReactNode; iconBg: string }[] = [
     {
       id: "mada", name: lang === "ar" ? "مدى" : "Mada",
-      icon: <span className="text-body font-bold text-n8">م</span>,
+      sub: lang === "ar" ? "البطاقة الأكثر استخداماً" : "Most used in KSA",
+      icon: <span className="text-body font-extrabold text-n8">م</span>,
       iconBg: "bg-primary",
     },
     {
@@ -50,15 +57,28 @@ const Checkout = () => {
       iconBg: "bg-n1",
     },
     {
-      id: "cod", name: lang === "ar" ? "الدفع عند الاستلام" : "Cash on Delivery",
-      icon: <DollarSign className="w-4 h-4 text-n2" />,
-      iconBg: "bg-n7",
+      id: "stcpay", name: "STC Pay",
+      sub: lang === "ar" ? "محفظة سعودية" : "Saudi wallet",
+      icon: <Smartphone className="w-4 h-4 text-n8" />,
+      iconBg: "bg-[#4F1F8F]",
     },
     {
-      id: "tamara", name: lang === "ar" ? "ادفع لاحقاً" : "Pay Later",
-      sub: lang === "ar" ? "أقساط بدون فوائد" : "Interest-free installments",
-      icon: <span className="text-body font-bold text-[#9333EA]">T</span>,
-      iconBg: "bg-[#F3E8FF]",
+      id: "tabby", name: "Tabby",
+      sub: lang === "ar" ? "قسّمها على 4 دفعات بدون فوائد" : "Pay in 4 — interest-free",
+      icon: <span className="text-[10px] font-extrabold text-tabby-text">4×</span>,
+      iconBg: "bg-tabby",
+    },
+    {
+      id: "tamara", name: "Tamara",
+      sub: lang === "ar" ? "قسّمها على 3 دفعات" : "Split in 3 payments",
+      icon: <span className="text-[10px] font-extrabold text-tamara-text">3×</span>,
+      iconBg: "bg-tamara",
+    },
+    {
+      id: "cod", name: lang === "ar" ? "الدفع عند الاستلام" : "Cash on Delivery",
+      sub: lang === "ar" ? "+15 ر.س رسوم" : "+15 SAR service fee",
+      icon: <DollarSign className="w-4 h-4 text-n8" />,
+      iconBg: "bg-ksa-red",
     },
   ];
 
@@ -216,6 +236,17 @@ const Checkout = () => {
         {/* Order Summary */}
         <section className="rounded-card p-4 space-y-2.5 border border-n6 bg-n8">
           <h3 className="text-body font-bold text-n1 mb-2">{lang === "ar" ? "ملخص الطلب" : "Order Summary"}</h3>
+
+          <div className="flex items-center gap-2 -mt-1 mb-1 p-2.5 rounded-input bg-success-bg/60">
+            <CalendarDays className="w-4 h-4 text-success-text shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-caption font-extrabold text-success-text leading-tight">
+                {t("estimatedArrival")} · {formatGregorian(etaDate, lang)}
+              </p>
+              <p className="text-[10px] text-n3 tabular">{t("hijri")}: {formatHijri(etaDate, lang)}</p>
+            </div>
+          </div>
+
           <div className="flex justify-between text-body text-n2">
             <span>{t("subtotal")}</span>
             <span className="tabular price-sar">{cartSubtotal.toFixed(2)}</span>
@@ -232,13 +263,19 @@ const Checkout = () => {
             </span>
             <span className="tabular price-sar">{shipping.toFixed(2)}</span>
           </div>
+          {codFee > 0 && (
+            <div className="flex justify-between text-body text-ksa-red">
+              <span>{lang === "ar" ? "رسوم الدفع عند الاستلام" : "COD service fee"}</span>
+              <span className="tabular price-sar">{codFee.toFixed(2)}</span>
+            </div>
+          )}
           <div className="flex justify-between text-body text-n2">
             <span>{t("vat")}</span>
             <span className="tabular price-sar">{vat.toFixed(2)}</span>
           </div>
           <div className="border-t border-n6 pt-2.5 mt-1 flex justify-between items-center">
             <span className="text-h2 font-bold text-n1">{t("total")}</span>
-            <span className="text-h1 font-bold text-primary tabular price-sar">{total.toFixed(2)}</span>
+            <span className="text-h1 font-extrabold text-primary tabular price-sar">{total.toFixed(2)}</span>
           </div>
         </section>
       </main>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search as SearchIcon, MapPin, Bell, ShoppingBag, ChevronDown, Mic, ScanLine, ChevronRight, GitCompare, Star, Truck, ShieldCheck, Check, X, Shuffle, Moon, Sun } from "lucide-react";
+import { Search as SearchIcon, MapPin, Bell, ShoppingBag, ChevronDown, Mic, ScanLine, ChevronRight, GitCompare, Star, Truck, ShieldCheck, Check, X, Shuffle, Moon, Sun, Zap, Clock, Tag } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { useTheme } from "@/lib/theme";
 import { useI18n } from "@/lib/i18n";
@@ -8,6 +8,7 @@ import { useStore } from "@/lib/store";
 import { categories, products, brands } from "@/lib/data";
 import { ProductCard } from "@/components/ProductCard";
 import { MobileShell } from "@/components/MobileShell";
+import { fastDeliveryCutoff } from "@/lib/ksa";
 import banner1 from "@/assets/banner-iphone.jpg";
 import banner2 from "@/assets/banner-gaming.jpg";
 import banner3 from "@/assets/banner-ramadan.jpg";
@@ -85,46 +86,82 @@ const Home = () => {
             <ChevronRight className={cn("w-4 h-4", dir === "rtl" && "rotate-180")} />
           </button>
         </div>
+
+        {/* Trust strip — Saudi-payment logos */}
+        <div className="px-4 pb-3">
+          <div className="flex items-center justify-around gap-1 bg-n8/15 backdrop-blur rounded-xl px-2 py-2 text-[10px] font-bold">
+            <span className="px-1.5 py-0.5 bg-n8 text-primary rounded">mada</span>
+            <span className="px-1.5 py-0.5 bg-n8 text-n1 rounded"> Pay</span>
+            <span className="px-1.5 py-0.5 bg-n8 text-tabby-text rounded">tabby</span>
+            <span className="px-1.5 py-0.5 bg-n8 text-tamara-text rounded">tamara</span>
+            <span className="px-1.5 py-0.5 bg-n8 text-primary rounded">STC Pay</span>
+          </div>
+        </div>
       </header>
 
       <main className="pb-4 space-y-5">
+        {/* Fast-delivery / cutoff banner — Saudi behavior cue */}
+        <FastDeliveryBanner lang={lang} />
+
         {/* Banner carousel */}
-        <div className="px-4 my-[24px]">
-          <div className="relative rounded-card overflow-hidden h-[150px] shadow-elev1">
+        <div className="px-4">
+          <div className="relative rounded-card overflow-hidden h-[160px] shadow-elev2">
             {banners.map((b, i) => (
               <div key={i} className={cn("absolute inset-0 transition-opacity duration-500", i === bannerIdx ? "opacity-100" : "opacity-0")}>
                 <img src={b.img} alt="" className="w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                 <div className="absolute bottom-3 start-4 text-n8">
-                  <h3 className="text-h2 drop-shadow">{b.title[lang]}</h3>
-                  <p className="text-caption opacity-90">{b.sub[lang]}</p>
+                  <span className="inline-block bg-ksa-yellow text-n1 text-[10px] font-extrabold px-2 py-0.5 rounded-md mb-1.5">
+                    {t("megaDeals")}
+                  </span>
+                  <h3 className="text-h2 drop-shadow font-extrabold">{b.title[lang]}</h3>
+                  <p className="text-caption opacity-95 font-semibold">{b.sub[lang]}</p>
                 </div>
               </div>
             ))}
             <div className="absolute bottom-2 end-3 flex gap-1.5">
               {banners.map((_, i) => (
-                <span key={i} className={cn("h-1.5 rounded-full transition-all", i === bannerIdx ? "w-5 bg-n8" : "w-1.5 bg-n8/50")} />
+                <span key={i} className={cn("h-1.5 rounded-full transition-all", i === bannerIdx ? "w-5 bg-ksa-yellow" : "w-1.5 bg-n8/50")} />
               ))}
             </div>
           </div>
         </div>
 
-        {/* Categories */}
+        {/* Categories — bigger Jarir-style tiles */}
         <section className="space-y-3">
           <div className="px-4 flex justify-between items-center">
-            <h3 className="text-h3 text-n1">{t("shopByCategory")}</h3>
+            <h3 className="text-h3 text-n1 font-extrabold">{t("shopByCategory")}</h3>
+            <button onClick={() => nav("/listing")} className="text-caption text-primary font-bold">{t("viewAll")}</button>
           </div>
-          <div className="flex gap-2.5 overflow-x-auto px-4 pb-1 scrollbar-hide py-[4px]">
-            {categories.map(c => (
+          <div className="px-4 grid grid-cols-4 gap-2.5">
+            {categories.slice(0, 8).map(c => (
               <button
                 key={c.id}
                 onClick={() => nav(`/listing?cat=${c.id}`)}
-                className="flex-shrink-0 flex items-center gap-2 h-11 px-4 rounded-full shadow-elev1 text-primary border-n4 bg-n8"
+                className="flex flex-col items-center gap-1.5 active:scale-95 transition"
               >
-                <span className="text-lg leading-none">{c.icon}</span>
-                <span className="text-caption font-bold text-n1 whitespace-nowrap">{c[lang]}</span>
+                <div className="w-full aspect-square rounded-2xl bg-gradient-to-br from-primary-bg to-n7 flex items-center justify-center text-2xl shadow-elev1 border border-n6/60">
+                  {c.icon}
+                </div>
+                <span className="text-[10px] font-bold text-n2 leading-tight text-center line-clamp-2">{c[lang]}</span>
               </button>
             ))}
+          </div>
+        </section>
+
+        {/* Mega Deals strip — yellow Noon-style */}
+        <section>
+          <div className="mx-4 rounded-card overflow-hidden bg-gradient-to-r from-ksa-yellow to-ksa-yellow-dark p-3 flex items-center gap-3 shadow-elev1">
+            <div className="w-12 h-12 rounded-full bg-n1 flex items-center justify-center shrink-0">
+              <Tag className="w-6 h-6 text-ksa-yellow" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-h3 font-extrabold text-n1 leading-tight">{t("megaDeals")}</p>
+              <p className="text-caption text-n1/80 font-semibold">{t("saveBig")} · {t("trustedByKsa")}</p>
+            </div>
+            <button onClick={() => nav("/listing")} className="bg-n1 text-ksa-yellow rounded-full h-9 px-4 text-caption font-extrabold shrink-0">
+              {t("shopNow")}
+            </button>
           </div>
         </section>
 
@@ -132,24 +169,27 @@ const Home = () => {
         <section className="space-y-3">
           <div className="px-4 flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <h3 className="text-h3 text-n1">⚡ {t("flashDeals")}</h3>
-              <span className="text-[11px] bg-warning-text text-n8 font-bold px-2 py-0.5 rounded-md tabular">
+              <h3 className="text-h3 text-n1 font-extrabold">⚡ {t("flashDeals")}</h3>
+              <span className="text-[11px] bg-ksa-red text-n8 font-extrabold px-2 py-0.5 rounded-md tabular">
                 {t("endsIn")} {fmtTime(timer)}
               </span>
             </div>
           </div>
           <div className="flex gap-3 overflow-x-auto px-4 pb-2 scrollbar-hide">
             {loading
-              ? Array.from({ length: 4 }).map((_, i) => <div key={i} className="min-w-[160px] h-[260px] rounded-card skeleton-shimmer" />)
+              ? Array.from({ length: 4 }).map((_, i) => <div key={i} className="min-w-[170px] h-[280px] rounded-card skeleton-shimmer" />)
               : products.slice(0, 5).map(p => <ProductCard key={p.id} product={p} compact />)}
           </div>
         </section>
 
-        {/* Popular in KSA - 2 col */}
+        {/* Popular in KSA - 2 col with KSA flag */}
         <section className="space-y-3">
           <div className="px-4 flex justify-between items-center">
-            <h3 className="text-h3 text-n1">🇸🇦 {t("popularKsa")}</h3>
-            <button className="text-caption text-p2 font-semibold">{t("viewAll")}</button>
+            <h3 className="text-h3 text-n1 font-extrabold flex items-center gap-2">
+              <span className="inline-flex items-center justify-center w-6 h-4 rounded-sm bg-ksa-green text-n8 text-[8px] font-bold">KSA</span>
+              {t("popularKsa")}
+            </h3>
+            <button className="text-caption text-primary font-bold">{t("viewAll")}</button>
           </div>
           <div className="px-4 grid grid-cols-2 gap-3">
             {loading
@@ -208,6 +248,36 @@ const Home = () => {
         </section>
       </main>
     </MobileShell>
+  );
+};
+
+/* ---------- Fast-delivery cutoff banner ---------- */
+const FastDeliveryBanner = ({ lang }: { lang: "en" | "ar" }) => {
+  const [left, setLeft] = useState(fastDeliveryCutoff());
+  useEffect(() => {
+    const id = setInterval(() => setLeft(fastDeliveryCutoff()), 60_000);
+    return () => clearInterval(id);
+  }, []);
+  if (!left) return null;
+  return (
+    <div className="px-4">
+      <div className="rounded-card bg-gradient-to-r from-success-bg to-tabby border border-success/20 p-3 flex items-center gap-3">
+        <div className="w-10 h-10 rounded-full bg-success flex items-center justify-center shrink-0">
+          <Zap className="w-5 h-5 text-n8 fill-n8" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-caption font-extrabold text-success-text leading-tight">
+            {lang === "ar"
+              ? `يصل غداً إذا طلبت خلال ${left.hours}س ${left.minutes}د`
+              : `Get it tomorrow — order within ${left.hours}h ${left.minutes}m`}
+          </p>
+          <p className="text-[10px] text-n3 mt-0.5 flex items-center gap-1">
+            <Clock className="w-3 h-3" />
+            {lang === "ar" ? "نوقف التوصيل أثناء أوقات الصلاة" : "Delivery pauses during prayer times"}
+          </p>
+        </div>
+      </div>
+    </div>
   );
 };
 

@@ -25,6 +25,16 @@
     --s1-dark: 211 25% 34%;        /* #42566B */
     --s2: 152 86% 53%;             /* #1FED93 accent green */
 
+    /* KSA / Noon-style accents */
+    --ksa-yellow: 48 100% 50%;       /* Noon-like CTA yellow */
+    --ksa-yellow-dark: 42 100% 45%;  /* hover/border */
+    --ksa-green: 145 65% 32%;        /* Saudi flag green */
+    --ksa-red: 0 80% 55%;            /* COD / urgency */
+    --tabby-mint: 160 70% 92%;
+    --tabby-mint-text: 165 80% 28%;
+    --tamara-purple: 270 70% 96%;
+    --tamara-purple-text: 270 70% 45%;
+
     /* Semantic */
     --success: 144 49% 53%;
     --success-bg: 138 56% 93%;
@@ -97,6 +107,16 @@
     --s1: 213 15% 30%;
     --s1-dark: 211 18% 60%;
     --s2: 152 70% 55%;
+
+    /* KSA accents (dark) */
+    --ksa-yellow: 48 95% 55%;
+    --ksa-yellow-dark: 42 95% 50%;
+    --ksa-green: 145 55% 45%;
+    --ksa-red: 0 70% 60%;
+    --tabby-mint: 160 30% 18%;
+    --tabby-mint-text: 160 65% 65%;
+    --tamara-purple: 270 30% 20%;
+    --tamara-purple-text: 270 70% 75%;
 
     --success: 144 49% 53%;
     --success-bg: 138 30% 18%;
