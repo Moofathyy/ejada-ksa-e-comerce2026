@@ -320,15 +320,23 @@ const PDP = () => {
         </div>
       </main>
 
-      {/* Fixed Add to Cart bar */}
-      <div className="fixed bottom-0 inset-x-0 mx-auto max-w-[402px] bg-n8 border-t border-n6 px-5 pt-3 safe-bottom shadow-elev2 z-40 pb-[24px] py-[16px] my-0">
+      {/* Fixed Add to Cart + Buy Now bar */}
+      <div className="fixed bottom-0 inset-x-0 mx-auto max-w-[402px] bg-n8 border-t border-n6 px-4 pt-3 pb-[20px] safe-bottom shadow-elev2 z-40 flex gap-2.5">
         <button
           onClick={handleAdd}
           disabled={product.stock === 0}
-          className="w-full h-14 bg-gradient-to-r from-primary to-primary-light text-n8 rounded-full font-semibold flex items-center justify-center gap-2 shadow-cta disabled:opacity-50 active:scale-[0.99] transition"
+          className="flex-1 h-14 bg-primary text-n8 rounded-full font-bold text-body flex items-center justify-center gap-2 shadow-elev1 disabled:opacity-50 active:scale-[0.98] transition"
         >
           <ShoppingCart className="w-5 h-5" />
           <span>{t("addToCart")}</span>
+        </button>
+        <button
+          onClick={handleBuyNow}
+          disabled={product.stock === 0}
+          className="flex-1 h-14 bg-ksa-yellow text-n1 rounded-full font-extrabold text-body flex items-center justify-center gap-2 shadow-cta disabled:opacity-50 active:scale-[0.98] transition"
+        >
+          <Zap className="w-5 h-5 fill-current" />
+          <span>{t("buyNowAction")}</span>
         </button>
       </div>
     </div>
