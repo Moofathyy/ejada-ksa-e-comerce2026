@@ -90,7 +90,7 @@ const InputRow = ({
       {label}
     </label>
     {children}
-    {hint && <p className="text-[11px] text-n3 mt-1.5">{hint}</p>}
+    {hint && <p className="text-[11px] text-info-text mt-1.5">{hint}</p>}
   </div>
 );
 
