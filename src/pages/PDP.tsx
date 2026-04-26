@@ -360,83 +360,56 @@ const PDP = () => {
           </div>
         </div>
 
-        {/* Compare with selected items */}
+        {/* Compare with suggested item */}
         {(() => {
-          const inCompare = compareList.includes(product.id);
-          const selectedItems = compareList
-            .filter(id => id !== product.id)
-            .map(getProduct)
-            .filter(Boolean) as NonNullable<ReturnType<typeof getProduct>>[];
-          const canCompare = inCompare && selectedItems.length >= 1;
+          const suggestions = products
+            .filter(p => p.id !== product.id && p.category === product.category)
+            .slice(0, 3);
+          if (suggestions.length === 0) return null;
           return (
             <div className="mt-6 border-t border-n6 pt-4">
-              <div className="flex items-center justify-between mb-3">
-                <h3 className="text-h3 text-n1 flex items-center gap-2">
-                  <GitCompareArrows className="w-5 h-5 text-primary" />
-                  {lang === "ar" ? "قارن مع العناصر المحددة" : "Compare with selected items"}
+              <div className="flex items-center gap-2 mb-1">
+                <GitCompareArrows className="w-5 h-5 text-primary" />
+                <h3 className="text-h3 text-n1">
+                  {lang === "ar" ? "قارن مع منتج مقترح" : "Compare with a suggested item"}
                 </h3>
-                <button
-                  onClick={() => {
-                    const added = toggleCompare(product.id);
-                    toast.success(
-                      added
-                        ? (lang === "ar" ? "تمت الإضافة للمقارنة" : "Added to compare")
-                        : (lang === "ar" ? "تمت الإزالة من المقارنة" : "Removed from compare"),
-                    );
-                  }}
-                  className={cn(
-                    "text-caption font-bold px-3 py-1.5 rounded-full border transition active:scale-95",
-                    inCompare ? "border-primary text-primary bg-primary-bg" : "border-n6 text-n1 bg-n8",
-                  )}
-                >
-                  {inCompare
-                    ? (lang === "ar" ? "✓ مضاف" : "✓ Added")
-                    : (lang === "ar" ? "+ أضف هذا" : "+ Add this")}
-                </button>
               </div>
-
-              {selectedItems.length === 0 ? (
-                <p className="text-caption text-n4">
-                  {lang === "ar"
-                    ? "لم تحدد منتجات أخرى بعد. أضف منتجات من القائمة لمقارنتها هنا."
-                    : "No other items selected yet. Add products from listings to compare them here."}
-                </p>
-              ) : (
-                <div className="flex gap-2 overflow-x-auto no-scrollbar -mx-1 px-1 pb-1">
-                  {selectedItems.map(p => (
-                    <div key={p.id} className="relative shrink-0 w-24">
-                      <button
-                        onClick={() => nav(`/product/${p.id}`)}
-                        className="w-24 h-24 rounded-2xl border border-n6 bg-n8 flex items-center justify-center overflow-hidden active:scale-95 transition"
-                      >
-                        <img src={p.image} alt={p.name[lang]} className="max-w-[80%] max-h-[80%] object-contain" />
-                      </button>
-                      <button
-                        onClick={() => removeCompare(p.id)}
-                        className="absolute -top-1 -end-1 w-5 h-5 rounded-full bg-n1 text-n8 flex items-center justify-center shadow-elev2"
-                        aria-label="Remove"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                      <p className="mt-1 text-[11px] text-n2 text-center truncate font-medium">{p.name[lang]}</p>
+              <p className="text-caption text-n4 mb-3">
+                {lang === "ar"
+                  ? "اختر منتجاً لمقارنته جنباً إلى جنب مع هذا المنتج."
+                  : "Pick a product to compare side-by-side with this one."}
+              </p>
+              <div className="space-y-2">
+                {suggestions.map(p => (
+                  <div
+                    key={p.id}
+                    className="flex items-center gap-3 p-3 rounded-2xl border border-n6 bg-n8"
+                  >
+                    <button
+                      onClick={() => nav(`/product/${p.id}`)}
+                      className="w-14 h-14 rounded-xl bg-primary-bg/40 flex items-center justify-center shrink-0 overflow-hidden active:scale-95"
+                    >
+                      <img src={p.image} alt={p.name[lang]} className="max-w-[80%] max-h-[80%] object-contain" />
+                    </button>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-caption text-n4 font-semibold uppercase tracking-wider">{p.brand}</p>
+                      <p className="text-body font-semibold text-n1 truncate">{p.name[lang]}</p>
+                      <p className="text-caption text-primary font-bold tabular price-sar mt-0.5">{p.price.toLocaleString()}</p>
                     </div>
-                  ))}
-                </div>
-              )}
-
-              <button
-                disabled={!canCompare}
-                onClick={() => nav("/compare")}
-                className={cn(
-                  "mt-3 w-full h-11 rounded-full font-bold flex items-center justify-center gap-2 transition",
-                  canCompare
-                    ? "bg-primary text-primary-foreground active:scale-[0.99]"
-                    : "bg-n7 text-n4 cursor-not-allowed",
-                )}
-              >
-                {lang === "ar" ? "قارن الآن" : "Compare now"}
-                <ArrowRight className={cn("w-4 h-4", dir === "rtl" && "rotate-180")} />
-              </button>
+                    <button
+                      onClick={() => {
+                        if (!compareList.includes(product.id)) toggleCompare(product.id);
+                        if (!compareList.includes(p.id)) toggleCompare(p.id);
+                        nav("/compare");
+                      }}
+                      className="shrink-0 h-10 px-4 rounded-full bg-primary text-primary-foreground text-caption font-bold flex items-center gap-1.5 active:scale-95 transition"
+                    >
+                      {lang === "ar" ? "قارن" : "Compare"}
+                      <ArrowRight className={cn("w-3.5 h-3.5", dir === "rtl" && "rotate-180")} />
+                    </button>
+                  </div>
+                ))}
+              </div>
             </div>
           );
         })()}
