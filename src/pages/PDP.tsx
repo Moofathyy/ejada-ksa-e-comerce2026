@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, Share2, Star, ChevronLeft, ChevronRight, X, Plus, Minus, ShoppingCart, Check, Sparkles, ShieldCheck, BadgeCheck } from "lucide-react";
+import { Heart, Share2, Star, ChevronLeft, ChevronRight, X, Plus, Minus, ShoppingCart, Check, Sparkles, ShieldCheck, BadgeCheck, Zap, Truck, RefreshCw } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { getProduct, products } from "@/lib/data";
 import { ProductCard } from "@/components/ProductCard";
+import { tabbyInstallment, tamaraInstallment, soldThisMonth, fastDeliveryCutoff } from "@/lib/ksa";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
