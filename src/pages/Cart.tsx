@@ -215,8 +215,10 @@ const Cart = () => {
       <div className="fixed bottom-[80px] inset-x-0 mx-auto max-w-[402px] px-4 safe-bottom z-40 pointer-events-none">
         <div className="pointer-events-auto">
         <button onClick={() => nav("/checkout")}
-          className="w-full h-[52px] bg-gradient-primary text-n8 rounded-full font-semibold text-h3 shadow-cta active:scale-[0.98] flex items-center justify-center gap-2">
-          {lang === "ar" ? "الدفع" : "Checkout"} · {total.toLocaleString(undefined, { maximumFractionDigits: 2 })} <Sar />
+          className="w-full h-[56px] rounded-full font-bold text-h3 text-n8 shadow-cta active:scale-[0.98] transition bg-gradient-primary flex items-center justify-center gap-2">
+          <span>{lang === "ar" ? "الدفع" : "Checkout"}</span>
+          <span className="opacity-80">•</span>
+          <span className="tabular price-sar">{total.toFixed(2)}</span>
         </button>
         </div>
       </div>
