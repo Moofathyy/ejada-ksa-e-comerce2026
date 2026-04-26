@@ -151,7 +151,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const cartSubtotal = cart.reduce((s, i) => s + (i.product.price + (i.warranty?.price ?? 0)) * i.qty, 0);
 
   return (
-    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress }}>
+    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, updateWarranty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress }}>
       {children}
     </Ctx.Provider>
   );
