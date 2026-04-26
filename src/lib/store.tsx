@@ -33,6 +33,7 @@ interface StoreCtx {
   addToCart: (p: Product, qty?: number, warranty?: CartWarranty) => void;
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
+  updateWarranty: (id: string, warranty?: CartWarranty) => void;
   clearCart: () => void;
   toggleWishlist: (id: string) => void;
   promo: { code: string; discount: number } | null;
