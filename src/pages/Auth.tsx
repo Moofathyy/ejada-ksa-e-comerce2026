@@ -532,6 +532,42 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
   </label>
 );
 
+const SaudiPhoneField = ({
+  label, value, onChange, lang,
+}: {
+  label: string;
+  value: string;
+  onChange: (raw: string) => void;
+  lang: "en" | "ar";
+}) => {
+  const display = formatSaudiMobile(value);
+  return (
+    <label className="block">
+      <span className="text-label text-n1 font-bold">{label}</span>
+      <div className="mt-2 flex items-stretch h-[52px] rounded-input border border-n4 focus-within:border-primary focus-within:border-2 bg-n8 transition overflow-hidden" dir="ltr">
+        <div className="flex items-center gap-1.5 px-3 bg-n7 border-e border-n6 text-n1">
+          <span className="text-lg leading-none" aria-hidden>🇸🇦</span>
+          <span className="text-body font-bold tabular">+966</span>
+        </div>
+        <input
+          type="tel"
+          inputMode="numeric"
+          autoComplete="tel-national"
+          value={display}
+          onChange={e => onChange(e.target.value)}
+          placeholder="5XX XXX XXXX"
+          maxLength={12} // "5XX XXX XXXX" = 12 chars
+          aria-label={label}
+          className="flex-1 h-full px-3 outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular tracking-wide"
+        />
+      </div>
+      <p className="mt-1 text-caption text-n3">
+        {lang === "ar" ? "نرسل رمز التحقق عبر رسالة نصية" : "We'll text you a verification code"}
+      </p>
+    </label>
+  );
+};
+
 const SocialBtn = ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
   <button
     onClick={onClick}
