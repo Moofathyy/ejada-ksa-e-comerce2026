@@ -11,7 +11,7 @@ import {
   User, Mail, Phone, MapPin, Plus, CreditCard, Trophy, Bell, Globe, Moon,
   Lock, Smartphone, Shield, Eye, Settings as SettingsIcon, Download, Trash2,
   HelpCircle, FileText, Star, ChevronRight, Check, Sparkles, Gift, ShoppingBag,
-  MessageSquare, Share2, UserPlus, TrendingUp, ArrowUpRight, Home, Briefcase,
+  MessageSquare, Share2, UserPlus, TrendingUp, ArrowUpRight, Home, Briefcase, ArrowLeft, ArrowRight,
 } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { useStore } from "@/lib/store";
@@ -19,6 +19,7 @@ import { useStore } from "@/lib/store";
 type SectionConfig = {
   title: { en: string; ar: string };
   render: (lang: "en" | "ar") => JSX.Element;
+  hideTopBar?: boolean;
 };
 
 const Field = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => (
@@ -280,6 +281,9 @@ const Loyalty = (lang: "en" | "ar") => <LoyaltyScreen lang={lang} />;
 
 const LoyaltyScreen = ({ lang }: { lang: "en" | "ar" }) => {
   const tr = (en: string, ar: string) => (lang === "ar" ? ar : en);
+  const nav = useNavigate();
+  const { dir } = useI18n();
+  const BackIcon = dir === "rtl" ? ArrowRight : ArrowLeft;
   const points = 2450;
   const tier = tr("GOLD", "ذهبي");
   const nextTier = tr("Platinum", "بلاتيني");
@@ -324,38 +328,54 @@ const LoyaltyScreen = ({ lang }: { lang: "en" | "ar" }) => {
   const filtered = tab === "all" ? allRewards : allRewards.filter(r => r.cat === tab);
 
   return (
-    <div className="-m-4 space-y-6">
+    <div className="space-y-6">
       {/* Hero — full bleed */}
-      <div className="bg-gradient-to-b from-primary to-primary-dark text-primary-foreground px-5 pt-6 pb-8 rounded-b-[28px]">
-        <p className="text-display font-bold leading-none tabular">
-          {points.toLocaleString()} <span className="text-h1 font-bold">{tr("Points", "نقطة")}</span>
-        </p>
-        <p className="text-caption text-s2 mt-2 font-semibold flex items-baseline gap-1">
-          = <Sar className="text-s2" /> {value} {tr("value", "قيمة")}
-        </p>
+      <div className="relative bg-gradient-to-b from-primary to-primary-dark text-primary-foreground px-5 pt-5 pb-8 rounded-b-[28px] overflow-hidden">
+        {/* subtle radial glow */}
+        <div className="absolute inset-0 opacity-30 pointer-events-none"
+          style={{ background: "radial-gradient(120% 60% at 80% 0%, hsl(var(--n8)/.25), transparent 60%)" }} />
+
+        {/* Back button */}
+        <button
+          onClick={() => nav(-1)}
+          aria-label="Back"
+          className="relative w-10 h-10 rounded-input bg-n1/15 backdrop-blur flex items-center justify-center active:scale-95 transition"
+        >
+          <BackIcon className="w-5 h-5" />
+        </button>
+
+        {/* Points */}
+        <div className="relative text-center mt-6">
+          <p className="text-[44px] leading-none font-extrabold tabular tracking-tight">
+            {points.toLocaleString()} <span className="font-extrabold">{tr("Points", "نقطة")}</span>
+          </p>
+          <p className="mt-3 text-body font-bold text-success-text inline-flex items-baseline gap-1">
+            = <Sar className="text-success-text" /> {value} {tr("value", "قيمة")}
+          </p>
+        </div>
 
         {/* Tier card */}
-        <div className="mt-5 bg-n1/15 backdrop-blur rounded-card p-3.5">
+        <div className="relative mt-6 bg-n1/15 backdrop-blur rounded-card p-3.5 border border-n1/10">
           <div className="flex items-center gap-2.5">
             <span className="bg-warning text-n1 text-[11px] font-extrabold tracking-wider px-2.5 py-1 rounded-md inline-flex items-center gap-1">
               <Star className="w-3 h-3 fill-n1" /> {tier}
             </span>
             <span className="text-caption font-semibold flex-1">
               {tr("Member", "عضو")}{" "}
-              <span className="text-s2 font-bold">
+              <span className="text-success-text font-bold">
                 {toNext} {tr(`points to ${nextTier}`, `نقطة للوصول إلى ${nextTier}`)}
               </span>
             </span>
           </div>
-          <div className="mt-2.5 h-1.5 bg-n1/20 rounded-full overflow-hidden">
+          <div className="mt-2.5 h-1.5 bg-n1/30 rounded-full overflow-hidden">
             <div className="h-full bg-n8 rounded-full transition-all" style={{ width: `${pct}%` }} />
           </div>
         </div>
 
         {/* Perk pills */}
-        <div className="mt-4 flex flex-wrap justify-center gap-2">
+        <div className="relative mt-4 flex flex-wrap justify-center gap-2">
           {[tr("5% discount", "خصم 5%"), tr("Free shipping", "شحن مجاني"), tr("Priority support", "دعم أولوية")].map(p => (
-            <span key={p} className="text-caption font-semibold bg-n1/15 backdrop-blur px-3 py-1.5 rounded-full">
+            <span key={p} className="text-caption font-semibold bg-n1/15 backdrop-blur px-3.5 py-1.5 rounded-full border border-n1/10">
               {p}
             </span>
           ))}
@@ -733,7 +753,7 @@ const SECTIONS: Record<string, SectionConfig> = {
   "personal-info": { title: { en: "Personal Information", ar: "المعلومات الشخصية" }, render: PersonalInfo },
   addresses: { title: { en: "Saved Addresses", ar: "العناوين المحفوظة" }, render: Addresses },
   payments: { title: { en: "Payment Methods", ar: "وسائل الدفع" }, render: PaymentMethods },
-  loyalty: { title: { en: "Loyalty Rewards", ar: "نقاط الولاء" }, render: Loyalty },
+  loyalty: { title: { en: "Loyalty Rewards", ar: "نقاط الولاء" }, render: Loyalty, hideTopBar: true },
   notifications: { title: { en: "Notifications", ar: "الإشعارات" }, render: Notifications },
   language: { title: { en: "Language & Accessibility", ar: "اللغة وإمكانية الوصول" }, render: LanguageA11y },
   appearance: { title: { en: "Appearance", ar: "المظهر" }, render: Appearance },
@@ -765,8 +785,8 @@ const ProfileSection = () => {
 
   return (
     <MobileShell>
-      <TopBar title={config.title[lang]} />
-      <main className="p-4 pb-8">{config.render(lang)}</main>
+      {!config.hideTopBar && <TopBar title={config.title[lang]} />}
+      <main className={cn("pb-8", config.hideTopBar ? "p-0" : "p-4")}>{config.render(lang)}</main>
     </MobileShell>
   );
 };
