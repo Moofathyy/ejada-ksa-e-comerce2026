@@ -589,7 +589,7 @@ const SaudiPhoneField = ({
         />
       </div>
       {error ? (
-        <p className="mt-1 text-caption text-destructive font-medium" role="alert">{error}</p>
+        <p className="mt-1 text-caption font-medium text-ksa-red" role="alert">{error}</p>
       ) : (
         <p className="mt-1 text-caption text-[#616161]">
           {lang === "ar" ? "نرسل رمز التحقق عبر رسالة نصية" : "We'll text you a verification code"}
