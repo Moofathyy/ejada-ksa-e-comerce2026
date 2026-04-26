@@ -50,7 +50,13 @@ interface StoreCtx {
   addAddress: (a: Omit<Address, "id">) => Address;
   removeAddress: (id: string) => void;
   setDefaultAddress: (id: string) => void;
+  compareList: string[];
+  toggleCompare: (id: string) => boolean;
+  removeCompare: (id: string) => void;
+  clearCompare: () => void;
 }
+
+const COMPARE_LIMIT = 4;
 
 const Ctx = createContext<StoreCtx | null>(null);
 
@@ -147,11 +153,25 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     setAddresses(prev => prev.map(a => ({ ...a, isDefault: a.id === id })));
   }, []);
 
+  const [compareList, setCompareList] = useState<string[]>([]);
+  const toggleCompare = useCallback((id: string) => {
+    let added = false;
+    setCompareList(prev => {
+      if (prev.includes(id)) return prev.filter(x => x !== id);
+      if (prev.length >= COMPARE_LIMIT) return prev;
+      added = true;
+      return [...prev, id];
+    });
+    return added;
+  }, []);
+  const removeCompare = useCallback((id: string) => setCompareList(prev => prev.filter(x => x !== id)), []);
+  const clearCompare = useCallback(() => setCompareList([]), []);
+
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
   const cartSubtotal = cart.reduce((s, i) => s + (i.product.price + (i.warranty?.price ?? 0)) * i.qty, 0);
 
   return (
-    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, updateWarranty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress }}>
+    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, updateWarranty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress, compareList, toggleCompare, removeCompare, clearCompare }}>
       {children}
     </Ctx.Provider>
   );
