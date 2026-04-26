@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { BottomNav } from "./BottomNav";
 import { StatusBar } from "./StatusBar";
+import { CompareTray } from "./CompareTray";
 
 export const MobileShell = ({ children, hideNav }: { children: ReactNode; hideNav?: boolean }) => {
   const { pathname } = useLocation();
@@ -12,6 +13,7 @@ export const MobileShell = ({ children, hideNav }: { children: ReactNode; hideNa
       <div key={pathname} className="animate-fade-in">
         {children}
       </div>
+      {!hideNav && <CompareTray />}
       {!hideNav && <BottomNav />}
     </div>
   );

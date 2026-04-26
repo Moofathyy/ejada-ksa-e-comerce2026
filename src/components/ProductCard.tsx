@@ -10,9 +10,10 @@ import { cn } from "@/lib/utils";
 
 export const ProductCard = ({ product, compact }: { product: Product; compact?: boolean }) => {
   const nav = useNavigate();
-  const { addToCart, toggleWishlist, wishlist } = useStore();
+  const { addToCart, toggleWishlist, wishlist, compareList, toggleCompare } = useStore();
   const { t, lang } = useI18n();
   const fav = wishlist.includes(product.id);
+  const inCompare = compareList.includes(product.id);
   const discount = product.originalPrice ? Math.round((1 - product.price / product.originalPrice) * 100) : 0;
   const lowStock = product.stock > 0 && product.stock <= 3;
   const sold = soldThisMonth(product.id);
@@ -128,10 +129,19 @@ export const ProductCard = ({ product, compact }: { product: Product; compact?: 
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                nav(`/listing?compare=${product.id}`);
+                const added = toggleCompare(product.id);
+                if (added) toast.success(lang === "ar" ? "تمت الإضافة للمقارنة" : "Added to compare");
+                else if (!inCompare) toast.error(lang === "ar" ? "الحد الأقصى 4 منتجات" : "Max 4 products");
+                else toast(lang === "ar" ? "تمت الإزالة من المقارنة" : "Removed from compare");
               }}
               aria-label="Compare"
-              className="w-9 h-9 shrink-0 rounded-full bg-n7 border border-n6 flex items-center justify-center text-n2 active:scale-90 transition"
+              aria-pressed={inCompare}
+              className={cn(
+                "w-9 h-9 shrink-0 rounded-full border flex items-center justify-center active:scale-90 transition",
+                inCompare
+                  ? "bg-primary border-primary text-n8"
+                  : "bg-n7 border-n6 text-n2"
+              )}
             >
               <GitCompareArrows className="w-4 h-4" />
             </button>
