@@ -448,7 +448,7 @@ const Auth = () => {
                         </span>
                         <span className={cn(
                           "text-caption transition",
-                          ok ? "text-success-text font-medium" : "text-info-text",
+                          ok ? "text-success-text font-medium" : "text-[#616161]",
                         )}>
                           {lang === "ar" ? r.ar : r.en}
                         </span>
