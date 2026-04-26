@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowUpDown, SlidersHorizontal, ArrowLeft, ArrowRight, Search as SearchIcon, Mic } from "lucide-react";
+import { ArrowUpDown, SlidersHorizontal, ArrowLeft, ArrowRight, Search as SearchIcon, Mic, PackageSearch } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { products, categories } from "@/lib/data";
 import { MobileShell } from "@/components/MobileShell";
@@ -161,10 +161,13 @@ const Listing = () => {
 
       <main className="p-4">
         {list.length === 0 ? (
-          <div className="py-16 text-center space-y-4">
-            <div className="text-6xl">📭</div>
-            <h3 className="text-h2 text-n1">No products found</h3>
-            <button onClick={() => nav("/home")} className="px-6 py-3 bg-primary text-n8 rounded-full font-semibold">Browse Categories</button>
+          <div className="flex flex-col items-center justify-center py-24 px-8 text-center">
+            <div className="w-[120px] h-[120px] rounded-full bg-gradient-primary shadow-cta flex items-center justify-center mb-6">
+              <PackageSearch className="w-12 h-12 text-n8" strokeWidth={2} />
+            </div>
+            <h2 className="text-h1 text-n1 mb-2">{lang === "ar" ? "لا توجد منتجات" : "No products found"}</h2>
+            <p className="text-body text-n3 mb-8">{lang === "ar" ? "جرّب تصفية مختلفة أو تصفّح الفئات" : "Try different filters or browse categories"}</p>
+            <button onClick={() => nav("/home")} className="px-10 h-[52px] bg-gradient-primary text-n8 rounded-full font-semibold shadow-cta active:scale-[0.98]">{lang === "ar" ? "تصفّح الفئات" : "Browse Categories"}</button>
           </div>
         ) : (
           <div className="grid grid-cols-2 gap-3">{list.map(p => <ProductCard key={p.id} product={p} />)}</div>
