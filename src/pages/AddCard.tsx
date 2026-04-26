@@ -215,9 +215,16 @@ const Field = ({
 }: { label: string; hint?: string; error?: string; children: React.ReactNode }) => (
   <div>
     <label className="text-caption text-n2 font-bold">{label}</label>
-    {children}
     {error
-      ? <p className="text-caption text-destructive mt-1 font-medium">{error}</p>
+      ? React.Children.map(children, (child) =>
+          React.isValidElement(child)
+            ? React.cloneElement(child as React.ReactElement<any>, {
+                className: cn((child.props as any).className, "border-ksa-red border-2 focus:border-ksa-red focus:ring-ksa-red/20"),
+              })
+            : child)
+      : children}
+    {error
+      ? <p className="text-caption text-ksa-red mt-1 font-medium">{error}</p>
       : hint && <p className="text-caption text-info-text mt-1">{hint}</p>}
   </div>
 );
