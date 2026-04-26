@@ -46,6 +46,7 @@ const Profile = () => {
     { icon: CreditCard, label: lang === "ar" ? "وسائل الدفع" : "Payment Methods", to: "/profile/payments" },
     { icon: Trophy, label: lang === "ar" ? "نقاط الولاء" : "Loyalty Rewards", to: "/profile/loyalty", trailing: <span className="text-caption text-n3 tabular">2450 pts</span> },
     { icon: Package, label: lang === "ar" ? "سجل الطلبات" : "Order History", to: "/orders" },
+    { icon: RotateCcw, label: lang === "ar" ? "طلبات الإرجاع" : "Returned Requests", to: "/return-requests" },
     { icon: Heart, label: t("wishlist"), to: "/wishlist", trailing: wishlist.length ? <span className="text-caption text-n3 tabular">{wishlist.length}</span> : undefined },
   ];
 
