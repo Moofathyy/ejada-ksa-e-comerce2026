@@ -87,16 +87,6 @@ const Home = () => {
           </button>
         </div>
 
-        {/* Trust strip — Saudi-payment logos */}
-        <div className="px-4 pb-3">
-          <div className="flex items-center justify-around gap-1 bg-n8/15 backdrop-blur rounded-xl px-2 py-2 text-[10px] font-bold">
-            <span className="px-1.5 py-0.5 bg-n8 text-primary rounded">mada</span>
-            <span className="px-1.5 py-0.5 bg-n8 text-n1 rounded"> Pay</span>
-            <span className="px-1.5 py-0.5 bg-n8 text-tabby-text rounded">tabby</span>
-            <span className="px-1.5 py-0.5 bg-n8 text-tamara-text rounded">tamara</span>
-            <span className="px-1.5 py-0.5 bg-n8 text-primary rounded">STC Pay</span>
-          </div>
-        </div>
       </header>
 
       <main className="pb-4 space-y-5">
