@@ -48,7 +48,7 @@ export default {
         tamara: { DEFAULT: "hsl(var(--tamara-purple))", text: "hsl(var(--tamara-purple-text))" },
         success: { DEFAULT: "hsl(var(--success))", bg: "hsl(var(--success-bg))", text: "hsl(var(--success-text))" },
         warning: { DEFAULT: "hsl(var(--warning))", bg: "hsl(var(--warning-bg))", text: "hsl(var(--warning-text))" },
-        info: { DEFAULT: "hsl(var(--info))", text: "hsl(var(--info-text))" },
+        info: { DEFAULT: "hsl(var(--info))", bg: "hsl(var(--info-bg))", text: "hsl(var(--info-text))" },
         n1: "hsl(var(--n1))",
         n2: "hsl(var(--n2))",
         n3: "hsl(var(--n3))",
