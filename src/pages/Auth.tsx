@@ -406,30 +406,6 @@ const Auth = () => {
                   </div>
                 )}
 
-                {/* Rules checklist */}
-                <ul className="mt-3 space-y-1.5">
-                  {rules.map(r => {
-                    const ok = checks[r.key];
-                    return (
-                      <li key={r.key} className="flex items-center gap-2">
-                        <span className={cn(
-                          "w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition",
-                          ok ? "bg-success" : "bg-n6",
-                        )}>
-                          {ok
-                            ? <Check className="w-3 h-3 text-n8" strokeWidth={3} />
-                            : <X className="w-3 h-3 text-n4" strokeWidth={3} />}
-                        </span>
-                        <span className={cn(
-                          "text-caption transition",
-                          ok ? "text-success-text font-medium" : "text-info-text",
-                        )}>
-                          {lang === "ar" ? r.ar : r.en}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
               </div>
 
               <div>
@@ -455,6 +431,31 @@ const Auth = () => {
                     {lang === "ar" ? "كلمتا المرور متطابقتان" : "Passwords match"}
                   </p>
                 )}
+
+                {/* Rules checklist */}
+                <ul className="mt-3 space-y-1.5">
+                  {rules.map(r => {
+                    const ok = checks[r.key];
+                    return (
+                      <li key={r.key} className="flex items-center gap-2">
+                        <span className={cn(
+                          "w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 transition",
+                          ok ? "bg-success" : "bg-n6",
+                        )}>
+                          {ok
+                            ? <Check className="w-3 h-3 text-n8" strokeWidth={3} />
+                            : <X className="w-3 h-3 text-n4" strokeWidth={3} />}
+                        </span>
+                        <span className={cn(
+                          "text-caption transition",
+                          ok ? "text-success-text font-medium" : "text-info-text",
+                        )}>
+                          {lang === "ar" ? r.ar : r.en}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
               </div>
             </div>
           );
