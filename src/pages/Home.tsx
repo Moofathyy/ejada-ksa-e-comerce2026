@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search as SearchIcon, MapPin, Bell, ShoppingBag, ChevronDown, Mic, ScanLine, ChevronRight, GitCompare, Star, Truck, ShieldCheck, Check, X, Shuffle, Moon, Sun } from "lucide-react";
+import { Search as SearchIcon, MapPin, Bell, ShoppingBag, ChevronDown, Mic, ScanLine, ChevronRight, GitCompare, Star, Truck, ShieldCheck, Check, X, Shuffle, Moon, Sun, Zap, Clock, Tag } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { useTheme } from "@/lib/theme";
 import { useI18n } from "@/lib/i18n";
@@ -8,6 +8,7 @@ import { useStore } from "@/lib/store";
 import { categories, products, brands } from "@/lib/data";
 import { ProductCard } from "@/components/ProductCard";
 import { MobileShell } from "@/components/MobileShell";
+import { fastDeliveryCutoff } from "@/lib/ksa";
 import banner1 from "@/assets/banner-iphone.jpg";
 import banner2 from "@/assets/banner-gaming.jpg";
 import banner3 from "@/assets/banner-ramadan.jpg";
