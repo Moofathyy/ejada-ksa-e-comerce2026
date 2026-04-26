@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
 import { Plus, Minus, Trash2, Tag, ShieldCheck, Truck, Clock, X, ShoppingBag } from "lucide-react";
 import { TrustModule } from "@/components/TrustModule";
@@ -211,15 +212,18 @@ const Cart = () => {
         </div>
       </main>
 
-      {/* Sticky checkout */}
-      <div className="fixed bottom-[72px] inset-x-0 mx-auto max-w-[402px] bg-n8 border-t border-n6 px-4 pt-3 pb-3 z-40 shadow-elev2">
-        <button onClick={() => nav("/checkout")}
-          className="w-full h-[56px] rounded-full font-bold text-h3 text-n8 shadow-cta active:scale-[0.98] transition bg-gradient-primary flex items-center justify-center gap-2">
-          <span>{lang === "ar" ? "الدفع" : "Checkout"}</span>
-          <span className="opacity-80">•</span>
-          <span className="tabular price-sar">{total.toFixed(2)}</span>
-        </button>
-      </div>
+      {/* Sticky checkout — portaled to body so window scrolling doesn't move it */}
+      {createPortal(
+        <div className="fixed bottom-[72px] inset-x-0 mx-auto max-w-[402px] bg-n8 border-t border-n6 px-4 pt-3 pb-3 z-40 shadow-elev2">
+          <button onClick={() => nav("/checkout")}
+            className="w-full h-[56px] rounded-full font-bold text-h3 text-n8 shadow-cta active:scale-[0.98] transition bg-gradient-primary flex items-center justify-center gap-2">
+            <span>{lang === "ar" ? "الدفع" : "Checkout"}</span>
+            <span className="opacity-80">•</span>
+            <span className="tabular price-sar">{total.toFixed(2)}</span>
+          </button>
+        </div>,
+        document.body
+      )}
     </MobileShell>
   );
 };
