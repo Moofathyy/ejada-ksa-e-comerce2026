@@ -36,8 +36,12 @@ const PDP = () => {
     { id: "ext3", label: { en: "Premium",   ar: "بريميوم" },   price: 349, sub: { en: "+2 years + accidental", ar: "سنتان + حوادث" } },
   ];
 
-  const handleAdd = () => { addToCart(product, qty); toast.success(t("addedToCart")); };
-  const handleBuyNow = () => { addToCart(product, qty); nav("/checkout"); };
+  const selectedWarranty = warrantyOpts[warrantyIdx];
+  const warrantyForCart = selectedWarranty.price > 0
+    ? { id: selectedWarranty.id, label: selectedWarranty.label, price: selectedWarranty.price }
+    : undefined;
+  const handleAdd = () => { addToCart(product, qty, warrantyForCart); toast.success(t("addedToCart")); };
+  const handleBuyNow = () => { addToCart(product, qty, warrantyForCart); nav("/checkout"); };
   const sold = soldThisMonth(product.id);
   const tabby = tabbyInstallment(product.price);
   const tamara = tamaraInstallment(product.price);
