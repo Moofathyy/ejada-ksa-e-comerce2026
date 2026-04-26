@@ -97,13 +97,14 @@ const Cart = () => {
 
       {/* Items */}
       <main className="p-4 space-y-3">
-        {cart.map(({ product: p, qty }) => {
+        {cart.map(({ product: p, qty, warranty }) => {
           const oos = p.stock === 0;
           const low = p.stock > 0 && p.stock <= 3;
           const onSale = !!p.originalPrice;
+          const linePrice = p.price + (warranty?.price ?? 0);
 
           return (
-            <div key={p.id} className={cn("bg-n8 rounded-card shadow-elev1 p-3", oos && "opacity-70")}>
+            <div key={`${p.id}-${warranty?.id ?? "std"}`} className={cn("bg-n8 rounded-card shadow-elev1 p-3", oos && "opacity-70")}>
               <div className="flex gap-3">
                 <div className="w-20 h-20 bg-n7 rounded-input flex-shrink-0 p-1">
                   <img src={p.image} alt="" className="w-full h-full object-contain" />
@@ -127,10 +128,24 @@ const Cart = () => {
                     {p.topSeller && <span className="text-[10px] bg-warning text-n1 px-2 py-0.5 rounded-full font-semibold">🔥 {t("topSeller")}</span>}
                   </div>
 
+                  {warranty && (
+                    <div className="mt-2 flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-input bg-primary-bg/70 border border-primary/15">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <ShieldCheck className="w-3.5 h-3.5 text-primary shrink-0" />
+                        <span className="text-[11px] font-semibold text-primary truncate">
+                          {lang === "ar" ? "ضمان " : "Warranty: "}{warranty.label[lang]}
+                        </span>
+                      </div>
+                      <span className="text-[11px] font-bold text-primary tabular shrink-0">
+                        +{warranty.price.toLocaleString()} <Sar />
+                      </span>
+                    </div>
+                  )}
+
                   <div className="flex items-end justify-between mt-2">
                     <div>
                       <div className="flex items-baseline gap-2">
-                        <span className="text-body font-bold text-primary tabular price-sar">{p.price.toLocaleString()}</span>
+                        <span className="text-body font-bold text-primary tabular price-sar">{linePrice.toLocaleString()}</span>
                         {onSale && <span className="text-[11px] text-n4 line-through tabular">{p.originalPrice!.toLocaleString()}</span>}
                       </div>
                       {oos && <p className="text-[10px] text-n4 mt-0.5">Not included in total</p>}

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Truck, Zap, Check, DollarSign, Smartphone, CalendarDays } from "lucide-react";
+import { ArrowLeft, ArrowRight, Truck, Zap, Check, DollarSign, Smartphone, CalendarDays, ShieldCheck } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { formatHijri, formatGregorian } from "@/lib/ksa";
@@ -35,6 +35,8 @@ const Checkout = () => {
     },
   ];
 
+  const warrantyTotal = cart.reduce((s, i) => s + (i.warranty?.price ?? 0) * i.qty, 0);
+  const productsSubtotal = cartSubtotal - warrantyTotal;
   const shipping = delivery === "exp" ? 45 : 0;
   const codFee = pay === "cod" ? 15 : 0;
   const discount = promo ? cartSubtotal * promo.discount : 0;
@@ -250,8 +252,27 @@ const Checkout = () => {
 
           <div className="flex justify-between text-body text-n2">
             <span>{t("subtotal")}</span>
-            <span className="tabular price-sar">{cartSubtotal.toFixed(2)}</span>
+            <span className="tabular price-sar">{productsSubtotal.toFixed(2)}</span>
           </div>
+          {warrantyTotal > 0 && (
+            <div className="space-y-1">
+              <div className="flex justify-between text-body text-n2">
+                <span className="flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-primary" />
+                  {lang === "ar" ? "ضمان ممتد" : "Extended warranty"}
+                </span>
+                <span className="tabular price-sar">{warrantyTotal.toFixed(2)}</span>
+              </div>
+              {cart.filter(i => i.warranty).map(i => (
+                <div key={`w-${i.product.id}-${i.warranty!.id}`} className="flex justify-between text-[11px] text-n3 ps-5">
+                  <span className="truncate pe-2">
+                    {i.product.name[lang]} · {i.warranty!.label[lang]}{i.qty > 1 ? ` × ${i.qty}` : ""}
+                  </span>
+                  <span className="tabular shrink-0">+{(i.warranty!.price * i.qty).toLocaleString()}</span>
+                </div>
+              ))}
+            </div>
+          )}
           {discount > 0 && (
             <div className="flex justify-between text-body text-success-text">
               <span>{t("discount")}</span>
