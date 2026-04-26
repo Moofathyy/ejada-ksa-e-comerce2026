@@ -343,7 +343,7 @@ const Auth = () => {
                   maxLength={1}
                   className={cn(
                     "w-14 h-16 text-center text-h1 font-bold rounded-input border-2 focus:outline-none bg-n8 text-n1 tabular",
-                    errors.otp ? "border-destructive" : "border-n4 focus:border-primary",
+                    errors.otp ? "border-ksa-red" : "border-n4 focus:border-primary",
                   )}
                 />
               ))}
@@ -542,13 +542,13 @@ const Field = ({ label, error, children }: { label: string; error?: string; chil
     <div className={cn(
       "mt-2 flex items-center gap-2 h-[52px] px-4 rounded-input border bg-n8 transition",
       error
-        ? "border-destructive border-2"
+        ? "border-ksa-red border-2"
         : "border-n4 focus-within:border-primary focus-within:border-2",
     )}>
       {children}
     </div>
     {error && (
-      <p className="mt-1 text-caption text-destructive font-medium" role="alert">{error}</p>
+      <p className="mt-1 text-caption text-ksa-red font-medium" role="alert">{error}</p>
     )}
   </label>
 );
@@ -569,7 +569,7 @@ const SaudiPhoneField = ({
       <div className={cn(
         "mt-2 flex items-stretch h-[52px] rounded-input border bg-n8 transition overflow-hidden",
         error
-          ? "border-destructive border-2"
+          ? "border-ksa-red border-2"
           : "border-n4 focus-within:border-primary focus-within:border-2",
       )} dir="ltr">
         <div className="flex items-center gap-1.5 px-3 bg-n7 border-e border-n6 text-n1">
