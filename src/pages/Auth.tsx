@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Check, ArrowLeft, ArrowRight, Mail } from "lucide-react";
+import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Mail } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { toast } from "sonner";
