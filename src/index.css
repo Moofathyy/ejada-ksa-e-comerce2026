@@ -25,6 +25,16 @@
     --s1-dark: 211 25% 34%;        /* #42566B */
     --s2: 152 86% 53%;             /* #1FED93 accent green */
 
+    /* KSA / Noon-style accents */
+    --ksa-yellow: 48 100% 50%;       /* Noon-like CTA yellow */
+    --ksa-yellow-dark: 42 100% 45%;  /* hover/border */
+    --ksa-green: 145 65% 32%;        /* Saudi flag green */
+    --ksa-red: 0 80% 55%;            /* COD / urgency */
+    --tabby-mint: 160 70% 92%;
+    --tabby-mint-text: 165 80% 28%;
+    --tamara-purple: 270 70% 96%;
+    --tamara-purple-text: 270 70% 45%;
+
     /* Semantic */
     --success: 144 49% 53%;
     --success-bg: 138 56% 93%;
