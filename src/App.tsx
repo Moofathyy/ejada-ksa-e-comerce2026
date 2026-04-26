@@ -21,6 +21,7 @@ import Profile from "./pages/Profile";
 import ProfileSection from "./pages/ProfileSection";
 import Notifications from "./pages/Notifications";
 import AddAddress from "./pages/AddAddress";
+import AddCard from "./pages/AddCard";
 import Returns from "./pages/Returns";
 import NotFound from "./pages/NotFound";
 
@@ -54,6 +55,7 @@ const App = () => (
               <Route path="/returns/:orderId" element={<Returns />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/profile/addresses/new" element={<AddAddress />} />
+              <Route path="/profile/payments/new" element={<AddCard />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
