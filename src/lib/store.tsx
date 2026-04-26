@@ -33,6 +33,7 @@ interface StoreCtx {
   addToCart: (p: Product, qty?: number, warranty?: CartWarranty) => void;
   removeFromCart: (id: string) => void;
   updateQty: (id: string, qty: number) => void;
+  updateWarranty: (id: string, warranty?: CartWarranty) => void;
   clearCart: () => void;
   toggleWishlist: (id: string) => void;
   promo: { code: string; discount: number } | null;
@@ -93,6 +94,20 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
     if (qty <= 0) return removeFromCart(id);
     setCart(prev => prev.map(i => i.product.id === id ? { ...i, qty } : i));
   }, [removeFromCart]);
+  const updateWarranty = useCallback((id: string, warranty?: CartWarranty) => {
+    setCart(prev => {
+      // Replace warranty on the matching product line; merge if a sibling line with same target warranty exists.
+      const target = prev.find(i => i.product.id === id);
+      if (!target) return prev;
+      const sibling = prev.find(i => i.product.id === id && (i.warranty?.id ?? "") === (warranty?.id ?? "") && i !== target);
+      if (sibling) {
+        return prev
+          .filter(i => i !== target)
+          .map(i => i === sibling ? { ...i, qty: i.qty + target.qty } : i);
+      }
+      return prev.map(i => i === target ? { ...i, warranty } : i);
+    });
+  }, []);
   const clearCart = useCallback(() => { setCart([]); setPromo(null); }, []);
 
   const toggleWishlist = useCallback((id: string) => {
@@ -136,7 +151,7 @@ export const StoreProvider = ({ children }: { children: ReactNode }) => {
   const cartSubtotal = cart.reduce((s, i) => s + (i.product.price + (i.warranty?.price ?? 0)) * i.qty, 0);
 
   return (
-    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress }}>
+    <Ctx.Provider value={{ cart, wishlist, addToCart, removeFromCart, updateQty, updateWarranty, clearCart, toggleWishlist, promo, applyPromo, removePromo, cartCount, cartSubtotal, user, signIn, signOut, city, setCity, addresses, addAddress, removeAddress, setDefaultAddress }}>
       {children}
     </Ctx.Provider>
   );
