@@ -103,7 +103,7 @@ const OrderConfirmation = () => {
       {/* CTAs */}
       <div className="px-6 pb-6 pt-2 space-y-3 safe-bottom">
         <button
-          onClick={() => nav("/orders")}
+          onClick={() => nav(`/order/ORD-${order.orderId}`)}
           className="w-full h-[52px] bg-primary text-primary-foreground rounded-full font-bold shadow-cta flex items-center justify-center gap-2"
         >
           <Package className="w-5 h-5" />
