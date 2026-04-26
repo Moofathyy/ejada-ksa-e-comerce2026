@@ -30,6 +30,11 @@ const PDP = () => {
   const connOpts = ["Wi-Fi 7", "5G", "Bluetooth 5.3"];
 
   const handleAdd = () => { addToCart(product, qty); toast.success(t("addedToCart")); };
+  const handleBuyNow = () => { addToCart(product, qty); nav("/checkout"); };
+  const sold = soldThisMonth(product.id);
+  const tabby = tabbyInstallment(product.price);
+  const tamara = tamaraInstallment(product.price);
+  const cutoff = fastDeliveryCutoff();
 
   return (
     <div className="phone-frame bg-background pb-28">
