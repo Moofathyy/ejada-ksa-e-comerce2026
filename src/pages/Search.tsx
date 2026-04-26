@@ -73,14 +73,53 @@ const Search = () => {
                 <SlidersHorizontal className="w-5 h-5 text-n8" />
               </button>
             </SheetTrigger>
-            <SheetContent side="bottom" className="rounded-t-3xl max-h-[85vh]">
-              <SheetHeader><SheetTitle>{lang === "ar" ? "تصفية" : "Filter"}</SheetTitle></SheetHeader>
-              <div className="space-y-4 py-4">
-                <div><h4 className="text-h3 mb-2">{lang === "ar" ? "السعر" : "Price"}</h4><input type="range" min={0} max={10000} className="w-full" /></div>
-                <div><h4 className="text-h3 mb-2">{lang === "ar" ? "الماركة" : "Brand"}</h4>
-                  <div className="flex flex-wrap gap-2">{["Apple", "Samsung", "Sony"].map(b => <span key={b} className="px-3 py-1.5 bg-n7 rounded-full text-caption">{b}</span>)}</div>
+            <SheetContent
+              side="bottom"
+              className="rounded-t-3xl max-h-[85vh] p-0 inset-x-0 mx-auto max-w-[402px] bg-n8 border-t-0"
+            >
+              <div className="mx-auto mt-3 h-1.5 w-12 rounded-full bg-n6" />
+              <SheetHeader className="px-5 pt-4 pb-2">
+                <SheetTitle className="text-h2 text-n1">{lang === "ar" ? "تصفية" : "Filter"}</SheetTitle>
+              </SheetHeader>
+              <div className="px-5 pb-6 space-y-6 overflow-y-auto">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-h3 text-n1">{lang === "ar" ? "السعر" : "Price"}</h4>
+                    <span className="text-caption text-n3 font-medium">0 — 10,000</span>
+                  </div>
+                  <input type="range" min={0} max={10000} defaultValue={5000} className="w-full accent-primary" />
                 </div>
-                <div><h4 className="text-h3 mb-2">{lang === "ar" ? "التقييم" : "Rating"}</h4><div className="flex gap-2">{[5,4,3].map(r => <span key={r} className="px-3 py-1.5 bg-n7 rounded-full text-caption">{r}★+</span>)}</div></div>
+
+                <div>
+                  <h4 className="text-h3 text-n1 mb-3">{lang === "ar" ? "الماركة" : "Brand"}</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {["Apple", "Samsung", "Sony"].map(b => (
+                      <button key={b} className="px-4 h-9 rounded-full text-caption font-semibold bg-n7 text-n2 border border-n6 hover:bg-primary-bg hover:text-primary hover:border-primary transition active:scale-95">
+                        {b}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="text-h3 text-n1 mb-3">{lang === "ar" ? "التقييم" : "Rating"}</h4>
+                  <div className="flex gap-2">
+                    {[5, 4, 3].map(r => (
+                      <button key={r} className="px-4 h-9 rounded-full text-caption font-semibold bg-n7 text-n2 border border-n6 hover:bg-primary-bg hover:text-primary hover:border-primary transition active:scale-95">
+                        {r}★+
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="sticky bottom-0 inset-x-0 bg-n8 border-t border-n6 px-5 py-3 flex items-center gap-3">
+                <button className="flex-1 h-12 rounded-full border border-n5 text-n2 font-semibold active:scale-[0.98] transition">
+                  {lang === "ar" ? "إعادة تعيين" : "Reset"}
+                </button>
+                <button className="flex-1 h-12 rounded-full bg-gradient-primary text-n8 font-semibold shadow-cta active:scale-[0.98] transition">
+                  {lang === "ar" ? "تطبيق" : "Apply"}
+                </button>
               </div>
             </SheetContent>
           </Sheet>
