@@ -61,6 +61,12 @@ const Auth = () => {
   const otpRefs = useRef<Array<HTMLInputElement | null>>([]);
   const [resendIn, setResendIn] = useState(0);
 
+  // Inline field errors
+  type FieldErrors = Partial<Record<"name" | "phone" | "email" | "password" | "confirmPwd" | "otp", string>>;
+  const [errors, setErrors] = useState<FieldErrors>({});
+  const clearError = (k: keyof FieldErrors) =>
+    setErrors(prev => (prev[k] ? { ...prev, [k]: undefined } : prev));
+
   useEffect(() => {
     if (resendIn <= 0) return;
     const id = setInterval(() => setResendIn(s => Math.max(0, s - 1)), 1000);
