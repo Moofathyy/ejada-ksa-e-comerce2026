@@ -164,34 +164,6 @@ const Listing = () => {
         </div>
       </header>
 
-      {/* Count/sort */}
-      <div className="bg-n8 border-b border-n6">
-        <div className="px-4 py-2 flex justify-between items-center">
-          <span className="text-caption text-n3">{list.length} {lang === "ar" ? "عنصر" : "items"}</span>
-          <Sheet>
-            <SheetTrigger asChild>
-              <button className="flex items-center gap-1.5 text-caption text-n2 font-semibold"><ArrowUpDown className="w-4 h-4" /> {lang === "ar" ? "ترتيب" : "Sort"}</button>
-            </SheetTrigger>
-            <SheetContent side="bottom" className="rounded-t-3xl">
-              <SheetHeader><SheetTitle>{lang === "ar" ? "ترتيب حسب" : "Sort By"}</SheetTitle></SheetHeader>
-              <div className="py-4 space-y-1">
-                {[
-                  { k: "popular", l: lang === "ar" ? "الأكثر مبيعاً" : "Best Sellers" },
-                  { k: "rating",  l: lang === "ar" ? "التقييم" : "Rating" },
-                  { k: "low",     l: lang === "ar" ? "السعر: من الأقل للأعلى" : "Price: Low to High" },
-                  { k: "high",    l: lang === "ar" ? "السعر: من الأعلى للأقل" : "Price: High to Low" },
-                ].map(o => (
-                  <button key={o.k} onClick={() => setSort(o.k as any)}
-                    className={cn("w-full text-start py-3 px-4 rounded-input", sort === o.k && "bg-primary-bg text-primary font-semibold")}>
-                    {o.l}
-                  </button>
-                ))}
-              </div>
-            </SheetContent>
-          </Sheet>
-        </div>
-      </div>
-
       <main className="p-4">
         {list.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 px-8 text-center">
