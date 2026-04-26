@@ -281,6 +281,9 @@ const Loyalty = (lang: "en" | "ar") => <LoyaltyScreen lang={lang} />;
 
 const LoyaltyScreen = ({ lang }: { lang: "en" | "ar" }) => {
   const tr = (en: string, ar: string) => (lang === "ar" ? ar : en);
+  const nav = useNavigate();
+  const { dir } = useI18n();
+  const BackIcon = dir === "rtl" ? ArrowRight : ArrowLeft;
   const points = 2450;
   const tier = tr("GOLD", "ذهبي");
   const nextTier = tr("Platinum", "بلاتيني");
