@@ -212,9 +212,9 @@ const Cart = () => {
       </main>
 
       {/* Sticky checkout */}
-      <div className="fixed bottom-[84px] inset-x-0 mx-auto max-w-[402px] px-4 z-40 pointer-events-none">
+      <div className="fixed bottom-[64px] inset-x-0 mx-auto max-w-[402px] bg-n8 px-4 pt-3 pb-3 z-40">
         <button onClick={() => nav("/checkout")}
-          className="pointer-events-auto w-full h-[56px] rounded-full font-bold text-h3 text-n8 shadow-cta active:scale-[0.98] transition bg-gradient-primary flex items-center justify-center gap-2">
+          className="w-full h-[56px] rounded-full font-bold text-h3 text-n8 shadow-cta active:scale-[0.98] transition bg-gradient-primary flex items-center justify-center gap-2">
           <span>{lang === "ar" ? "الدفع" : "Checkout"}</span>
           <span className="opacity-80">•</span>
           <span className="tabular price-sar">{total.toFixed(2)}</span>
