@@ -428,10 +428,10 @@ const Auth = () => {
               </div>
 
               <div>
-                <Field label={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"}>
+                <Field label={lang === "ar" ? "تأكيد كلمة المرور" : "Confirm Password"} error={errors.confirmPwd}>
                   <input
                     type={showConfirmPwd ? "text" : "password"} autoComplete="new-password"
-                    value={confirmPwd} onChange={e => setConfirmPwd(e.target.value)}
+                    value={confirmPwd} onChange={e => { setConfirmPwd(e.target.value); clearError("confirmPwd"); }}
                     placeholder={lang === "ar" ? "أعد إدخال كلمة المرور" : "Re-enter password"} dir="ltr"
                     className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
                   />
