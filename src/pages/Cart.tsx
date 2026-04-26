@@ -1,16 +1,24 @@
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "react-router-dom";
-import { Plus, Minus, Trash2, Tag, ShieldCheck, Truck, Clock, X, ShoppingBag } from "lucide-react";
+import { Plus, Minus, Trash2, Tag, ShieldCheck, Truck, Clock, X, ShoppingBag, Pencil, Check } from "lucide-react";
 import { TrustModule } from "@/components/TrustModule";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
-import { useStore } from "@/lib/store";
+import { useStore, CartWarranty } from "@/lib/store";
 import { TopBar } from "@/components/TopBar";
 import { MobileShell } from "@/components/MobileShell";
 import { toast } from "sonner";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetClose } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+
+type WarrantyOption = { id: string; label: { en: string; ar: string }; price: number; sub: { en: string; ar: string } };
+const WARRANTY_OPTIONS: WarrantyOption[] = [
+  { id: "std",  label: { en: "Standard",  ar: "قياسي" },     price: 0,   sub: { en: "1-year manufacturer", ar: "سنة من الشركة" } },
+  { id: "ext2", label: { en: "Extended",  ar: "ممتد" },      price: 199, sub: { en: "+1 year extra cover", ar: "سنة إضافية" } },
+  { id: "ext3", label: { en: "Premium",   ar: "بريميوم" },   price: 349, sub: { en: "+2 years + accidental", ar: "سنتان + حوادث" } },
+];
 
 const FREE_THRESHOLD = 500;
 
