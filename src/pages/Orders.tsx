@@ -124,7 +124,7 @@ export const OrderTracking = () => {
         </div>
       </header>
 
-      <main className="px-4 -mt-4 pb-8 space-y-4">
+      <main className="px-4 pt-4 pb-8 space-y-4">
         {/* Map card */}
         <div className="bg-n8 rounded-card shadow-elev1 overflow-hidden">
           <div className="relative h-44 bg-gradient-to-br from-primary/10 via-accent to-primary/5">
