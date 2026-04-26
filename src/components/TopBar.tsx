@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 
 interface Props {
@@ -14,7 +14,7 @@ interface Props {
 export const TopBar = ({ title, right, showBack = true, onBack, transparent }: Props) => {
   const nav = useNavigate();
   const { dir } = useI18n();
-  const Back = dir === "rtl" ? ChevronRight : ChevronLeft;
+  const Back = dir === "rtl" ? ArrowRight : ArrowLeft;
 
   return (
     <header
@@ -28,10 +28,10 @@ export const TopBar = ({ title, right, showBack = true, onBack, transparent }: P
         {showBack && (
           <button
             onClick={() => (onBack ? onBack() : nav(-1))}
-            className="w-10 h-10 -ms-2 flex items-center justify-center rounded-full hover:bg-primary-foreground/15 active:scale-95 transition"
+            className={`w-10 h-10 rounded-xl flex items-center justify-center active:scale-95 transition ${transparent ? "bg-n1/10" : "bg-n8/15 backdrop-blur"}`}
             aria-label="Back"
           >
-            <Back className="w-6 h-6" />
+            <Back className="w-5 h-5" />
           </button>
         )}
       </div>
