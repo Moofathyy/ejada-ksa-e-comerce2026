@@ -19,6 +19,7 @@ import { useStore } from "@/lib/store";
 type SectionConfig = {
   title: { en: string; ar: string };
   render: (lang: "en" | "ar") => JSX.Element;
+  hideTopBar?: boolean;
 };
 
 const Field = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => (
