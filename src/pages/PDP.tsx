@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, Share2, Star, ChevronLeft, ChevronRight, ArrowLeft, X, Plus, Minus, ShoppingCart, Check, Sparkles, Zap, ShieldCheck } from "lucide-react";
+import { Heart, Share2, Star, ChevronLeft, ChevronRight, ArrowLeft, X, Plus, Minus, ShoppingCart, Check, Sparkles, Zap, ShieldCheck, GitCompareArrows, ArrowRight } from "lucide-react";
 import { TrustModule } from "@/components/TrustModule";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
@@ -15,7 +15,7 @@ const PDP = () => {
   const { id } = useParams();
   const nav = useNavigate();
   const { lang, t, dir } = useI18n();
-  const { addToCart, toggleWishlist, wishlist } = useStore();
+  const { addToCart, toggleWishlist, wishlist, compareList, toggleCompare, removeCompare } = useStore();
   const product = getProduct(id || "");
   const [qty, setQty] = useState(1);
   const [storageIdx, setStorageIdx] = useState(1);
@@ -359,6 +359,87 @@ const PDP = () => {
             )}
           </div>
         </div>
+
+        {/* Compare with selected items */}
+        {(() => {
+          const inCompare = compareList.includes(product.id);
+          const selectedItems = compareList
+            .filter(id => id !== product.id)
+            .map(getProduct)
+            .filter(Boolean) as NonNullable<ReturnType<typeof getProduct>>[];
+          const canCompare = inCompare && selectedItems.length >= 1;
+          return (
+            <div className="mt-6 border-t border-n6 pt-4">
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-h3 text-n1 flex items-center gap-2">
+                  <GitCompareArrows className="w-5 h-5 text-primary" />
+                  {lang === "ar" ? "قارن مع العناصر المحددة" : "Compare with selected items"}
+                </h3>
+                <button
+                  onClick={() => {
+                    const added = toggleCompare(product.id);
+                    toast.success(
+                      added
+                        ? (lang === "ar" ? "تمت الإضافة للمقارنة" : "Added to compare")
+                        : (lang === "ar" ? "تمت الإزالة من المقارنة" : "Removed from compare"),
+                    );
+                  }}
+                  className={cn(
+                    "text-caption font-bold px-3 py-1.5 rounded-full border transition active:scale-95",
+                    inCompare ? "border-primary text-primary bg-primary-bg" : "border-n6 text-n1 bg-n8",
+                  )}
+                >
+                  {inCompare
+                    ? (lang === "ar" ? "✓ مضاف" : "✓ Added")
+                    : (lang === "ar" ? "+ أضف هذا" : "+ Add this")}
+                </button>
+              </div>
+
+              {selectedItems.length === 0 ? (
+                <p className="text-caption text-n4">
+                  {lang === "ar"
+                    ? "لم تحدد منتجات أخرى بعد. أضف منتجات من القائمة لمقارنتها هنا."
+                    : "No other items selected yet. Add products from listings to compare them here."}
+                </p>
+              ) : (
+                <div className="flex gap-2 overflow-x-auto no-scrollbar -mx-1 px-1 pb-1">
+                  {selectedItems.map(p => (
+                    <div key={p.id} className="relative shrink-0 w-24">
+                      <button
+                        onClick={() => nav(`/product/${p.id}`)}
+                        className="w-24 h-24 rounded-2xl border border-n6 bg-n8 flex items-center justify-center overflow-hidden active:scale-95 transition"
+                      >
+                        <img src={p.image} alt={p.name[lang]} className="max-w-[80%] max-h-[80%] object-contain" />
+                      </button>
+                      <button
+                        onClick={() => removeCompare(p.id)}
+                        className="absolute -top-1 -end-1 w-5 h-5 rounded-full bg-n1 text-n8 flex items-center justify-center shadow-elev2"
+                        aria-label="Remove"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                      <p className="mt-1 text-[11px] text-n2 text-center truncate font-medium">{p.name[lang]}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              <button
+                disabled={!canCompare}
+                onClick={() => nav("/compare")}
+                className={cn(
+                  "mt-3 w-full h-11 rounded-full font-bold flex items-center justify-center gap-2 transition",
+                  canCompare
+                    ? "bg-primary text-primary-foreground active:scale-[0.99]"
+                    : "bg-n7 text-n4 cursor-not-allowed",
+                )}
+              >
+                {lang === "ar" ? "قارن الآن" : "Compare now"}
+                <ArrowRight className={cn("w-4 h-4", dir === "rtl" && "rotate-180")} />
+              </button>
+            </div>
+          );
+        })()}
 
         {/* Upsell */}
         <div className="mt-6 border-t border-n6 pt-4">
