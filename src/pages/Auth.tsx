@@ -5,6 +5,15 @@ import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import {
+  formatSaudiMobile,
+  isValidSaudiMobile,
+  maskSaudiMobile,
+  parseSaudiMobile,
+  toE164Saudi,
+  toLatinDigits,
+  formatHijri,
+} from "@/lib/ksa";
 
 type Mode = "signin" | "signup";
 type SignupStep = "info" | "otp" | "password";
@@ -58,7 +67,11 @@ const Auth = () => {
     return () => clearInterval(id);
   }, [resendIn]);
 
-  const validatePhone = (v: string) => /^\+?[0-9\s-]{8,16}$/.test(v.trim());
+  const validatePhone = (v: string) => isValidSaudiMobile(v);
+  const onPhoneChange = (raw: string) => setPhone(parseSaudiMobile(raw));
+  const ksaPhoneError = lang === "ar"
+    ? "أدخل رقم جوال سعودي صحيح يبدأ بـ 5"
+    : "Enter a valid Saudi mobile starting with 5";
   const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
   const resetSignup = () => {
@@ -74,11 +87,11 @@ const Auth = () => {
 
   // ---- Sign in ----
   const submitSignin = () => {
-    if (!validatePhone(phone)) { toast.error(t("invalidPhone")); return; }
+    if (!validatePhone(phone)) { toast.error(ksaPhoneError); return; }
     if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
     setLoading(true);
     setTimeout(() => {
-      signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${phone.trim()}@phone.local`, city });
+      signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${toE164Saudi(phone)}@phone.local`, city });
       localStorage.setItem("ejada_user", lang === "ar" ? "أحمد" : "Ahmed");
       toast.success(t("welcomeBack"));
       setLoading(false);
@@ -90,7 +103,7 @@ const Auth = () => {
   const goNextSignup = () => {
     if (step === "info") {
       if (name.trim().length < 2) { toast.error(lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name"); return; }
-      if (!validatePhone(phone)) { toast.error(t("invalidPhone")); return; }
+      if (!validatePhone(phone)) { toast.error(ksaPhoneError); return; }
       if (!validateEmail(email)) {
         toast.error(lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email");
         return;
@@ -119,7 +132,7 @@ const Auth = () => {
     }
     setLoading(true);
     setTimeout(() => {
-      signIn({ name: name.trim(), email: email.trim() || `${phone.trim()}@phone.local`, city });
+      signIn({ name: name.trim(), email: email.trim() || `${toE164Saudi(phone)}@phone.local`, city });
       localStorage.setItem("ejada_user", name.trim());
       toast.success(t("accountCreated"));
       setLoading(false);
@@ -136,7 +149,19 @@ const Auth = () => {
   };
 
   const setOtpAt = (i: number, val: string) => {
-    const v = val.replace(/\D/g, "").slice(-1);
+    const cleaned = toLatinDigits(val).replace(/\D/g, "");
+    // Paste support: if user pasted multiple digits, fill from current index
+    if (cleaned.length > 1) {
+      setOtp(prev => {
+        const next = [...prev];
+        for (let k = 0; k < cleaned.length && i + k < 4; k++) next[i + k] = cleaned[k];
+        return next;
+      });
+      const lastIdx = Math.min(i + cleaned.length - 1, 3);
+      otpRefs.current[lastIdx]?.focus();
+      return;
+    }
+    const v = cleaned.slice(-1);
     setOtp(prev => {
       const next = [...prev];
       next[i] = v;
@@ -188,7 +213,7 @@ const Auth = () => {
       : step === "info"
         ? (lang === "ar" ? "أخبرنا قليلاً عن نفسك" : "Tell us a bit about yourself")
         : step === "otp"
-          ? (lang === "ar" ? `أرسلنا رمزاً مكوناً من 4 أرقام إلى ${phone}` : `We sent a 4-digit code to ${phone}`)
+          ? (lang === "ar" ? `أرسلنا رمزاً مكوناً من 4 أرقام إلى ${maskSaudiMobile(phone)}` : `We sent a 4-digit code to ${maskSaudiMobile(phone)}`)
           : (lang === "ar" ? "اختر كلمة مرور آمنة" : "Choose a secure password");
 
   const ctaLabel =
@@ -215,8 +240,11 @@ const Auth = () => {
             <p className="text-h1 font-bold truncate">{headerTitle}</p>
           </div>
         </div>
-        <div className="px-4 pb-4">
-          <p className="text-caption opacity-90">{headerSub}</p>
+        <div className="px-4 pb-4 flex items-center justify-between gap-3">
+          <p className="text-caption opacity-90 flex-1 min-w-0">{headerSub}</p>
+          <span className="text-[10px] font-semibold opacity-75 tabular whitespace-nowrap">
+            {formatHijri(new Date(), lang)}
+          </span>
         </div>
       </header>
 
@@ -224,14 +252,12 @@ const Auth = () => {
         {/* SIGN IN */}
         {mode === "signin" && (
           <>
-            <Field label={t("phoneNumber")}>
-              <input
-                type="tel" inputMode="tel" autoComplete="tel"
-                value={phone} onChange={e => setPhone(e.target.value)}
-                placeholder={t("enterPhone")} dir="ltr"
-                className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-              />
-            </Field>
+            <SaudiPhoneField
+              label={t("phoneNumber")}
+              value={phone}
+              onChange={onPhoneChange}
+              lang={lang}
+            />
 
             <Field label={t("password")}>
               <input
@@ -276,14 +302,12 @@ const Auth = () => {
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
               />
             </Field>
-            <Field label={t("phoneNumber")}>
-              <input
-                type="tel" inputMode="tel" autoComplete="tel"
-                value={phone} onChange={e => setPhone(e.target.value)}
-                placeholder={t("enterPhone")} dir="ltr"
-                className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-              />
-            </Field>
+            <SaudiPhoneField
+              label={t("phoneNumber")}
+              value={phone}
+              onChange={onPhoneChange}
+              lang={lang}
+            />
             <Field label={lang === "ar" ? "البريد الإلكتروني" : "Email"}>
               <Mail className="w-5 h-5 text-n4" />
               <input
@@ -506,6 +530,42 @@ const Field = ({ label, children }: { label: string; children: React.ReactNode }
     </div>
   </label>
 );
+
+const SaudiPhoneField = ({
+  label, value, onChange, lang,
+}: {
+  label: string;
+  value: string;
+  onChange: (raw: string) => void;
+  lang: "en" | "ar";
+}) => {
+  const display = formatSaudiMobile(value);
+  return (
+    <label className="block">
+      <span className="text-label text-n1 font-bold">{label}</span>
+      <div className="mt-2 flex items-stretch h-[52px] rounded-input border border-n4 focus-within:border-primary focus-within:border-2 bg-n8 transition overflow-hidden" dir="ltr">
+        <div className="flex items-center gap-1.5 px-3 bg-n7 border-e border-n6 text-n1">
+          <span className="text-lg leading-none" aria-hidden>🇸🇦</span>
+          <span className="text-body font-bold tabular">+966</span>
+        </div>
+        <input
+          type="tel"
+          inputMode="numeric"
+          autoComplete="tel-national"
+          value={display}
+          onChange={e => onChange(e.target.value)}
+          placeholder="5XX XXX XXXX"
+          maxLength={12} // "5XX XXX XXXX" = 12 chars
+          aria-label={label}
+          className="flex-1 h-full px-3 outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular tracking-wide"
+        />
+      </div>
+      <p className="mt-1 text-caption text-n3">
+        {lang === "ar" ? "نرسل رمز التحقق عبر رسالة نصية" : "We'll text you a verification code"}
+      </p>
+    </label>
+  );
+};
 
 const SocialBtn = ({ children, onClick }: { children: React.ReactNode; onClick: () => void }) => (
   <button

@@ -1,6 +1,51 @@
 /**
- * KSA-specific helpers: Hijri date, Tabby/Tamara installments, fast-delivery cutoff.
+ * KSA-specific helpers: Hijri date, Tabby/Tamara installments, fast-delivery cutoff,
+ * Saudi phone formatting & validation, Arabic-Indic digit normalization.
  */
+
+/** Convert Arabic-Indic (٠-٩) and Persian (۰-۹) digits to Latin (0-9). */
+export const toLatinDigits = (s: string): string =>
+  s.replace(/[\u0660-\u0669]/g, d => String(d.charCodeAt(0) - 0x0660))
+   .replace(/[\u06F0-\u06F9]/g, d => String(d.charCodeAt(0) - 0x06F0));
+
+/** Convert Latin digits to Arabic-Indic for display. */
+export const toArabicDigits = (s: string | number): string =>
+  String(s).replace(/[0-9]/g, d => String.fromCharCode(0x0660 + Number(d)));
+
+/**
+ * Extract the Saudi mobile subscriber number (9 digits starting with 5)
+ * from any user input. Strips +966 / 00966 / leading 0 prefixes and
+ * normalizes Arabic-Indic digits.
+ */
+export const parseSaudiMobile = (raw: string): string => {
+  let v = toLatinDigits(raw).replace(/\D/g, "");
+  if (v.startsWith("00966")) v = v.slice(5);
+  else if (v.startsWith("966")) v = v.slice(3);
+  else if (v.startsWith("0")) v = v.slice(1);
+  return v.slice(0, 9);
+};
+
+/** Validate Saudi mobile: 9 digits starting with 5. */
+export const isValidSaudiMobile = (raw: string): boolean =>
+  /^5\d{8}$/.test(parseSaudiMobile(raw));
+
+/** Format the local part as "5XX XXX XXXX". */
+export const formatSaudiMobile = (local: string): string => {
+  const v = parseSaudiMobile(local);
+  if (v.length <= 3) return v;
+  if (v.length <= 6) return `${v.slice(0, 3)} ${v.slice(3)}`;
+  return `${v.slice(0, 3)} ${v.slice(3, 6)} ${v.slice(6)}`;
+};
+
+/** Full E.164: +9665XXXXXXXX */
+export const toE164Saudi = (raw: string): string => `+966${parseSaudiMobile(raw)}`;
+
+/** Mask middle digits for privacy: +966 5X XXX •• 34 */
+export const maskSaudiMobile = (raw: string): string => {
+  const v = parseSaudiMobile(raw);
+  if (v.length < 9) return toE164Saudi(raw);
+  return `+966 ${v.slice(0, 2)} ${v.slice(2, 5)} •• ${v.slice(7)}`;
+};
 
 export const formatHijri = (date: Date, lang: "en" | "ar" = "en"): string => {
   try {
