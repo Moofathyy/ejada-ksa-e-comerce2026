@@ -85,23 +85,6 @@ const ReturnRequests = () => {
       <TopBar title={tr("Returned Requests", "طلبات الإرجاع")} onBack={() => nav(-1)} />
 
       <main className="px-4 pt-4 pb-6 space-y-3">
-        {/* Summary */}
-        <div className="bg-primary text-n8 rounded-card p-4 shadow-elev1 flex items-center gap-3">
-          <div className="w-11 h-11 rounded-full bg-n8/15 flex items-center justify-center">
-            <RotateCcw className="w-5 h-5" />
-          </div>
-          <div className="flex-1">
-            <p className="text-caption opacity-80">{tr("Total Requests", "إجمالي الطلبات")}</p>
-            <p className="text-h1 font-bold tabular">{SAMPLE.length}</p>
-          </div>
-          <button
-            onClick={() => nav("/returns")}
-            className="bg-n8 text-primary rounded-full px-3 py-2 text-caption font-bold flex items-center gap-1"
-          >
-            <Plus className="w-4 h-4" /> {tr("New", "جديد")}
-          </button>
-        </div>
-
         {SAMPLE.length === 0 ? (
           <div className="bg-n8 rounded-card shadow-elev1 p-8 text-center">
             <Package className="w-12 h-12 text-n4 mx-auto mb-2" />
