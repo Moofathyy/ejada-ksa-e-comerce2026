@@ -168,8 +168,26 @@
     font-family: 'Readex Pro', system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
-
   [dir="rtl"] { font-family: 'Readex Pro', system-ui, sans-serif; }
+
+  /* Modern global motion defaults */
+  a, button, [role="button"], input, select, textarea, summary, label {
+    transition-property: transform, background-color, border-color, color, box-shadow, opacity, filter;
+    transition-duration: 220ms;
+    transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  button:not(:disabled):active,
+  [role="button"]:not([aria-disabled="true"]):active {
+    transform: scale(0.97);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
 }
 
 @layer components {
@@ -204,6 +222,23 @@
     -webkit-mask: url("/sar.svg") no-repeat center / contain;
     mask: url("/sar.svg") no-repeat center / contain;
   }
+
+  /* Modern interaction utilities */
+  .hover-lift {
+    @apply transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-elev2;
+  }
+  .hover-scale {
+    @apply transition-transform duration-200 ease-[cubic-bezier(0.34,1.56,0.64,1)] hover:scale-[1.03] active:scale-[0.97];
+  }
+  .press {
+    @apply transition-transform duration-150 active:scale-[0.96];
+  }
+  .story-link {
+    @apply relative inline-block after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:start-0 after:bg-primary after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+  }
+  .glass {
+    @apply backdrop-blur-md bg-n8/60 border border-n6/60;
+  }
 }
 
 @layer utilities {
@@ -216,25 +251,32 @@
   }
   @keyframes scale-bounce {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.08); }
-  }
-  @keyframes slide-up {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    50% { transform: scale(1.12); }
   }
   @keyframes confetti-pop {
     0% { transform: scale(0) rotate(0deg); opacity: 0; }
     50% { transform: scale(1.2) rotate(180deg); opacity: 1; }
     100% { transform: scale(1) rotate(360deg); opacity: 1; }
   }
-  .animate-bounce-cart { animation: scale-bounce 0.4s ease; }
-  .animate-slide-up { animation: slide-up 0.3s ease-out; }
-  .animate-fade-in { animation: fade-in 0.3s ease-out; }
-  .animate-confetti { animation: confetti-pop 0.6s ease-out; }
+  .animate-bounce-cart { animation: scale-bounce 0.45s cubic-bezier(0.34,1.56,0.64,1); }
+  .animate-confetti { animation: confetti-pop 0.6s cubic-bezier(0.34,1.56,0.64,1); }
+
+  /* Staggered list entrance — apply to a parent's children */
+  .stagger > * { animation: fade-in 0.45s cubic-bezier(0.22,1,0.36,1) both; }
+  .stagger > *:nth-child(1) { animation-delay: 0.02s; }
+  .stagger > *:nth-child(2) { animation-delay: 0.06s; }
+  .stagger > *:nth-child(3) { animation-delay: 0.10s; }
+  .stagger > *:nth-child(4) { animation-delay: 0.14s; }
+  .stagger > *:nth-child(5) { animation-delay: 0.18s; }
+  .stagger > *:nth-child(6) { animation-delay: 0.22s; }
+  .stagger > *:nth-child(7) { animation-delay: 0.26s; }
+  .stagger > *:nth-child(8) { animation-delay: 0.30s; }
+  .stagger > *:nth-child(n+9) { animation-delay: 0.34s; }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 }
 
 @layer utilities {
