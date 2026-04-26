@@ -349,6 +349,94 @@ const Checkout = () => {
           )}
         </button>
       </div>
+
+      {/* Installments Bottom Sheet */}
+      <Sheet open={showInstallSheet} onOpenChange={setShowInstallSheet}>
+        <SheetContent side="bottom" className="rounded-t-3xl border-0 p-0 max-h-[85vh] overflow-y-auto">
+          <div className="mx-auto w-12 h-1.5 rounded-full bg-n6 mt-3 mb-1" />
+          <SheetHeader className="px-5 pt-3 pb-2 text-start">
+            <SheetTitle className="text-h2 text-n1 font-bold">
+              {lang === "ar" ? "اختر خطة التقسيط" : "Choose an installment plan"}
+            </SheetTitle>
+            <SheetDescription className="text-caption text-n3">
+              {lang === "ar"
+                ? `إجمالي الطلب ${total.toFixed(2)} ر.س — جميع الخطط بدون فوائد`
+                : `Order total ${total.toFixed(2)} SAR — all plans are interest-free`}
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="px-5 py-4 space-y-2.5">
+            {([3, 4, 6, 12] as const).map(n => {
+              const monthly = total / n;
+              const active = installPlan === n;
+              return (
+                <button
+                  key={n}
+                  type="button"
+                  onClick={() => setInstallPlan(n)}
+                  className={cn(
+                    "w-full bg-n8 rounded-card p-4 flex items-center gap-3 border-2 transition text-start",
+                    active ? "border-primary shadow-elev1" : "border-n6",
+                  )}
+                >
+                  <div className={cn(
+                    "w-12 h-12 rounded-2xl flex flex-col items-center justify-center shrink-0 leading-none",
+                    active ? "bg-primary text-n8" : "bg-primary-bg text-primary",
+                  )}>
+                    <span className="text-h3 font-extrabold tabular">{n}</span>
+                    <span className="text-[9px] font-bold uppercase tracking-wider opacity-80 mt-0.5">
+                      {lang === "ar" ? "دفعات" : "Pmts"}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-body font-bold text-n1">
+                      {lang === "ar" ? `${n} دفعات شهرية` : `${n} monthly payments`}
+                    </p>
+                    <p className="text-caption text-n3 mt-0.5">
+                      {lang === "ar"
+                        ? `${monthly.toFixed(2)} ر.س / شهر · بدون فوائد`
+                        : `${monthly.toFixed(2)} SAR / month · 0% interest`}
+                    </p>
+                  </div>
+                  <div className={cn(
+                    "shrink-0 w-5 h-5 rounded-full border-2 flex items-center justify-center transition",
+                    active ? "border-primary bg-primary" : "border-n4",
+                  )}>
+                    {active && <Check className="w-3 h-3 text-n8" strokeWidth={3} />}
+                  </div>
+                </button>
+              );
+            })}
+
+            <div className="flex items-start gap-2.5 p-3 mt-2 rounded-card bg-info/5 border border-info/20">
+              <ShieldCheck className="w-4 h-4 text-info-text shrink-0 mt-0.5" />
+              <p className="text-caption text-info-text leading-relaxed">
+                {lang === "ar"
+                  ? "تتم الموافقة على التقسيط فوراً بعد التحقق من بطاقتك."
+                  : "Installment approval is instant after card verification."}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => {
+                setPay("installments");
+                setShowInstallSheet(false);
+                toast.success(
+                  lang === "ar"
+                    ? `تم اختيار التقسيط على ${installPlan} دفعات`
+                    : `Installments set to ${installPlan} payments`,
+                );
+              }}
+              className="w-full h-[52px] mt-2 bg-primary text-primary-foreground rounded-full font-bold shadow-cta active:scale-[0.98] transition"
+            >
+              {lang === "ar"
+                ? `تأكيد · ${(total / installPlan).toFixed(2)} ر.س × ${installPlan}`
+                : `Confirm · ${(total / installPlan).toFixed(2)} SAR × ${installPlan}`}
+            </button>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
