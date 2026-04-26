@@ -19,6 +19,8 @@ const Checkout = () => {
   const [addr, setAddr] = useState(0);
   const [delivery, setDelivery] = useState<DeliveryId>("exp");
   const [pay, setPay] = useState<PayId>("mada");
+  const [installPlan, setInstallPlan] = useState<3 | 4 | 6 | 12>(4);
+  const [showInstallSheet, setShowInstallSheet] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const addresses = [
@@ -65,18 +67,6 @@ const Checkout = () => {
       sub: lang === "ar" ? "محفظة سعودية" : "Saudi wallet",
       icon: <Smartphone className="w-4 h-4 text-n8" />,
       iconBg: "bg-[#4F1F8F]",
-    },
-    {
-      id: "tabby", name: "Tabby",
-      sub: lang === "ar" ? "قسّمها على 4 دفعات بدون فوائد" : "Pay in 4 — interest-free",
-      icon: <span className="text-[10px] font-extrabold text-tabby-text">4×</span>,
-      iconBg: "bg-tabby",
-    },
-    {
-      id: "tamara", name: "Tamara",
-      sub: lang === "ar" ? "قسّمها على 3 دفعات" : "Split in 3 payments",
-      icon: <span className="text-[10px] font-extrabold text-tamara-text">3×</span>,
-      iconBg: "bg-tamara",
     },
     {
       id: "cod", name: lang === "ar" ? "الدفع عند الاستلام" : "Cash on Delivery",
