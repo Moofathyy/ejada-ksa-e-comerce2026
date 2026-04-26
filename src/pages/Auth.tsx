@@ -67,7 +67,11 @@ const Auth = () => {
     return () => clearInterval(id);
   }, [resendIn]);
 
-  const validatePhone = (v: string) => /^\+?[0-9\s-]{8,16}$/.test(v.trim());
+  const validatePhone = (v: string) => isValidSaudiMobile(v);
+  const onPhoneChange = (raw: string) => setPhone(parseSaudiMobile(raw));
+  const ksaPhoneError = lang === "ar"
+    ? "أدخل رقم جوال سعودي صحيح يبدأ بـ 5"
+    : "Enter a valid Saudi mobile starting with 5";
   const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 
   const resetSignup = () => {
