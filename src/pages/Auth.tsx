@@ -1,44 +1,123 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Check, ArrowLeft, ArrowRight } from "lucide-react";
+import { Eye, EyeOff, Check, ArrowLeft, ArrowRight, Mail } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 type Mode = "signin" | "signup";
+type SignupStep = "info" | "otp" | "password";
 
 const Auth = () => {
   const nav = useNavigate();
   const { t, lang, dir } = useI18n();
   const { signIn, city } = useStore();
   const [mode, setMode] = useState<Mode>("signin");
+
+  // shared
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPwd, setShowPwd] = useState(false);
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const validatePhone = (v: string) => /^\+?[0-9\s-]{8,16}$/.test(v.trim());
+  // signup flow
+  const [step, setStep] = useState<SignupStep>("info");
+  const [otp, setOtp] = useState<string[]>(["", "", "", ""]);
+  const otpRefs = useRef<Array<HTMLInputElement | null>>([]);
+  const [resendIn, setResendIn] = useState(0);
 
-  const submit = () => {
+  useEffect(() => {
+    if (resendIn <= 0) return;
+    const id = setInterval(() => setResendIn(s => Math.max(0, s - 1)), 1000);
+    return () => clearInterval(id);
+  }, [resendIn]);
+
+  const validatePhone = (v: string) => /^\+?[0-9\s-]{8,16}$/.test(v.trim());
+  const validateEmail = (v: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+
+  const resetSignup = () => {
+    setStep("info");
+    setOtp(["", "", "", ""]);
+    setResendIn(0);
+  };
+
+  const switchMode = (next: Mode) => {
+    setMode(next);
+    if (next === "signup") resetSignup();
+  };
+
+  // ---- Sign in ----
+  const submitSignin = () => {
     if (!validatePhone(phone)) { toast.error(t("invalidPhone")); return; }
     if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
-    if (mode === "signup" && name.trim().length < 2) {
-      toast.error(lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name");
-      return;
-    }
-
     setLoading(true);
     setTimeout(() => {
-      const userName = mode === "signup" ? name.trim() : (lang === "ar" ? "أحمد" : "Ahmed");
-      signIn({ name: userName, email: `${phone.trim()}@phone.local`, city });
-      localStorage.setItem("ejada_user", userName);
-      toast.success(mode === "signup" ? t("accountCreated") : t("welcomeBack"));
+      signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${phone.trim()}@phone.local`, city });
+      localStorage.setItem("ejada_user", lang === "ar" ? "أحمد" : "Ahmed");
+      toast.success(t("welcomeBack"));
       setLoading(false);
       nav("/home", { replace: true });
     }, 600);
+  };
+
+  // ---- Sign up steps ----
+  const goNextSignup = () => {
+    if (step === "info") {
+      if (name.trim().length < 2) { toast.error(lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name"); return; }
+      if (!validatePhone(phone)) { toast.error(t("invalidPhone")); return; }
+      if (!validateEmail(email)) {
+        toast.error(lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email");
+        return;
+      }
+      setStep("otp");
+      setResendIn(45);
+      setTimeout(() => otpRefs.current[0]?.focus(), 50);
+      return;
+    }
+    if (step === "otp") {
+      if (otp.some(d => d.length !== 1)) {
+        toast.error(lang === "ar" ? "أدخل رمز التحقق" : "Enter the verification code");
+        return;
+      }
+      setStep("password");
+      return;
+    }
+    // password step → finalize
+    if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
+    setLoading(true);
+    setTimeout(() => {
+      signIn({ name: name.trim(), email: email.trim() || `${phone.trim()}@phone.local`, city });
+      localStorage.setItem("ejada_user", name.trim());
+      toast.success(t("accountCreated"));
+      setLoading(false);
+      nav("/home", { replace: true });
+    }, 600);
+  };
+
+  const handleBack = () => {
+    if (mode === "signup") {
+      if (step === "password") { setStep("otp"); return; }
+      if (step === "otp") { setStep("info"); return; }
+    }
+    nav(-1);
+  };
+
+  const setOtpAt = (i: number, val: string) => {
+    const v = val.replace(/\D/g, "").slice(-1);
+    setOtp(prev => {
+      const next = [...prev];
+      next[i] = v;
+      return next;
+    });
+    if (v && i < 3) otpRefs.current[i + 1]?.focus();
+  };
+
+  const onOtpKeyDown = (i: number, e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Backspace" && !otp[i] && i > 0) otpRefs.current[i - 1]?.focus();
   };
 
   const social = (provider: "Apple" | "Google") => {
@@ -59,155 +138,237 @@ const Auth = () => {
 
   const BackIcon = dir === "rtl" ? ArrowRight : ArrowLeft;
 
+  // Header copy per state
+  const headerEyebrow =
+    mode === "signin"
+      ? (lang === "ar" ? "تسجيل الدخول" : "Sign In")
+      : (lang === "ar" ? "حساب جديد" : "Create Account");
+
+  const headerTitle =
+    mode === "signin"
+      ? t("welcomeBack")
+      : step === "info"
+        ? (lang === "ar" ? "المعلومات الشخصية" : "Personal Information")
+        : step === "otp"
+          ? (lang === "ar" ? "تحقق من رقمك" : "Verify Your Number")
+          : (lang === "ar" ? "إنشاء كلمة المرور" : "Create Password");
+
+  const headerSub =
+    mode === "signin"
+      ? t("signInToContinue")
+      : step === "info"
+        ? (lang === "ar" ? "أخبرنا قليلاً عن نفسك" : "Tell us a bit about yourself")
+        : step === "otp"
+          ? (lang === "ar" ? `أرسلنا رمزاً مكوناً من 4 أرقام إلى ${phone}` : `We sent a 4-digit code to ${phone}`)
+          : (lang === "ar" ? "اختر كلمة مرور آمنة" : "Choose a secure password");
+
+  const ctaLabel =
+    mode === "signin"
+      ? t("signIn")
+      : step === "password"
+        ? t("signUp")
+        : (lang === "ar" ? "متابعة" : "Continue");
+
   return (
     <div className="phone-frame bg-background flex flex-col overflow-y-auto">
       {/* Sticky primary header — matches Home style */}
       <header className="sticky top-0 z-30 bg-primary text-n8 rounded-b-3xl shadow-elev1">
         <div className="px-4 pt-4 pb-2 flex items-center gap-3">
           <button
-            onClick={() => nav(-1)}
+            onClick={handleBack}
             aria-label="Back"
             className="w-11 h-11 rounded-xl bg-n8/15 backdrop-blur flex items-center justify-center border border-n8/20 active:scale-95 transition"
           >
             <BackIcon className="w-5 h-5" />
           </button>
           <div className="leading-tight flex-1 min-w-0">
-            <p className="text-[10px] font-semibold tracking-[0.12em] opacity-80 uppercase">
-              {mode === "signin"
-                ? (lang === "ar" ? "تسجيل الدخول" : "Sign In")
-                : (lang === "ar" ? "حساب جديد" : "Create Account")}
-            </p>
-            <p className="text-h1 font-bold truncate">
-              {mode === "signin" ? t("welcomeBack") : t("createYourAccount")}
-            </p>
+            <p className="text-[10px] font-semibold tracking-[0.12em] opacity-80 uppercase">{headerEyebrow}</p>
+            <p className="text-h1 font-bold truncate">{headerTitle}</p>
           </div>
         </div>
         <div className="px-4 pb-4">
-          <p className="text-caption opacity-90">
-            {mode === "signin" ? t("signInToContinue") : t("joinEjada")}
-          </p>
+          <p className="text-caption opacity-90">{headerSub}</p>
         </div>
       </header>
 
       <div className="px-6 pt-6 pb-8 flex-1 space-y-5">
-        {/* Sign Up only: Full Name */}
-        {mode === "signup" && (
-          <Field label={t("fullName")}>
-            <input
-              value={name}
-              onChange={e => setName(e.target.value)}
-              placeholder={lang === "ar" ? "أحمد العتيبي" : "Ahmed Al-Otaibi"}
-              className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-            />
-          </Field>
+        {/* SIGN IN */}
+        {mode === "signin" && (
+          <>
+            <Field label={t("phoneNumber")}>
+              <input
+                type="tel" inputMode="tel" autoComplete="tel"
+                value={phone} onChange={e => setPhone(e.target.value)}
+                placeholder={t("enterPhone")} dir="ltr"
+                className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+              />
+            </Field>
+
+            <Field label={t("password")}>
+              <input
+                type={showPwd ? "text" : "password"} autoComplete="current-password"
+                value={password} onChange={e => setPassword(e.target.value)}
+                placeholder={t("enterPassword")} dir="ltr"
+                className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+              />
+              <button type="button" onClick={() => setShowPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle password">
+                {showPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+              </button>
+            </Field>
+
+            <div className="flex items-center justify-between">
+              <button onClick={() => setRemember(r => !r)} className="flex items-center gap-2" type="button">
+                <span className={cn(
+                  "w-5 h-5 rounded-[5px] border-2 flex items-center justify-center transition",
+                  remember ? "bg-primary border-primary" : "bg-n8 border-n4"
+                )}>
+                  {remember && <Check className="w-3.5 h-3.5 text-n8" strokeWidth={3} />}
+                </span>
+                <span className="text-caption text-n2 font-medium">{t("rememberMe")}</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => toast(lang === "ar" ? "ميزة قادمة قريباً" : "Coming soon")}
+                className="text-caption text-primary font-bold"
+              >
+                {t("forgotPassword")}
+              </button>
+            </div>
+          </>
         )}
 
-        {/* Phone Number */}
-        <Field label={t("phoneNumber")}>
-          <input
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            value={phone}
-            onChange={e => setPhone(e.target.value)}
-            placeholder={t("enterPhone")}
-            dir="ltr"
-            className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-          />
-        </Field>
+        {/* SIGN UP — Step 1: Personal info */}
+        {mode === "signup" && step === "info" && (
+          <>
+            <Field label={t("fullName")}>
+              <input
+                value={name} onChange={e => setName(e.target.value)}
+                placeholder={lang === "ar" ? "أحمد العتيبي" : "Ahmed Al-Otaibi"}
+                className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+              />
+            </Field>
+            <Field label={t("phoneNumber")}>
+              <input
+                type="tel" inputMode="tel" autoComplete="tel"
+                value={phone} onChange={e => setPhone(e.target.value)}
+                placeholder={t("enterPhone")} dir="ltr"
+                className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+              />
+            </Field>
+            <Field label={lang === "ar" ? "البريد الإلكتروني" : "Email"}>
+              <Mail className="w-5 h-5 text-n4" />
+              <input
+                type="email" inputMode="email" autoComplete="email"
+                value={email} onChange={e => setEmail(e.target.value)}
+                placeholder={lang === "ar" ? "name@example.com" : "name@example.com"}
+                dir="ltr"
+                className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+              />
+            </Field>
+          </>
+        )}
 
-        {/* Password */}
-        <Field label={t("password")}>
-          <input
-            type={showPwd ? "text" : "password"}
-            autoComplete={mode === "signin" ? "current-password" : "new-password"}
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            placeholder={t("enterPassword")}
-            dir="ltr"
-            className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-          />
-          <button type="button" onClick={() => setShowPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle password">
-            {showPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-          </button>
-        </Field>
-
-        {/* Remember me + Forgot */}
-        {mode === "signin" && (
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setRemember(r => !r)}
-              className="flex items-center gap-2 group"
-              type="button"
-            >
-              <span className={cn(
-                "w-5 h-5 rounded-[5px] border-2 flex items-center justify-center transition",
-                remember ? "bg-primary border-primary" : "bg-n8 border-n4"
-              )}>
-                {remember && <Check className="w-3.5 h-3.5 text-n8" strokeWidth={3} />}
-              </span>
-              <span className="text-caption text-n2 font-medium">{t("rememberMe")}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => toast(lang === "ar" ? "ميزة قادمة قريباً" : "Coming soon")}
-              className="text-caption text-primary font-bold"
-            >
-              {t("forgotPassword")}
-            </button>
+        {/* SIGN UP — Step 2: OTP */}
+        {mode === "signup" && step === "otp" && (
+          <div className="space-y-5">
+            <div className="flex items-center justify-center gap-3" dir="ltr">
+              {otp.map((d, i) => (
+                <input
+                  key={i}
+                  ref={el => (otpRefs.current[i] = el)}
+                  value={d}
+                  onChange={e => setOtpAt(i, e.target.value)}
+                  onKeyDown={e => onOtpKeyDown(i, e)}
+                  inputMode="numeric"
+                  maxLength={1}
+                  className="w-14 h-16 text-center text-h1 font-bold rounded-input border-2 border-n4 focus:border-primary focus:outline-none bg-n8 text-n1 tabular"
+                />
+              ))}
+            </div>
+            <div className="text-center text-caption text-n3">
+              {resendIn > 0 ? (
+                <span>
+                  {lang === "ar" ? `يمكنك إعادة الإرسال خلال ${resendIn} ث` : `Resend code in ${resendIn}s`}
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => { setResendIn(45); toast.success(lang === "ar" ? "تم إرسال الرمز" : "Code resent"); }}
+                  className="text-primary font-bold"
+                >
+                  {lang === "ar" ? "إعادة إرسال الرمز" : "Resend code"}
+                </button>
+              )}
+            </div>
           </div>
+        )}
+
+        {/* SIGN UP — Step 3: Password */}
+        {mode === "signup" && step === "password" && (
+          <Field label={t("password")}>
+            <input
+              type={showPwd ? "text" : "password"} autoComplete="new-password"
+              value={password} onChange={e => setPassword(e.target.value)}
+              placeholder={t("enterPassword")} dir="ltr"
+              className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+            />
+            <button type="button" onClick={() => setShowPwd(s => !s)} className="text-n4 hover:text-n2 px-1" aria-label="Toggle password">
+              {showPwd ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </Field>
         )}
 
         {/* Primary CTA */}
         <button
-          onClick={submit}
+          onClick={mode === "signin" ? submitSignin : goNextSignup}
           disabled={loading}
           className="w-full h-[56px] rounded-full text-h3 font-semibold text-n8 shadow-cta active:scale-[0.98] transition disabled:opacity-60 bg-gradient-primary"
         >
-          {loading ? "…" : (mode === "signin" ? t("signIn") : t("signUp"))}
+          {loading ? "…" : ctaLabel}
         </button>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 pt-1">
-          <div className="flex-1 h-px bg-n6" />
-          <span className="text-caption text-n4">{lang === "ar" ? "أو" : "or"}</span>
-          <div className="flex-1 h-px bg-n6" />
-        </div>
+        {/* Social + guest + switch — only on entry views (signin or signup step 1) */}
+        {(mode === "signin" || (mode === "signup" && step === "info")) && (
+          <>
+            <div className="flex items-center gap-3 pt-1">
+              <div className="flex-1 h-px bg-n6" />
+              <span className="text-caption text-n4">{lang === "ar" ? "أو" : "or"}</span>
+              <div className="flex-1 h-px bg-n6" />
+            </div>
 
-        {/* Social */}
-        <div className="space-y-3">
-          <SocialBtn onClick={() => social("Google")}>
-            <GoogleIcon />
-            <span className="text-body font-bold text-n1">{t("continueWithGoogle")}</span>
-          </SocialBtn>
-          <SocialBtn onClick={() => social("Apple")}>
-            <AppleIcon />
-            <span className="text-body font-bold text-n1">{t("continueWithApple")}</span>
-          </SocialBtn>
-        </div>
+            <div className="space-y-3">
+              <SocialBtn onClick={() => social("Google")}>
+                <GoogleIcon />
+                <span className="text-body font-bold text-n1">{t("continueWithGoogle")}</span>
+              </SocialBtn>
+              <SocialBtn onClick={() => social("Apple")}>
+                <AppleIcon />
+                <span className="text-body font-bold text-n1">{t("continueWithApple")}</span>
+              </SocialBtn>
+            </div>
 
-        {/* Guest */}
-        <button
-          onClick={guest}
-          className="w-full text-body font-bold text-n1 py-3 hover:text-primary transition"
-        >
-          {t("continueAsGuest")}
-        </button>
+            <button
+              onClick={guest}
+              className="w-full text-body font-bold text-n1 py-3 hover:text-primary transition"
+            >
+              {t("continueAsGuest")}
+            </button>
 
-        {/* Switch mode */}
-        <p className="text-center text-caption text-n2 pt-2">
-          {mode === "signin" ? t("dontHaveAccount") : t("haveAccount")}{" "}
-          <button
-            onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
-            className="text-primary font-bold"
-          >
-            {mode === "signin" ? t("register") : t("signIn")}
-          </button>
-        </p>
+            <p className="text-center text-caption text-n2 pt-2">
+              {mode === "signin" ? t("dontHaveAccount") : t("haveAccount")}{" "}
+              <button
+                onClick={() => switchMode(mode === "signin" ? "signup" : "signin")}
+                className="text-primary font-bold"
+              >
+                {mode === "signin" ? t("register") : t("signIn")}
+              </button>
+            </p>
 
-        <p className="text-center text-micro text-n4 leading-relaxed">
-          {t("loginHint")}
-        </p>
+            <p className="text-center text-micro text-n4 leading-relaxed">
+              {t("loginHint")}
+            </p>
+          </>
+        )}
       </div>
     </div>
   );
