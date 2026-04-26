@@ -328,7 +328,7 @@ const LoyaltyScreen = ({ lang }: { lang: "en" | "ar" }) => {
   const filtered = tab === "all" ? allRewards : allRewards.filter(r => r.cat === tab);
 
   return (
-    <div className="-m-4 space-y-6">
+    <div className="space-y-6">
       {/* Hero — full bleed */}
       <div className="relative bg-gradient-to-b from-primary to-primary-dark text-primary-foreground px-5 pt-5 pb-8 rounded-b-[28px] overflow-hidden">
         {/* subtle radial glow */}
