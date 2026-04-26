@@ -23,6 +23,7 @@ import Notifications from "./pages/Notifications";
 import AddAddress from "./pages/AddAddress";
 import AddCard from "./pages/AddCard";
 import Returns from "./pages/Returns";
+import ReturnRequests from "./pages/ReturnRequests";
 import Compare from "./pages/Compare";
 import NotFound from "./pages/NotFound";
 
@@ -52,6 +53,7 @@ const App = () => (
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/profile/:section" element={<ProfileSection />} />
+              <Route path="/return-requests" element={<ReturnRequests />} />
               <Route path="/returns" element={<Returns />} />
               <Route path="/returns/:orderId" element={<Returns />} />
               <Route path="/notifications" element={<Notifications />} />
