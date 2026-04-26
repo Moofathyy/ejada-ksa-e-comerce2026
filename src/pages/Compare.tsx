@@ -81,7 +81,7 @@ const Compare = () => {
         <main className="pb-8">
           {/* Header cards */}
           <div
-            className="grid divide-x divide-n6 border-b border-n6 sticky top-14 bg-n8 z-10"
+            className="grid divide-x divide-n6 border-b border-n6 bg-n8"
             style={{ gridTemplateColumns: `88px repeat(${items.length}, minmax(0, 1fr))` }}
           >
             <div className="bg-n7" />
