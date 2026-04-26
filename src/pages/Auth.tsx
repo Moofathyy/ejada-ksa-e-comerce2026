@@ -90,6 +90,10 @@ const Auth = () => {
     }
     // password step → finalize
     if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
+    if (password !== confirmPwd) {
+      toast.error(lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match");
+      return;
+    }
     setLoading(true);
     setTimeout(() => {
       signIn({ name: name.trim(), email: email.trim() || `${phone.trim()}@phone.local`, city });
