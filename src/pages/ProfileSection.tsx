@@ -785,8 +785,8 @@ const ProfileSection = () => {
 
   return (
     <MobileShell>
-      <TopBar title={config.title[lang]} />
-      <main className="p-4 pb-8">{config.render(lang)}</main>
+      {!config.hideTopBar && <TopBar title={config.title[lang]} />}
+      <main className={cn("pb-8", config.hideTopBar ? "p-0" : "p-4")}>{config.render(lang)}</main>
     </MobileShell>
   );
 };
