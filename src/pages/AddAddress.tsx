@@ -322,22 +322,22 @@ const Field = ({
   label, hint, error, children,
 }: { label: string; hint?: string; error?: string; children: React.ReactNode }) => (
   <div>
-    <label className="text-caption text-n2 font-bold">{label}</label>
+    <label className="block text-label text-n1 font-bold">{label}</label>
     {error
       ? React.Children.map(children, (child) =>
           React.isValidElement(child)
             ? React.cloneElement(child as React.ReactElement<any>, {
-                className: cn((child.props as any).className, "border-ksa-red border-2 focus:border-ksa-red focus:ring-ksa-red/20"),
+                className: cn((child.props as any).className, "border-ksa-red border-2 focus:border-ksa-red focus:ring-0"),
               })
             : child)
       : children}
     {error
-      ? <p className="text-caption text-ksa-red mt-1 font-medium">{error}</p>
-      : hint && <p className="text-caption mt-1 text-[#616161]">{hint}</p>}
+      ? <p className="mt-1 text-caption font-medium text-ksa-red" role="alert">{error}</p>
+      : hint && <p className="mt-1 text-caption text-[#616161]">{hint}</p>}
   </div>
 );
 
-const baseInput = "w-full mt-1.5 h-12 px-4 bg-n8 border border-n5 rounded-input text-body text-n1 placeholder:text-n4 focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition";
+const baseInput = "w-full mt-2 h-[52px] px-4 bg-n8 border border-n4 rounded-input text-body text-n1 placeholder:text-n4 focus:border-primary focus:border-2 focus:ring-0 outline-none transition";
 
 const Input = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
   <input {...props} className={cn(baseInput, props.className)} />
