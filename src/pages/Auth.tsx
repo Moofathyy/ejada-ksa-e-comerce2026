@@ -93,8 +93,11 @@ const Auth = () => {
 
   // ---- Sign in ----
   const submitSignin = () => {
-    if (!validatePhone(phone)) { toast.error(ksaPhoneError); return; }
-    if (password.length < 6) { toast.error(t("passwordTooShort")); return; }
+    const next: FieldErrors = {};
+    if (!validatePhone(phone)) next.phone = ksaPhoneError;
+    if (password.length < 6) next.password = String(t("passwordTooShort"));
+    setErrors(next);
+    if (Object.keys(next).length) return;
     setLoading(true);
     setTimeout(() => {
       signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${toE164Saudi(phone)}@phone.local`, city });
@@ -108,12 +111,12 @@ const Auth = () => {
   // ---- Sign up steps ----
   const goNextSignup = () => {
     if (step === "info") {
-      if (name.trim().length < 2) { toast.error(lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name"); return; }
-      if (!validatePhone(phone)) { toast.error(ksaPhoneError); return; }
-      if (!validateEmail(email)) {
-        toast.error(lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email");
-        return;
-      }
+      const next: FieldErrors = {};
+      if (name.trim().length < 2) next.name = lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name";
+      if (!validatePhone(phone)) next.phone = ksaPhoneError;
+      if (!validateEmail(email)) next.email = lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email";
+      setErrors(next);
+      if (Object.keys(next).length) return;
       setStep("otp");
       setResendIn(45);
       setTimeout(() => otpRefs.current[0]?.focus(), 50);
@@ -121,21 +124,23 @@ const Auth = () => {
     }
     if (step === "otp") {
       if (otp.some(d => d.length !== 1)) {
-        toast.error(lang === "ar" ? "أدخل رمز التحقق" : "Enter the verification code");
+        setErrors({ otp: lang === "ar" ? "أدخل رمز التحقق المكون من 4 أرقام" : "Enter the 4-digit verification code" });
         return;
       }
+      setErrors({});
       setStep("password");
       return;
     }
     // password step → finalize
+    const next: FieldErrors = {};
     if (!isPasswordValid(password)) {
-      toast.error(lang === "ar" ? "كلمة المرور لا تستوفي جميع المتطلبات" : "Password does not meet all requirements");
-      return;
+      next.password = lang === "ar" ? "كلمة المرور لا تستوفي جميع المتطلبات" : "Password does not meet all requirements";
     }
     if (password !== confirmPwd) {
-      toast.error(lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match");
-      return;
+      next.confirmPwd = lang === "ar" ? "كلمتا المرور غير متطابقتين" : "Passwords do not match";
     }
+    setErrors(next);
+    if (Object.keys(next).length) return;
     setLoading(true);
     setTimeout(() => {
       signIn({ name: name.trim(), email: email.trim() || `${toE164Saudi(phone)}@phone.local`, city });
