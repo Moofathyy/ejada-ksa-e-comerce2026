@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Heart, Share2, Star, ChevronLeft, ChevronRight, ArrowLeft, X, Plus, Minus, ShoppingCart, Check, Sparkles, Zap } from "lucide-react";
+import { Heart, Share2, Star, ChevronLeft, ChevronRight, ArrowLeft, X, Plus, Minus, ShoppingCart, Check, Sparkles, Zap, ShieldCheck } from "lucide-react";
 import { TrustModule } from "@/components/TrustModule";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
@@ -21,6 +21,7 @@ const PDP = () => {
   const [storageIdx, setStorageIdx] = useState(1);
   const [connIdx, setConnIdx] = useState(1);
   const [tab, setTab] = useState<"description" | "specs" | "reviews">("description");
+  const [warrantyIdx, setWarrantyIdx] = useState(0);
 
   if (!product) return <div className="phone-frame p-8 text-center">Product not found</div>;
 
@@ -29,6 +30,11 @@ const PDP = () => {
   const Back = dir === "rtl" ? ChevronRight : ChevronLeft;
   const storageOpts = product.variants?.storage ?? ["256GB", "512GB", "1TB"];
   const connOpts = ["Wi-Fi 7", "5G", "Bluetooth 5.3"];
+  const warrantyOpts: { id: string; label: { en: string; ar: string }; price: number; sub: { en: string; ar: string } }[] = [
+    { id: "std",  label: { en: "Standard",  ar: "قياسي" },     price: 0,   sub: { en: "1-year manufacturer", ar: "سنة من الشركة" } },
+    { id: "ext2", label: { en: "Extended",  ar: "ممتد" },      price: 199, sub: { en: "+1 year extra cover", ar: "سنة إضافية" } },
+    { id: "ext3", label: { en: "Premium",   ar: "بريميوم" },   price: 349, sub: { en: "+2 years + accidental", ar: "سنتان + حوادث" } },
+  ];
 
   const handleAdd = () => { addToCart(product, qty); toast.success(t("addedToCart")); };
   const handleBuyNow = () => { addToCart(product, qty); nav("/checkout"); };
@@ -188,6 +194,53 @@ const PDP = () => {
                 {c}
               </button>
             ))}
+          </div>
+        </div>
+
+        {/* Warranty */}
+        <div className="mt-5">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-caption font-semibold tracking-wider text-n4 uppercase flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-primary" />
+              {lang === "ar" ? "خيارات الضمان" : "Warranty Options"}
+            </p>
+          </div>
+          <div className="space-y-2">
+            {warrantyOpts.map((w, i) => {
+              const active = warrantyIdx === i;
+              return (
+                <button
+                  key={w.id}
+                  onClick={() => setWarrantyIdx(i)}
+                  className={cn(
+                    "w-full flex items-center justify-between gap-3 px-4 py-3 rounded-2xl border text-start transition active:scale-[0.99]",
+                    active ? "border-primary bg-primary-bg" : "border-n6 bg-n8",
+                  )}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span
+                      className={cn(
+                        "w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0",
+                        active ? "border-primary" : "border-n4",
+                      )}
+                    >
+                      {active && <span className="w-2.5 h-2.5 rounded-full bg-primary" />}
+                    </span>
+                    <div className="min-w-0">
+                      <p className={cn("text-body font-semibold truncate", active ? "text-primary" : "text-n1")}>
+                        {w.label[lang]}
+                      </p>
+                      <p className="text-caption text-n4 truncate">{w.sub[lang]}</p>
+                    </div>
+                  </div>
+                  <span className={cn("text-caption font-bold tabular shrink-0", active ? "text-primary" : "text-n2")}>
+                    {w.price === 0
+                      ? (lang === "ar" ? "مجاناً" : "Free")
+                      : <>+{w.price.toLocaleString()} <Sar /></>}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
 
