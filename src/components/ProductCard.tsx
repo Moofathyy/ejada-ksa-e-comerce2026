@@ -127,7 +127,7 @@ export const ProductCard = ({ product, compact }: { product: Product; compact?: 
                   toast.success(t("addedToCart"));
                 }}
                 className={cn(
-                  "flex-1 h-9 text-caption font-extrabold rounded-full transition shadow-sm",
+                  "flex-1 h-9 text-[10px] font-extrabold rounded-full transition shadow-sm",
                   outOfStock
                     ? "bg-n6 text-n4 cursor-not-allowed opacity-70"
                     : "bg-gradient-primary text-n8 active:scale-[0.97]"
