@@ -207,12 +207,22 @@
   /* Desktop: render a simple border frame around the app */
   @media (min-width: 768px) {
     .phone-frame {
-      max-width: 402px;
-      min-height: 844px;
-      border: 1px solid hsl(var(--primary));
-      border-radius: 24px;
+      max-width: 440px;
+      height: 92vh;
+      min-height: 760px;
+      max-height: 960px;
+      margin: 4vh auto;
+      border: 2px solid hsl(var(--primary));
+      border-radius: 32px;
       overflow: hidden;
       overflow-y: auto;
+      position: relative;
+    }
+
+    /* Keep BottomNav inside the frame on desktop */
+    .phone-frame > nav.fixed {
+      position: absolute;
+      max-width: 100%;
     }
   }
 
