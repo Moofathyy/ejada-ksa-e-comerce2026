@@ -114,39 +114,53 @@ export const ProductCard = ({ product, compact }: { product: Product; compact?: 
         </div>
 
         {/* CTA */}
-        {product.stock > 0 && (
-          <div className="flex items-center gap-1.5 mt-1.5">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                addToCart(product);
-                toast.success(t("addedToCart"));
-              }}
-              className="flex-1 h-9 bg-gradient-primary text-n8 text-caption font-extrabold rounded-full active:scale-[0.97] transition shadow-sm"
-            >
-              {t("addToCart")}
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                const added = toggleCompare(product.id);
-                if (added) toast.success(lang === "ar" ? "تمت الإضافة للمقارنة" : "Added to compare");
-                else if (!inCompare) toast.error(lang === "ar" ? "الحد الأقصى 4 منتجات" : "Max 4 products");
-                else toast(lang === "ar" ? "تمت الإزالة من المقارنة" : "Removed from compare");
-              }}
-              aria-label="Compare"
-              aria-pressed={inCompare}
-              className={cn(
-                "w-9 h-9 shrink-0 rounded-full border flex items-center justify-center active:scale-90 transition",
-                inCompare
-                  ? "bg-primary border-primary text-n8"
-                  : "bg-n7 border-n6 text-n2"
-              )}
-            >
-              <GitCompareArrows className="w-4 h-4" />
-            </button>
-          </div>
-        )}
+        {(() => {
+          const outOfStock = product.stock === 0;
+          return (
+            <div className="flex items-center gap-1.5 mt-1.5">
+              <button
+                disabled={outOfStock}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (outOfStock) return;
+                  addToCart(product);
+                  toast.success(t("addedToCart"));
+                }}
+                className={cn(
+                  "flex-1 h-9 text-caption font-extrabold rounded-full transition shadow-sm",
+                  outOfStock
+                    ? "bg-n6 text-n4 cursor-not-allowed opacity-70"
+                    : "bg-gradient-primary text-n8 active:scale-[0.97]"
+                )}
+              >
+                {outOfStock ? t("outOfStock") : t("addToCart")}
+              </button>
+              <button
+                disabled={outOfStock}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  if (outOfStock) return;
+                  const added = toggleCompare(product.id);
+                  if (added) toast.success(lang === "ar" ? "تمت الإضافة للمقارنة" : "Added to compare");
+                  else if (!inCompare) toast.error(lang === "ar" ? "الحد الأقصى 4 منتجات" : "Max 4 products");
+                  else toast(lang === "ar" ? "تمت الإزالة من المقارنة" : "Removed from compare");
+                }}
+                aria-label="Compare"
+                aria-pressed={inCompare}
+                className={cn(
+                  "w-9 h-9 shrink-0 rounded-full border flex items-center justify-center transition",
+                  outOfStock
+                    ? "bg-n7 border-n6 text-n4 cursor-not-allowed opacity-70"
+                    : inCompare
+                      ? "bg-primary border-primary text-n8 active:scale-90"
+                      : "bg-n7 border-n6 text-n2 active:scale-90"
+                )}
+              >
+                <GitCompareArrows className="w-4 h-4" />
+              </button>
+            </div>
+          );
+        })()}
       </div>
     </div>
   );
