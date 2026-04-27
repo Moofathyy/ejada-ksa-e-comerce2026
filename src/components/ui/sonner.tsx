@@ -26,6 +26,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
         close: <X className="w-3.5 h-3.5" />,
       }}
       toastOptions={{
+        duration: 900,
         unstyled: false,
         classNames: {
           toast: [
