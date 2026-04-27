@@ -225,8 +225,7 @@ const Home = () => {
                   <img
                     src={`https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/${b.slug}.svg`}
                     alt={b.name}
-                    className="w-7 h-7"
-                    style={{ filter: `brightness(0) saturate(100%)`, opacity: 0.85 }}
+                    className="w-7 h-7 brand-logo"
                     loading="lazy"
                     onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = "none"; }}
                   />
