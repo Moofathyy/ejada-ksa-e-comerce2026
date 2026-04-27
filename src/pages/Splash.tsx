@@ -17,10 +17,10 @@ const FLOATERS = [
 const Splash = () => {
   const nav = useNavigate();
   useEffect(() => {
-    const seenOnboarding = localStorage.getItem("ejada_onboarded");
-    const signedIn = !!localStorage.getItem("ejada_user_profile");
-    const dest = !seenOnboarding ? "/onboarding" : (signedIn ? "/home" : "/auth");
-    const t = setTimeout(() => nav(dest, { replace: true }), 2400);
+    // Always start the full flow on reload: splash → onboarding → auth → home
+    localStorage.removeItem("ejada_onboarded");
+    localStorage.removeItem("ejada_user_profile");
+    const t = setTimeout(() => nav("/onboarding", { replace: true }), 2400);
     return () => clearTimeout(t);
   }, [nav]);
 
