@@ -22,7 +22,23 @@ const Checkout = () => {
   const [pay, setPay] = useState<PayId>("mada");
   const [installPlan, setInstallPlan] = useState<3 | 4 | 6 | 12>(4);
   const [showInstallSheet, setShowInstallSheet] = useState(false);
+  const [showAddrSheet, setShowAddrSheet] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+
+  type AddrType = "home" | "work" | "other";
+  type LocalAddr = { label: string; line1: string; line2: string; isDefault: boolean };
+  const [extraAddresses, setExtraAddresses] = useState<LocalAddr[]>([]);
+  const [newAddr, setNewAddr] = useState({
+    type: "home" as AddrType,
+    label: lang === "ar" ? "المنزل" : "Home",
+    region: "",
+    city: "",
+    district: "",
+    street: "",
+    building: "",
+    postal: "",
+    phone: "",
+  });
 
   const addresses = [
     {
