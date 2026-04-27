@@ -156,9 +156,8 @@ const Checkout = () => {
             </div>
             <button
               onClick={() => setShowAddrSheet(true)}
-              className="text-caption font-bold text-primary underline underline-offset-4 flex items-center gap-1"
+              className="text-caption font-bold text-primary underline underline-offset-4"
             >
-              <Plus className="w-3.5 h-3.5" />
               {lang === "ar" ? "إضافة جديد" : "Add New"}
             </button>
           </div>
