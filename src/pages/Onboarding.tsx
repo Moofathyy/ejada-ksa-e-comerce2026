@@ -62,7 +62,7 @@ const Onboarding = () => {
     )}
     style={onGradient ? { background: SLIDE_GRADIENTS[step] } : undefined}
     >
-      <StatusBar />
+      <StatusBar transparent />
       {/* Decorative blurred orbs (only on slide steps) */}
       {onGradient && (
         <>
