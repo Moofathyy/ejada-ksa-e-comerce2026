@@ -241,13 +241,6 @@ const Auth = () => {
       {/* Sticky primary header — matches Home style */}
       <header className="sticky top-7 z-30 bg-primary text-n8 rounded-b-3xl shadow-elev1">
         <div className="px-4 pt-4 flex items-center gap-3 pb-[16px]">
-          <button
-            onClick={handleBack}
-            aria-label="Back"
-            className="w-11 h-11 rounded-xl bg-n8/15 backdrop-blur flex items-center justify-center border border-n8/20 active:scale-95 transition"
-          >
-            <BackIcon className="w-5 h-5" />
-          </button>
           <div className="leading-tight flex-1 min-w-0">
             <p className="text-[10px] font-semibold tracking-[0.12em] opacity-80 uppercase">{headerEyebrow}</p>
             <p className="text-h1 font-bold truncate">{headerTitle}</p>
