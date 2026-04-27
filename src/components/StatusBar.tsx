@@ -29,7 +29,7 @@ export const StatusBar = () => {
   }, [lang]);
 
   return (
-    <div className="sticky top-0 z-40 h-7 px-5 flex items-center justify-between bg-primary text-n8 text-[12px] font-semibold tabular">
+    <div className="sticky top-0 z-40 h-7 px-5 flex items-center justify-between text-n8 text-[12px] font-semibold tabular bg-white/0">
       <span>{time}</span>
       <div className="flex items-center gap-1.5">
         <Signal className="w-3.5 h-3.5" strokeWidth={2.5} />
