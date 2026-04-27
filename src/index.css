@@ -209,7 +209,7 @@
     .phone-frame {
       max-width: 402px;
       min-height: 844px;
-      border: 1px solid hsl(var(--n5));
+      border: 1px solid hsl(var(--primary));
       border-radius: 24px;
       overflow: hidden;
       overflow-y: auto;
