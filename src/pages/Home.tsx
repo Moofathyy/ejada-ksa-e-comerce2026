@@ -70,7 +70,7 @@ const Home = () => {
         </div>
 
         <div className="px-4">
-          <button onClick={() => nav("/search")} className="w-full h-12 bg-n8/15 backdrop-blur rounded-2xl flex items-center px-4 gap-3 text-n8/80 dark:text-white/80 text-body">
+          <button onClick={() => nav("/search")} className="w-full h-12 bg-n8/15 backdrop-blur rounded-2xl flex items-center px-4 gap-3 text-n8/80 text-body">
             <SearchIcon className="w-5 h-5" />
             <span className="flex-1 text-start">{lang === "ar" ? "ابحث عن أحدث الأجهزة..." : "Search latest devices..."}</span>
             <Mic className="w-5 h-5" />
