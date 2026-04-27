@@ -198,6 +198,16 @@
   .dark .bg-gradient-primary * {
     color: hsl(0 0% 100%) !important;
   }
+
+  /* Brand logo color: black in light mode, white in dark mode */
+  .brand-logo {
+    filter: brightness(0) saturate(100%);
+    opacity: 0.85;
+  }
+  .dark .brand-logo {
+    filter: brightness(0) saturate(100%) invert(1);
+    opacity: 0.95;
+  }
 }
 
 @layer components {
