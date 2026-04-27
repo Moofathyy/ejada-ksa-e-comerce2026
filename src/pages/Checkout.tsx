@@ -352,7 +352,7 @@ const Checkout = () => {
 
       {/* Installments Bottom Sheet */}
       <Sheet open={showInstallSheet} onOpenChange={setShowInstallSheet}>
-        <SheetContent side="bottom" className="rounded-t-3xl border-0 p-0 max-h-[85vh] overflow-y-auto">
+        <SheetContent side="bottom" className="rounded-t-3xl border-0 p-0 max-h-[85vh] overflow-y-auto mx-auto max-w-[402px] inset-x-0">
           <div className="mx-auto w-12 h-1.5 rounded-full bg-n6 mt-3 mb-1" />
           <SheetHeader className="px-5 pt-3 pb-2 text-start">
             <SheetTitle className="text-h2 text-n1 font-bold">
