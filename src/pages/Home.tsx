@@ -104,8 +104,8 @@ const Home = () => {
                   <span className="inline-block bg-ksa-yellow text-n1 text-[10px] font-extrabold px-2 py-0.5 rounded-md mb-1.5">
                     {t("megaDeals")}
                   </span>
-                  <h3 className="text-h2 drop-shadow font-extrabold text-n2">{b.title[lang]}</h3>
-                  <p className="text-caption opacity-95 font-semibold text-n3">{b.sub[lang]}</p>
+                  <h3 className="text-h2 drop-shadow font-extrabold text-n8">{b.title[lang]}</h3>
+                  <p className="text-caption opacity-95 font-semibold text-n7">{b.sub[lang]}</p>
                 </div>
               </div>
             ))}
