@@ -85,7 +85,7 @@ const PI_DEFAULT: PIData = {
 const InputRow = ({
   icon: Icon, label, children, hint,
 }: { icon: any; label: string; children: React.ReactNode; hint?: string }) => (
-  <div className="px-4 py-3 border-b border-n6 last:border-0">
+  <div className="px-4 py-3 border-b border-n6 last:border-0 bg-white/0">
     <label className="flex items-center gap-2 text-caption text-n3 mb-1.5">
       <Icon className="w-4 h-4 text-primary" />
       {label}
