@@ -634,4 +634,23 @@ const Checkout = () => {
     </div>
   );
 };
+const sheetInputBase = "w-full mt-2 h-[48px] px-4 bg-n8 border border-n4 rounded-input text-body text-n1 placeholder:text-n4 focus:border-primary focus:border-2 focus:ring-0 outline-none transition";
+
+const SheetField = ({ label, children }: { label: string; children: React.ReactNode }) => (
+  <div>
+    <label className="block text-label text-n1 font-bold">{label}</label>
+    {children}
+  </div>
+);
+
+const SheetInput = (props: React.InputHTMLAttributes<HTMLInputElement>) => (
+  <input {...props} className={cn(sheetInputBase, props.className)} />
+);
+
+const SheetSelect = ({ children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) => (
+  <select {...props} className={cn(sheetInputBase, "appearance-none disabled:opacity-50", props.className)}>
+    {children}
+  </select>
+);
+
 export default Checkout;
