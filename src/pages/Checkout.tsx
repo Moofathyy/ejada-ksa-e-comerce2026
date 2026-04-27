@@ -40,7 +40,7 @@ const Checkout = () => {
     phone: "",
   });
 
-  const addresses = [
+  const addresses: LocalAddr[] = [
     {
       label: lang === "ar" ? "المكتب الرئيسي" : "Home Office",
       line1: lang === "ar" ? "طريق الملك فهد، حي العليا" : "King Fahd Road, Al Olaya District",
@@ -53,7 +53,27 @@ const Checkout = () => {
       line2: lang === "ar" ? "جدة 23412، المملكة العربية السعودية" : "Jeddah 23412, Saudi Arabia",
       isDefault: false,
     },
+    ...extraAddresses,
   ];
+
+  const saveNewAddress = () => {
+    const { label, region, city, district, street, building, postal, phone } = newAddr;
+    if (!label.trim() || !region || !city || !district.trim() || !street.trim() || !building.trim() || !/^\d{5}$/.test(postal) || !/^5\d{8}$/.test(phone.replace(/\D/g, ""))) {
+      toast.error(lang === "ar" ? "يرجى إكمال جميع الحقول بشكل صحيح" : "Please complete all fields correctly");
+      return;
+    }
+    const created: LocalAddr = {
+      label: label.trim(),
+      line1: `${street.trim()}, ${district.trim()}`,
+      line2: `${city} ${postal}, ${lang === "ar" ? "المملكة العربية السعودية" : "Saudi Arabia"}`,
+      isDefault: false,
+    };
+    setExtraAddresses(prev => [...prev, created]);
+    setAddr(addresses.length); // select the newly added (current length before append)
+    setShowAddrSheet(false);
+    setNewAddr({ type: "home", label: lang === "ar" ? "المنزل" : "Home", region: "", city: "", district: "", street: "", building: "", postal: "", phone: "" });
+    toast.success(lang === "ar" ? "تم حفظ العنوان" : "Address saved");
+  };
 
   const warrantyTotal = cart.reduce((s, i) => s + (i.warranty?.price ?? 0) * i.qty, 0);
   const productsSubtotal = cartSubtotal - warrantyTotal;
