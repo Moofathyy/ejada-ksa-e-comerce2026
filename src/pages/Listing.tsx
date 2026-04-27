@@ -65,7 +65,7 @@ const Listing = () => {
               value={q}
               onChange={e => setQ(e.target.value)}
               placeholder={lang === "ar" ? "ابحث عن المنتجات…" : "Search products..."}
-              className="flex-1 bg-transparent outline-none text-body text-n8 placeholder:text-n8/60"
+              className="flex-1 bg-transparent outline-none text-body text-n1"
             />
             <Mic className="w-5 h-5 text-n8" />
           </div>
