@@ -43,7 +43,7 @@ const Home = () => {
   return (
     <MobileShell>
       {/* Sticky Header — primary blue */}
-      <header className="sticky top-7 z-30 bg-primary text-n8 rounded-b-3xl shadow-elev1">
+      <header className="sticky top-7 z-30 bg-primary text-n8 dark:text-white rounded-b-3xl shadow-elev1">
         <div className="px-4 pt-4 pb-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-11 h-11 rounded-full bg-n8/15 backdrop-blur flex items-center justify-center text-body font-bold border border-n8/20">
