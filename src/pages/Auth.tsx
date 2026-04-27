@@ -333,6 +333,16 @@ const Auth = () => {
         {/* SIGN UP — Step 2: OTP */}
         {mode === "signup" && step === "otp" && (
           <div className="space-y-5">
+            <div className="text-center space-y-1.5">
+              <h2 className="text-h2 font-bold text-n1">
+                {lang === "ar" ? "أدخل رمز التحقق" : "Enter Verification Code"}
+              </h2>
+              <p className="text-caption text-n3">
+                {lang === "ar"
+                  ? `أرسلنا رمزاً مكوناً من 4 أرقام إلى ${maskSaudiMobile(phone)}`
+                  : `We've sent a 4-digit code to ${maskSaudiMobile(phone)}`}
+              </p>
+            </div>
             <div className="flex items-center justify-center gap-3" dir="ltr">
               {otp.map((d, i) => (
                 <input
