@@ -114,7 +114,7 @@ export const ProductCard = ({ product, compact }: { product: Product; compact?: 
         </div>
 
         {/* CTA */}
-        {!compact && product.stock > 0 && (
+        {product.stock > 0 && (
           <div className="flex items-center gap-1.5 mt-1.5">
             <button
               onClick={(e) => {
