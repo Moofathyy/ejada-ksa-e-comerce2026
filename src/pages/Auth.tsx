@@ -255,7 +255,7 @@ const Auth = () => {
         </div>
       </header>
 
-      <div className="px-6 pt-6 pb-8 flex-1 space-y-5">
+      <div className="px-6 pt-6 pb-8 flex-1 space-y-5 my-[48px]">
         {/* SIGN IN */}
         {mode === "signin" && (
           <>
