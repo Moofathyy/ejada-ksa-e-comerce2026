@@ -240,7 +240,7 @@ const Auth = () => {
       <StatusBar />
       {/* Sticky primary header — matches Home style */}
       <header className="sticky top-7 z-30 bg-primary text-n8 rounded-b-3xl shadow-elev1">
-        <div className="px-4 pt-4 flex items-center gap-3 pb-[16px]">
+        <div className="px-4 pt-4 pb-2 flex items-center gap-3">
           <button
             onClick={handleBack}
             aria-label="Back"
