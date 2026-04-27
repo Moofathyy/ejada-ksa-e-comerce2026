@@ -97,7 +97,7 @@ const Checkout = () => {
     <div className="phone-frame bg-background pb-32">
       <StatusBar />
       {/* Deep blue header */}
-      <header className="bg-primary text-n8 px-4 pt-5 pb-7">
+      <header className="bg-primary text-n8 px-4 pt-5 pb-7 rounded-b-3xl shadow-elev1">
         <div className="flex items-center gap-3">
           <button
             onClick={() => nav(-1)}
