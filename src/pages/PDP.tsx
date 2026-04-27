@@ -10,6 +10,7 @@ import { ProductCard } from "@/components/ProductCard";
 import { tabbyInstallment, tamaraInstallment, soldThisMonth, fastDeliveryCutoff } from "@/lib/ksa";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { StatusBar } from "@/components/StatusBar";
 
 const PDP = () => {
   const { id } = useParams();
@@ -53,6 +54,7 @@ const PDP = () => {
 
   return (
     <div className="phone-frame bg-background pb-28">
+      <StatusBar />
       {/* Dark hero image with floating controls */}
       <div className="relative h-[380px] flex items-center justify-center overflow-hidden bg-primary-bg">
         <img src={product.image} alt={product.name[lang]} className="max-w-[80%] max-h-[85%] object-contain" />
