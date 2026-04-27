@@ -389,6 +389,161 @@ const Checkout = () => {
         </button>
       </div>
 
+      {/* Add Address Bottom Sheet */}
+      <Sheet open={showAddrSheet} onOpenChange={setShowAddrSheet}>
+        <SheetContent side="bottom" className="rounded-t-3xl border-0 p-0 max-h-[85vh] overflow-y-auto mx-auto max-w-[402px] inset-x-0">
+          <div className="mx-auto w-12 h-1.5 rounded-full bg-n6 mt-3 mb-1" />
+          <SheetHeader className="px-5 pt-3 pb-2 text-start">
+            <SheetTitle className="text-h2 text-n1 font-bold">
+              {lang === "ar" ? "إضافة عنوان جديد" : "Add new address"}
+            </SheetTitle>
+            <SheetDescription className="text-caption text-n3">
+              {lang === "ar" ? "سنستخدم هذا العنوان لتوصيل طلبك" : "We'll use this address to deliver your order"}
+            </SheetDescription>
+          </SheetHeader>
+
+          <div className="px-5 py-4 space-y-4">
+            {/* Type */}
+            <div className="grid grid-cols-3 gap-2">
+              {([
+                { k: "home" as const, icon: Home, label: lang === "ar" ? "المنزل" : "Home" },
+                { k: "work" as const, icon: Briefcase, label: lang === "ar" ? "العمل" : "Work" },
+                { k: "other" as const, icon: MapPin, label: lang === "ar" ? "أخرى" : "Other" },
+              ]).map(t => {
+                const Icon = t.icon;
+                const active = newAddr.type === t.k;
+                return (
+                  <button
+                    key={t.k}
+                    type="button"
+                    onClick={() => setNewAddr(p => ({ ...p, type: t.k, label: t.label }))}
+                    className={cn(
+                      "h-16 rounded-card border-2 flex flex-col items-center justify-center gap-1 transition active:scale-95",
+                      active ? "border-primary bg-primary/5 text-primary" : "border-n6 bg-n8 text-n2",
+                    )}
+                  >
+                    <Icon className="w-4 h-4" />
+                    <span className="text-caption font-bold">{t.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <SheetField label={lang === "ar" ? "اسم العنوان" : "Address Label"}>
+              <SheetInput
+                value={newAddr.label}
+                onChange={e => setNewAddr(p => ({ ...p, label: e.target.value }))}
+                placeholder={lang === "ar" ? "المنزل" : "Home"}
+                maxLength={40}
+              />
+            </SheetField>
+
+            <div className="grid grid-cols-2 gap-3">
+              <SheetField label={lang === "ar" ? "المنطقة" : "Region"}>
+                <SheetSelect
+                  value={newAddr.region}
+                  onChange={e => setNewAddr(p => ({ ...p, region: e.target.value, city: "" }))}
+                >
+                  <option value="" disabled>{lang === "ar" ? "اختر" : "Select"}</option>
+                  {["Riyadh", "Makkah", "Madinah", "Eastern", "Asir", "Tabuk", "Qassim", "Hail"].map(r => (
+                    <option key={r} value={r}>{r}</option>
+                  ))}
+                </SheetSelect>
+              </SheetField>
+
+              <SheetField label={lang === "ar" ? "المدينة" : "City"}>
+                <SheetSelect
+                  value={newAddr.city}
+                  onChange={e => setNewAddr(p => ({ ...p, city: e.target.value }))}
+                  disabled={!newAddr.region}
+                >
+                  <option value="" disabled>{lang === "ar" ? "اختر" : "Select"}</option>
+                  {(({
+                    Riyadh: ["Riyadh", "Diriyah", "Al Kharj"],
+                    Makkah: ["Jeddah", "Makkah", "Taif"],
+                    Madinah: ["Madinah", "Yanbu"],
+                    Eastern: ["Dammam", "Khobar", "Dhahran"],
+                    Asir: ["Abha", "Khamis Mushait"],
+                    Tabuk: ["Tabuk"],
+                    Qassim: ["Buraidah", "Unaizah"],
+                    Hail: ["Hail"],
+                  } as Record<string, string[]>)[newAddr.region] || []).map(c => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </SheetSelect>
+              </SheetField>
+            </div>
+
+            <SheetField label={lang === "ar" ? "الحي" : "District"}>
+              <SheetInput
+                value={newAddr.district}
+                onChange={e => setNewAddr(p => ({ ...p, district: e.target.value }))}
+                placeholder={lang === "ar" ? "العليا" : "Al Olaya"}
+              />
+            </SheetField>
+
+            <SheetField label={lang === "ar" ? "اسم الشارع" : "Street Name"}>
+              <SheetInput
+                value={newAddr.street}
+                onChange={e => setNewAddr(p => ({ ...p, street: e.target.value }))}
+                placeholder={lang === "ar" ? "طريق الملك فهد" : "King Fahd Road"}
+              />
+            </SheetField>
+
+            <div className="grid grid-cols-2 gap-3">
+              <SheetField label={lang === "ar" ? "رقم المبنى" : "Building No."}>
+                <SheetInput
+                  value={newAddr.building}
+                  onChange={e => setNewAddr(p => ({ ...p, building: e.target.value.replace(/\D/g, "").slice(0, 6) }))}
+                  inputMode="numeric"
+                  placeholder="1234"
+                />
+              </SheetField>
+              <SheetField label={lang === "ar" ? "الرمز البريدي" : "Postal Code"}>
+                <SheetInput
+                  value={newAddr.postal}
+                  onChange={e => setNewAddr(p => ({ ...p, postal: e.target.value.replace(/\D/g, "").slice(0, 5) }))}
+                  inputMode="numeric"
+                  placeholder="12213"
+                />
+              </SheetField>
+            </div>
+
+            {/* Phone — same style as sign up */}
+            <label className="block">
+              <span className="text-label text-n1 font-bold">{lang === "ar" ? "رقم الجوال" : "Phone Number"}</span>
+              <div
+                className="mt-2 flex items-stretch h-[52px] rounded-input border border-n4 bg-n8 transition overflow-hidden focus-within:border-primary focus-within:border-2"
+                dir="ltr"
+              >
+                <div className="flex items-center gap-1.5 px-3 bg-n7 border-e border-n6 text-n1">
+                  <span className="text-lg leading-none" aria-hidden>🇸🇦</span>
+                  <span className="text-body font-bold tabular">+966</span>
+                </div>
+                <input
+                  type="tel"
+                  inputMode="numeric"
+                  value={formatSaudiMobile(newAddr.phone)}
+                  onChange={e => setNewAddr(p => ({ ...p, phone: parseSaudiMobile(e.target.value) }))}
+                  placeholder="XXX XXX XXXX"
+                  maxLength={12}
+                  className="flex-1 h-full px-3 outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular tracking-wide"
+                />
+              </div>
+            </label>
+
+            <button
+              type="button"
+              onClick={saveNewAddress}
+              className="w-full h-[52px] mt-2 bg-primary text-primary-foreground rounded-full font-bold shadow-cta active:scale-[0.98] transition flex items-center justify-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              {lang === "ar" ? "حفظ العنوان" : "Save Address"}
+            </button>
+          </div>
+        </SheetContent>
+      </Sheet>
+
       {/* Installments Bottom Sheet */}
       <Sheet open={showInstallSheet} onOpenChange={setShowInstallSheet}>
         <SheetContent side="bottom" className="rounded-t-3xl border-0 p-0 max-h-[85vh] overflow-y-auto mx-auto max-w-[402px] inset-x-0">
