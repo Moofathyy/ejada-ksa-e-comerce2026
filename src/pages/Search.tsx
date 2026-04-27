@@ -56,7 +56,7 @@ const Search = () => {
               value={q}
               onChange={e => setQ(e.target.value)}
               placeholder={t("searchPlaceholder")}
-              className="flex-1 bg-transparent outline-none text-body text-n8 placeholder:text-n8/60"
+              className="flex-1 bg-transparent outline-none text-body text-n1"
             />
             {q ? (
               <button onClick={() => setQ("")} aria-label="Clear"><X className="w-4 h-4 text-n8/80" /></button>
