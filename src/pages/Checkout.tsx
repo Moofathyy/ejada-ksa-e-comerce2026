@@ -155,9 +155,10 @@ const Checkout = () => {
               <h2 className="text-h2 text-n1 mt-0.5">{lang === "ar" ? "عنوان الشحن" : "Shipping Address"}</h2>
             </div>
             <button
-              onClick={() => toast(lang === "ar" ? "ميزة قادمة قريباً" : "Coming soon")}
-              className="text-caption font-bold text-primary underline underline-offset-4"
+              onClick={() => setShowAddrSheet(true)}
+              className="text-caption font-bold text-primary underline underline-offset-4 flex items-center gap-1"
             >
+              <Plus className="w-3.5 h-3.5" />
               {lang === "ar" ? "إضافة جديد" : "Add New"}
             </button>
           </div>
