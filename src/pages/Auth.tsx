@@ -5,6 +5,7 @@ import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { StatusBar } from "@/components/StatusBar";
 import {
   formatSaudiMobile,
   isValidSaudiMobile,
@@ -236,8 +237,9 @@ const Auth = () => {
 
   return (
     <div className="phone-frame bg-background flex flex-col overflow-y-auto">
+      <StatusBar />
       {/* Sticky primary header — matches Home style */}
-      <header className="sticky top-0 z-30 bg-primary text-n8 rounded-b-3xl shadow-elev1">
+      <header className="sticky top-7 z-30 bg-primary text-n8 rounded-b-3xl shadow-elev1">
         <div className="px-4 pt-4 pb-2 flex items-center gap-3">
           <button
             onClick={handleBack}

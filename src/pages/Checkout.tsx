@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { TrustModule } from "@/components/TrustModule";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import { StatusBar } from "@/components/StatusBar";
 
 type DeliveryId = "std" | "exp";
 type PayId = "mada" | "applepay" | "stcpay" | "cod" | "installments";
@@ -94,6 +95,7 @@ const Checkout = () => {
 
   return (
     <div className="phone-frame bg-background pb-32">
+      <StatusBar />
       {/* Deep blue header */}
       <header className="bg-primary text-n8 px-4 pt-5 pb-7">
         <div className="flex items-center gap-3">

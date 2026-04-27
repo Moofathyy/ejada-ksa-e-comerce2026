@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Check, Star, Sparkles, Package, ArrowRight } from "lucide-react";
 import { Sar } from "@/components/Sar";
 import { useI18n } from "@/lib/i18n";
+import { StatusBar } from "@/components/StatusBar";
 import { cn } from "@/lib/utils";
 
 const OrderConfirmation = () => {
@@ -27,6 +28,7 @@ const OrderConfirmation = () => {
 
   return (
     <div className="phone-frame bg-background flex flex-col min-h-screen">
+      <StatusBar />
       <main className="flex-1 px-6 pt-10 pb-4 space-y-6">
         {/* Success icon */}
         <div className="text-center">

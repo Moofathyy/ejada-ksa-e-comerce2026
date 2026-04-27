@@ -6,6 +6,7 @@ import { useStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 import langEn from "@/assets/lang-en.png";
 import langAr from "@/assets/lang-ar.png";
+import { StatusBar } from "@/components/StatusBar";
 
 type Step = 0 | 1 | 2 | 3 | 4; // 0-2 slides, 3 language, 4 city
 
@@ -61,6 +62,7 @@ const Onboarding = () => {
     )}
     style={onGradient ? { background: SLIDE_GRADIENTS[step] } : undefined}
     >
+      <StatusBar />
       {/* Decorative blurred orbs (only on slide steps) */}
       {onGradient && (
         <>
