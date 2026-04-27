@@ -64,7 +64,7 @@ const Home = () => {
             </button>
             <button onClick={() => nav("/notifications")} className="relative w-10 h-10 flex items-center justify-center bg-n8/15 rounded-xl" aria-label="Notifications">
               <Bell className="w-5 h-5" />
-              <span className="absolute top-2 end-2 w-2 h-2 rounded-full bg-n8" />
+              <span className="absolute top-2 end-2 w-2 h-2 rounded-full bg-n8 dark:bg-white" />
             </button>
           </div>
         </div>
