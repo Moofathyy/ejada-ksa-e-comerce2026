@@ -204,6 +204,47 @@
     overflow-x: hidden;
   }
 
+  /* Desktop: render a device-like bezel around the app */
+  @media (min-width: 768px) {
+    body {
+      background:
+        radial-gradient(1200px 600px at 50% -10%, hsl(var(--primary) / 0.08), transparent 60%),
+        hsl(var(--n7));
+      min-height: 100vh;
+      padding: 32px 0;
+    }
+
+    .phone-frame {
+      max-width: 402px;
+      min-height: 844px;
+      height: 844px;
+      border-radius: 48px;
+      border: 10px solid hsl(var(--n1));
+      box-shadow:
+        0 0 0 2px hsl(var(--n2)),
+        0 30px 60px -15px hsl(0 0% 0% / 0.45),
+        0 18px 36px -18px hsl(0 0% 0% / 0.35);
+      overflow: hidden;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    /* Notch */
+    .phone-frame::before {
+      content: "";
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 26px;
+      background: hsl(var(--n1));
+      border-radius: 0 0 18px 18px;
+      z-index: 60;
+      pointer-events: none;
+    }
+  }
+
   .skeleton-shimmer {
     background: linear-gradient(90deg,
       hsl(var(--n7)) 0%,
