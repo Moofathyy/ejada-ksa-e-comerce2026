@@ -190,6 +190,12 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* Dark mode: ensure text on primary-colored surfaces (headers, CTAs) stays white */
+  .dark .bg-primary,
+  .dark .bg-primary * {
+    color: hsl(0 0% 100%);
+  }
 }
 
 @layer components {
