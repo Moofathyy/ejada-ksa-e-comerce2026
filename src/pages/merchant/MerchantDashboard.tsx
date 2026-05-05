@@ -40,15 +40,37 @@ const MerchantDashboard = () => {
   const maxBar = Math.max(1, ...days.map(d => d.total));
 
   const stats = [
-    { icon: DollarSign, label: lang === "ar" ? "الإيرادات" : "Revenue", value: `${revenue.toLocaleString()} SAR`, change: "+12.4%", up: true },
-    { icon: ShoppingBag, label: lang === "ar" ? "طلبات جديدة" : "New Orders", value: String(newOrders), change: `+${newOrders}`, up: true },
-    { icon: Package, label: lang === "ar" ? "المنتجات" : "Products", value: String(activeProducts), change: `${products.length - activeProducts} ${lang === "ar" ? "غير نشط" : "inactive"}`, up: false },
-    { icon: Eye, label: lang === "ar" ? "قيد التجهيز" : "In Pipeline", value: `${pendingRevenue.toLocaleString()} SAR`, change: "+8.1%", up: true },
+    { icon: DollarSign, label: lang === "ar" ? "الإيرادات" : "Revenue", value: `${revenue.toLocaleString()} SAR`, change: "+12.4%", up: true,
+      tile: "bg-gradient-to-br from-emerald-400 to-emerald-600" },
+    { icon: ShoppingBag, label: lang === "ar" ? "طلبات جديدة" : "New Orders", value: String(newOrders), change: `+${newOrders}`, up: true,
+      tile: "bg-gradient-to-br from-fuchsia-500 to-pink-600" },
+    { icon: Package, label: lang === "ar" ? "المنتجات" : "Products", value: String(activeProducts), change: `${products.length - activeProducts} ${lang === "ar" ? "غير نشط" : "inactive"}`, up: false,
+      tile: "bg-gradient-to-br from-amber-400 to-orange-500" },
+    { icon: Eye, label: lang === "ar" ? "قيد التجهيز" : "In Pipeline", value: `${pendingRevenue.toLocaleString()} SAR`, change: "+8.1%", up: true,
+      tile: "bg-gradient-to-br from-sky-400 to-indigo-600" },
+  ];
+
+  const barColors = [
+    "from-rose-400 to-rose-600",
+    "from-orange-400 to-amber-500",
+    "from-amber-400 to-yellow-500",
+    "from-emerald-400 to-teal-500",
+    "from-sky-400 to-cyan-500",
+    "from-indigo-400 to-violet-500",
+    "from-fuchsia-400 to-pink-500",
+  ];
+
+  const rankTiles = [
+    "bg-gradient-to-br from-yellow-400 to-amber-500 text-white",
+    "bg-gradient-to-br from-slate-300 to-slate-500 text-white",
+    "bg-gradient-to-br from-orange-400 to-rose-500 text-white",
   ];
 
   return (
     <MerchantShell lang={lang}>
-      <header className="bg-primary text-n8 pt-6 pb-6 rounded-b-3xl shadow-elev1 px-5">
+      <header className="bg-gradient-to-br from-violet-600 via-fuchsia-500 to-pink-500 text-white pt-6 pb-6 rounded-b-3xl shadow-elev1 px-5 relative overflow-hidden">
+        <div className="absolute -top-10 -end-10 w-40 h-40 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-12 -start-8 w-44 h-44 rounded-full bg-amber-300/20 blur-3xl pointer-events-none" />
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.12em] opacity-80 uppercase">
@@ -82,18 +104,19 @@ const MerchantDashboard = () => {
           {stats.map(s => {
             const Icon = s.icon;
             return (
-              <div key={s.label} className="bg-n8 rounded-card shadow-elev1 p-3.5">
-                <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Icon className="w-4.5 h-4.5 text-primary" />
+              <div key={s.label} className={cn("rounded-card shadow-elev1 p-3.5 text-white relative overflow-hidden", s.tile)}>
+                <div className="absolute -top-6 -end-6 w-20 h-20 rounded-full bg-white/15 pointer-events-none" />
+                <div className="flex items-center justify-between relative">
+                  <div className="w-9 h-9 rounded-xl bg-white/25 backdrop-blur flex items-center justify-center">
+                    <Icon className="w-4.5 h-4.5 text-white" />
                   </div>
-                  <span className={cn("text-[10px] font-bold flex items-center gap-0.5", s.up ? "text-success" : "text-n3")}>
+                  <span className="text-[10px] font-bold flex items-center gap-0.5 bg-white/20 backdrop-blur px-1.5 py-0.5 rounded-full">
                     {s.up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                     {s.change}
                   </span>
                 </div>
-                <p className="text-[11px] text-n3 mt-2.5">{s.label}</p>
-                <p className="text-h3 font-bold text-n1 mt-0.5 tabular">{s.value}</p>
+                <p className="text-[11px] opacity-90 mt-2.5 relative">{s.label}</p>
+                <p className="text-h3 font-bold mt-0.5 tabular relative">{s.value}</p>
               </div>
             );
           })}
@@ -110,7 +133,7 @@ const MerchantDashboard = () => {
               <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
                 <div className="w-full bg-n7 rounded-t-md relative" style={{ height: "100%" }}>
                   <div
-                    className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-primary to-primary/70 rounded-t-md transition-all"
+                    className={cn("absolute bottom-0 inset-x-0 bg-gradient-to-t rounded-t-md transition-all", barColors[i % barColors.length])}
                     style={{ height: `${(d.total / maxBar) * 100}%` }}
                   />
                 </div>
@@ -133,7 +156,7 @@ const MerchantDashboard = () => {
               <p className="p-6 text-center text-caption text-n3">{lang === "ar" ? "لا توجد بيانات بعد" : "No sales yet"}</p>
             ) : topProducts.map((p, i) => (
               <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-n6 last:border-0">
-                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-caption">#{i + 1}</div>
+                <div className={cn("w-8 h-8 rounded-full font-bold flex items-center justify-center text-caption shadow-sm", rankTiles[i] || "bg-primary/10 text-primary")}>#{i + 1}</div>
                 <div className="flex-1 min-w-0">
                   <p className="text-body font-semibold text-n1 truncate">{p.name}</p>
                   <p className="text-caption text-n3">{p.units} {lang === "ar" ? "قطعة مباعة" : "units sold"}</p>
