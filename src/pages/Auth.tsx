@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Mail } from "lucide-react";
+import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Mail, Store } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
-import { useMerchant } from "@/lib/merchant";
 import { toast } from "sonner";
-import { Store, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StatusBar } from "@/components/StatusBar";
 import {
@@ -45,11 +43,6 @@ const Auth = () => {
   const nav = useNavigate();
   const { t, lang, dir } = useI18n();
   const { signIn, city } = useStore();
-  const { signInMerchant } = useMerchant();
-  const [accountType, setAccountType] = useState<"customer" | "merchant">("customer");
-  const [businessName, setBusinessName] = useState("");
-  const [crNumber, setCrNumber] = useState("");
-  const [businessCategory, setBusinessCategory] = useState("Electronics");
   const [mode, setMode] = useState<Mode>("signin");
 
   // shared
@@ -96,7 +89,6 @@ const Auth = () => {
 
   const switchMode = (next: Mode) => {
     setMode(next);
-    if (next === "signin") setAccountType("customer");
     if (next === "signup") resetSignup();
   };
 
@@ -109,23 +101,6 @@ const Auth = () => {
     if (Object.keys(next).length) return;
     setLoading(true);
     setTimeout(() => {
-      if (accountType === "merchant") {
-        signInMerchant({
-          id: `m_${Date.now()}`,
-          ownerName: lang === "ar" ? "أحمد التاجر" : "Ahmed (Merchant)",
-          email: `${toE164Saudi(phone)}@merchant.local`,
-          phone: toE164Saudi(phone),
-          businessName: lang === "ar" ? "متجر التقنية" : "Tech Store",
-          crNumber: "1010234567",
-          category: "Electronics",
-          city,
-          createdAt: Date.now(),
-        });
-        toast.success(lang === "ar" ? "أهلاً بعودتك أيها التاجر!" : "Welcome back, Merchant!");
-        setLoading(false);
-        nav("/merchant/dashboard", { replace: true });
-        return;
-      }
       signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${toE164Saudi(phone)}@phone.local`, city });
       localStorage.setItem("ejada_user", lang === "ar" ? "أحمد" : "Ahmed");
       toast.success(t("welcomeBack"));
@@ -141,10 +116,6 @@ const Auth = () => {
       if (name.trim().length < 2) next.name = lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name";
       if (!validatePhone(phone)) next.phone = ksaPhoneError;
       if (!validateEmail(email)) next.email = lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email";
-      if (accountType === "merchant") {
-        if (businessName.trim().length < 2) (next as FieldErrors & { name?: string }).name = next.name || (lang === "ar" ? "أدخل اسم النشاط التجاري" : "Enter business name");
-        if (!/^\d{10}$/.test(crNumber)) (next as FieldErrors & { phone?: string }).phone = next.phone || (lang === "ar" ? "السجل التجاري 10 أرقام" : "CR number must be 10 digits");
-      }
       setErrors(next);
       if (Object.keys(next).length) return;
       setStep("otp");
@@ -173,18 +144,6 @@ const Auth = () => {
     if (Object.keys(next).length) return;
     setLoading(true);
     setTimeout(() => {
-      if (accountType === "merchant") {
-        signInMerchant({
-          id: `m_${Date.now()}`, ownerName: name.trim(),
-          email: email.trim(), phone: toE164Saudi(phone),
-          businessName: businessName.trim(), crNumber, category: businessCategory,
-          city, createdAt: Date.now(),
-        });
-        toast.success(lang === "ar" ? "تم إنشاء حساب التاجر 🎉" : "Merchant account created 🎉");
-        setLoading(false);
-        nav("/merchant/dashboard", { replace: true });
-        return;
-      }
       signIn({ name: name.trim(), email: email.trim() || `${toE164Saudi(phone)}@phone.local`, city });
       localStorage.setItem("ejada_user", name.trim());
       toast.success(t("accountCreated"));
@@ -290,31 +249,7 @@ const Auth = () => {
       </header>
 
       <div className="px-6 pt-6 pb-8 flex-1 space-y-5 my-[24px]">
-        {/* Merchant signup toggle visible only on signup step 1 */}
-        {mode === "signup" && step === "info" && (
-          <div className="bg-n7 p-1 rounded-full flex">
-            {([
-              { key: "customer", icon: ShoppingBag, en: "Customer", ar: "متسوق" },
-              { key: "merchant", icon: Store, en: "Merchant", ar: "تاجر" },
-            ] as const).map(opt => {
-              const Icon = opt.icon;
-              const active = accountType === opt.key;
-              return (
-                <button
-                  key={opt.key}
-                  type="button"
-                  onClick={() => setAccountType(opt.key)}
-                  className={cn(
-                    "flex-1 h-10 rounded-full font-bold text-caption flex items-center justify-center gap-1.5 transition",
-                    active ? "bg-primary text-n8 shadow-elev1" : "text-n2"
-                  )}
-                >
-                  <Icon className="w-4 h-4" /> {lang === "ar" ? opt.ar : opt.en}
-                </button>
-              );
-            })}
-          </div>
-        )}
+        {/* Customer-only auth flow. Merchants use /merchant/register. */}
         {/* SIGN IN */}
         {mode === "signin" && (
           <>
@@ -357,13 +292,10 @@ const Auth = () => {
               </button>
             </div>
 
-            {/* Merchant entry CTA → routes to register flow as merchant */}
+            {/* Merchant entry CTA → dedicated merchant register flow */}
             <button
               type="button"
-              onClick={() => {
-                setAccountType("merchant");
-                switchMode("signup");
-              }}
+              onClick={() => nav("/merchant/register")}
               className="w-full h-[52px] rounded-full border-2 border-primary/40 bg-primary-bg flex items-center justify-center gap-2 text-body font-bold text-primary hover:bg-primary/10 active:scale-[0.99] transition"
             >
               <Store className="w-5 h-5" />
@@ -399,34 +331,6 @@ const Auth = () => {
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
               />
             </Field>
-            {accountType === "merchant" && (
-              <>
-                <Field label={lang === "ar" ? "اسم النشاط التجاري" : "Business Name"}>
-                  <input
-                    value={businessName} onChange={e => setBusinessName(e.target.value)}
-                    placeholder={lang === "ar" ? "متجر التقنية" : "Tech Store"}
-                    className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
-                  />
-                </Field>
-                <Field label={lang === "ar" ? "رقم السجل التجاري" : "Commercial Registration No."}>
-                  <input
-                    value={crNumber} onChange={e => setCrNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
-                    inputMode="numeric" placeholder="1010234567" dir="ltr"
-                    className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular"
-                  />
-                </Field>
-                <Field label={lang === "ar" ? "فئة النشاط" : "Business Category"}>
-                  <select
-                    value={businessCategory} onChange={e => setBusinessCategory(e.target.value)}
-                    className="flex-1 h-full outline-none text-body bg-transparent text-n1"
-                  >
-                    {["Electronics", "Fashion", "Home", "Beauty", "Sports", "Other"].map(c => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                  </select>
-                </Field>
-              </>
-            )}
           </>
         )}
 
