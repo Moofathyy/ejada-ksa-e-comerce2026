@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Mail } from "lucide-react";
+import { Eye, EyeOff, Check, X, ArrowLeft, ArrowRight, Mail, Store } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useStore } from "@/lib/store";
-import { useMerchant } from "@/lib/merchant";
 import { toast } from "sonner";
-import { Store, ShoppingBag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { StatusBar } from "@/components/StatusBar";
 import {
