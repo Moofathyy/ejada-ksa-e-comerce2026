@@ -108,6 +108,23 @@ const Auth = () => {
     if (Object.keys(next).length) return;
     setLoading(true);
     setTimeout(() => {
+      if (accountType === "merchant") {
+        signInMerchant({
+          id: `m_${Date.now()}`,
+          ownerName: lang === "ar" ? "أحمد التاجر" : "Ahmed (Merchant)",
+          email: `${toE164Saudi(phone)}@merchant.local`,
+          phone: toE164Saudi(phone),
+          businessName: lang === "ar" ? "متجر التقنية" : "Tech Store",
+          crNumber: "1010234567",
+          category: "Electronics",
+          city,
+          createdAt: Date.now(),
+        });
+        toast.success(lang === "ar" ? "أهلاً بعودتك أيها التاجر!" : "Welcome back, Merchant!");
+        setLoading(false);
+        nav("/merchant/dashboard", { replace: true });
+        return;
+      }
       signIn({ name: lang === "ar" ? "أحمد" : "Ahmed", email: `${toE164Saudi(phone)}@phone.local`, city });
       localStorage.setItem("ejada_user", lang === "ar" ? "أحمد" : "Ahmed");
       toast.success(t("welcomeBack"));
