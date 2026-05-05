@@ -40,6 +40,7 @@ const App = () => (
     <I18nProvider>
       <ThemeProvider>
         <StoreProvider>
+          <MerchantProvider>
           <TooltipProvider>
           <Sonner />
           <BrowserRouter>
@@ -66,10 +67,18 @@ const App = () => (
               <Route path="/compare" element={<Compare />} />
               <Route path="/profile/addresses/new" element={<AddAddress />} />
               <Route path="/profile/payments/new" element={<AddCard />} />
+              <Route path="/merchant" element={<MerchantDashboard />} />
+              <Route path="/merchant/dashboard" element={<MerchantDashboard />} />
+              <Route path="/merchant/products" element={<MerchantProducts />} />
+              <Route path="/merchant/products/new" element={<MerchantProductForm />} />
+              <Route path="/merchant/products/:id" element={<MerchantProductForm />} />
+              <Route path="/merchant/orders" element={<MerchantOrders />} />
+              <Route path="/merchant/profile" element={<MerchantProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
           </TooltipProvider>
+          </MerchantProvider>
         </StoreProvider>
       </ThemeProvider>
     </I18nProvider>
