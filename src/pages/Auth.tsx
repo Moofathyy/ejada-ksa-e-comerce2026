@@ -290,31 +290,7 @@ const Auth = () => {
       </header>
 
       <div className="px-6 pt-6 pb-8 flex-1 space-y-5 my-[24px]">
-        {/* Merchant signup toggle visible only on signup step 1 */}
-        {mode === "signup" && step === "info" && (
-          <div className="bg-n7 p-1 rounded-full flex">
-            {([
-              { key: "customer", icon: ShoppingBag, en: "Customer", ar: "متسوق" },
-              { key: "merchant", icon: Store, en: "Merchant", ar: "تاجر" },
-            ] as const).map(opt => {
-              const Icon = opt.icon;
-              const active = accountType === opt.key;
-              return (
-                <button
-                  key={opt.key}
-                  type="button"
-                  onClick={() => setAccountType(opt.key)}
-                  className={cn(
-                    "flex-1 h-10 rounded-full font-bold text-caption flex items-center justify-center gap-1.5 transition",
-                    active ? "bg-primary text-n8 shadow-elev1" : "text-n2"
-                  )}
-                >
-                  <Icon className="w-4 h-4" /> {lang === "ar" ? opt.ar : opt.en}
-                </button>
-              );
-            })}
-          </div>
-        )}
+        {/* Customer-only auth flow. Merchants use /merchant/register. */}
         {/* SIGN IN */}
         {mode === "signin" && (
           <>
