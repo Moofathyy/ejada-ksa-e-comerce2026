@@ -28,6 +28,7 @@ import ReturnRequests from "./pages/ReturnRequests";
 import Compare from "./pages/Compare";
 import MerchantDashboard from "./pages/merchant/MerchantDashboard";
 import MerchantRegister from "./pages/merchant/MerchantRegister";
+import MerchantPayouts from "./pages/merchant/MerchantPayouts";
 import MerchantProducts from "./pages/merchant/MerchantProducts";
 import MerchantProductForm from "./pages/merchant/MerchantProductForm";
 import MerchantOrders from "./pages/merchant/MerchantOrders";
@@ -76,6 +77,7 @@ const App = () => (
               <Route path="/merchant/products/:id" element={<MerchantProductForm />} />
               <Route path="/merchant/orders" element={<MerchantOrders />} />
               <Route path="/merchant/profile" element={<MerchantProfile />} />
+              <Route path="/merchant/payouts" element={<MerchantPayouts />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
