@@ -68,9 +68,7 @@ const MerchantDashboard = () => {
 
   return (
     <MerchantShell lang={lang}>
-      <header className="bg-gradient-to-br from-violet-600 via-fuchsia-500 to-pink-500 text-white pt-6 pb-6 rounded-b-3xl shadow-elev1 px-5 relative overflow-hidden">
-        <div className="absolute -top-10 -end-10 w-40 h-40 rounded-full bg-white/10 blur-2xl pointer-events-none" />
-        <div className="absolute -bottom-12 -start-8 w-44 h-44 rounded-full bg-amber-300/20 blur-3xl pointer-events-none" />
+      <header className="bg-primary text-n8 pt-6 pb-6 rounded-b-3xl shadow-elev1 px-5">
         <div className="flex items-center justify-between">
           <div>
             <p className="text-[11px] font-semibold tracking-[0.12em] opacity-80 uppercase">
