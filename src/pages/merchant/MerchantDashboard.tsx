@@ -41,13 +41,13 @@ const MerchantDashboard = () => {
 
   const stats = [
     { icon: DollarSign, label: lang === "ar" ? "الإيرادات" : "Revenue", value: `${revenue.toLocaleString()} SAR`, change: "+12.4%", up: true,
-      tile: "bg-gradient-to-br from-emerald-400 to-emerald-600" },
+      tile: "bg-gradient-to-br from-emerald-400 to-emerald-600", to: "/merchant/payouts" },
     { icon: ShoppingBag, label: lang === "ar" ? "طلبات جديدة" : "New Orders", value: String(newOrders), change: `+${newOrders}`, up: true,
-      tile: "bg-gradient-to-br from-fuchsia-500 to-pink-600" },
+      tile: "bg-gradient-to-br from-fuchsia-500 to-pink-600", to: "/merchant/orders" },
     { icon: Package, label: lang === "ar" ? "المنتجات" : "Products", value: String(activeProducts), change: `${products.length - activeProducts} ${lang === "ar" ? "غير نشط" : "inactive"}`, up: false,
-      tile: "bg-gradient-to-br from-amber-400 to-orange-500" },
+      tile: "bg-gradient-to-br from-amber-400 to-orange-500", to: "/merchant/products" },
     { icon: Eye, label: lang === "ar" ? "قيد التجهيز" : "In Pipeline", value: `${pendingRevenue.toLocaleString()} SAR`, change: "+8.1%", up: true,
-      tile: "bg-gradient-to-br from-sky-400 to-indigo-600" },
+      tile: "bg-gradient-to-br from-sky-400 to-indigo-600", to: "/merchant/orders" },
   ];
 
   const barColors = [
