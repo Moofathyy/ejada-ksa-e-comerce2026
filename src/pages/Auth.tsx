@@ -43,11 +43,6 @@ const Auth = () => {
   const nav = useNavigate();
   const { t, lang, dir } = useI18n();
   const { signIn, city } = useStore();
-  const { signInMerchant } = useMerchant();
-  const [accountType, setAccountType] = useState<"customer" | "merchant">("customer");
-  const [businessName, setBusinessName] = useState("");
-  const [crNumber, setCrNumber] = useState("");
-  const [businessCategory, setBusinessCategory] = useState("Electronics");
   const [mode, setMode] = useState<Mode>("signin");
 
   // shared
