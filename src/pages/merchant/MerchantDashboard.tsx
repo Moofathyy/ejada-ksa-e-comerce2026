@@ -85,7 +85,11 @@ const MerchantDashboard = () => {
           </button>
         </div>
 
-        <div className="mt-5 bg-n8/10 backdrop-blur rounded-2xl p-4">
+        <button
+          type="button"
+          onClick={() => nav("/merchant/payouts")}
+          className="mt-5 w-full text-start bg-n8/10 backdrop-blur rounded-2xl p-4 active:scale-[0.99] hover:bg-n8/15 transition"
+        >
           <p className="text-[11px] opacity-80 uppercase tracking-wider">{lang === "ar" ? "إجمالي المبيعات" : "Total Sales"}</p>
           <p className="text-display font-bold mt-1 tabular">{revenue.toLocaleString()} <span className="text-h2">SAR</span></p>
           <div className="flex items-center gap-1.5 mt-1 text-caption">
@@ -93,7 +97,7 @@ const MerchantDashboard = () => {
             <span className="font-semibold">+12.4%</span>
             <span className="opacity-70">{lang === "ar" ? "مقارنة بالأسبوع الماضي" : "vs last week"}</span>
           </div>
-        </div>
+        </button>
       </header>
 
       <main className="px-4 pt-5 pb-6 space-y-5">
