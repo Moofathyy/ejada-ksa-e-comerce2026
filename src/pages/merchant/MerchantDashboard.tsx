@@ -102,7 +102,15 @@ const MerchantDashboard = () => {
           {stats.map(s => {
             const Icon = s.icon;
             return (
-              <div key={s.label} className={cn("rounded-card shadow-elev1 p-3.5 text-white relative overflow-hidden", s.tile)}>
+              <button
+                key={s.label}
+                type="button"
+                onClick={() => nav(s.to)}
+                className={cn(
+                  "text-start rounded-card shadow-elev1 p-3.5 text-white relative overflow-hidden active:scale-[0.98] hover:brightness-110 transition",
+                  s.tile,
+                )}
+              >
                 <div className="absolute -top-6 -end-6 w-20 h-20 rounded-full bg-white/15 pointer-events-none" />
                 <div className="flex items-center justify-between relative">
                   <div className="w-9 h-9 rounded-xl bg-white/25 backdrop-blur flex items-center justify-center">
@@ -115,7 +123,7 @@ const MerchantDashboard = () => {
                 </div>
                 <p className="text-[11px] opacity-90 mt-2.5 relative">{s.label}</p>
                 <p className="text-h3 font-bold mt-0.5 tabular relative">{s.value}</p>
-              </div>
+              </button>
             );
           })}
         </div>
