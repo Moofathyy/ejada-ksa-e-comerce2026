@@ -192,6 +192,17 @@ export const MerchantProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => { localStorage.setItem(KEY_P, JSON.stringify(products)); }, [products]);
   useEffect(() => { localStorage.setItem(KEY_O, JSON.stringify(orders)); }, [orders]);
 
+  // Auto-refresh stale seeded orders so the last-7-days chart stays current
+  useEffect(() => {
+    if (!merchant) return;
+    const isAllSeeded = orders.length > 0 && orders.every(o => o.id.startsWith("mo"));
+    const newest = orders.reduce((mx, o) => Math.max(mx, o.createdAt), 0);
+    if (isAllSeeded && Date.now() - newest > 86400000) {
+      setOrders(seedOrders(merchant.id));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [merchant?.id]);
+
   const signInMerchant = useCallback((m: Merchant) => {
     setMerchant(m);
     // Seed demo data if first sign-in
