@@ -36,9 +36,6 @@ const MerchantProducts = () => {
             <p className="text-[11px] font-semibold tracking-[0.12em] opacity-80 uppercase">{lang === "ar" ? "كتالوج" : "Catalog"}</p>
             <h1 className="text-h1 font-bold">{lang === "ar" ? "المنتجات" : "Products"}</h1>
           </div>
-          <button onClick={() => nav("/merchant/products/new")} className="h-11 px-4 rounded-xl bg-n8 text-primary font-bold flex items-center gap-1.5 shadow-elev1">
-            <Plus className="w-5 h-5" /> {lang === "ar" ? "إضافة" : "Add"}
-          </button>
         </div>
 
         <div className="mt-4 bg-n8 rounded-input flex items-center gap-2 px-3 h-11">
