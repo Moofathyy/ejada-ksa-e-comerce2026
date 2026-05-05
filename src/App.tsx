@@ -77,6 +77,7 @@ const App = () => (
               <Route path="/merchant/products/:id" element={<MerchantProductForm />} />
               <Route path="/merchant/orders" element={<MerchantOrders />} />
               <Route path="/merchant/profile" element={<MerchantProfile />} />
+              <Route path="/merchant/payouts" element={<MerchantPayouts />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
