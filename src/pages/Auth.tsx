@@ -385,6 +385,34 @@ const Auth = () => {
                 className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
               />
             </Field>
+            {accountType === "merchant" && (
+              <>
+                <Field label={lang === "ar" ? "اسم النشاط التجاري" : "Business Name"}>
+                  <input
+                    value={businessName} onChange={e => setBusinessName(e.target.value)}
+                    placeholder={lang === "ar" ? "متجر التقنية" : "Tech Store"}
+                    className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4"
+                  />
+                </Field>
+                <Field label={lang === "ar" ? "رقم السجل التجاري" : "Commercial Registration No."}>
+                  <input
+                    value={crNumber} onChange={e => setCrNumber(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                    inputMode="numeric" placeholder="1010234567" dir="ltr"
+                    className="flex-1 h-full outline-none text-body bg-transparent text-n1 placeholder:text-n4 tabular"
+                  />
+                </Field>
+                <Field label={lang === "ar" ? "فئة النشاط" : "Business Category"}>
+                  <select
+                    value={businessCategory} onChange={e => setBusinessCategory(e.target.value)}
+                    className="flex-1 h-full outline-none text-body bg-transparent text-n1"
+                  >
+                    {["Electronics", "Fashion", "Home", "Beauty", "Sports", "Other"].map(c => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </Field>
+              </>
+            )}
           </>
         )}
 
