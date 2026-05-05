@@ -172,6 +172,18 @@ const Auth = () => {
     if (Object.keys(next).length) return;
     setLoading(true);
     setTimeout(() => {
+      if (accountType === "merchant") {
+        signInMerchant({
+          id: `m_${Date.now()}`, ownerName: name.trim(),
+          email: email.trim(), phone: toE164Saudi(phone),
+          businessName: businessName.trim(), crNumber, category: businessCategory,
+          city, createdAt: Date.now(),
+        });
+        toast.success(lang === "ar" ? "تم إنشاء حساب التاجر 🎉" : "Merchant account created 🎉");
+        setLoading(false);
+        nav("/merchant/dashboard", { replace: true });
+        return;
+      }
       signIn({ name: name.trim(), email: email.trim() || `${toE164Saudi(phone)}@phone.local`, city });
       localStorage.setItem("ejada_user", name.trim());
       toast.success(t("accountCreated"));
