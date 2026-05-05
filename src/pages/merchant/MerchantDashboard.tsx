@@ -40,10 +40,30 @@ const MerchantDashboard = () => {
   const maxBar = Math.max(1, ...days.map(d => d.total));
 
   const stats = [
-    { icon: DollarSign, label: lang === "ar" ? "الإيرادات" : "Revenue", value: `${revenue.toLocaleString()} SAR`, change: "+12.4%", up: true },
-    { icon: ShoppingBag, label: lang === "ar" ? "طلبات جديدة" : "New Orders", value: String(newOrders), change: `+${newOrders}`, up: true },
-    { icon: Package, label: lang === "ar" ? "المنتجات" : "Products", value: String(activeProducts), change: `${products.length - activeProducts} ${lang === "ar" ? "غير نشط" : "inactive"}`, up: false },
-    { icon: Eye, label: lang === "ar" ? "قيد التجهيز" : "In Pipeline", value: `${pendingRevenue.toLocaleString()} SAR`, change: "+8.1%", up: true },
+    { icon: DollarSign, label: lang === "ar" ? "الإيرادات" : "Revenue", value: `${revenue.toLocaleString()} SAR`, change: "+12.4%", up: true,
+      tile: "bg-gradient-to-br from-emerald-400 to-emerald-600" },
+    { icon: ShoppingBag, label: lang === "ar" ? "طلبات جديدة" : "New Orders", value: String(newOrders), change: `+${newOrders}`, up: true,
+      tile: "bg-gradient-to-br from-fuchsia-500 to-pink-600" },
+    { icon: Package, label: lang === "ar" ? "المنتجات" : "Products", value: String(activeProducts), change: `${products.length - activeProducts} ${lang === "ar" ? "غير نشط" : "inactive"}`, up: false,
+      tile: "bg-gradient-to-br from-amber-400 to-orange-500" },
+    { icon: Eye, label: lang === "ar" ? "قيد التجهيز" : "In Pipeline", value: `${pendingRevenue.toLocaleString()} SAR`, change: "+8.1%", up: true,
+      tile: "bg-gradient-to-br from-sky-400 to-indigo-600" },
+  ];
+
+  const barColors = [
+    "from-rose-400 to-rose-600",
+    "from-orange-400 to-amber-500",
+    "from-amber-400 to-yellow-500",
+    "from-emerald-400 to-teal-500",
+    "from-sky-400 to-cyan-500",
+    "from-indigo-400 to-violet-500",
+    "from-fuchsia-400 to-pink-500",
+  ];
+
+  const rankTiles = [
+    "bg-gradient-to-br from-yellow-400 to-amber-500 text-white",
+    "bg-gradient-to-br from-slate-300 to-slate-500 text-white",
+    "bg-gradient-to-br from-orange-400 to-rose-500 text-white",
   ];
 
   return (
