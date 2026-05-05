@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ArrowRight, Info, Wallet } from "lucide-react";
+import { ArrowLeft, ArrowRight, Info, Wallet, TrendingUp, Clock, Sparkles, Download, Filter, ArrowUpRight, ArrowDownLeft } from "lucide-react";
 import { MerchantShell } from "@/components/MerchantShell";
 import { useI18n } from "@/lib/i18n";
 import { useMerchant } from "@/lib/merchant";
