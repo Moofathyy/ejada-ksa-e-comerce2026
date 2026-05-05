@@ -140,7 +140,7 @@ const MerchantPayouts = () => {
 
       <main className="px-4 -mt-16 pb-8 space-y-4 relative z-10">
         {/* Hero — Available Balance */}
-        <section className="rounded-card shadow-elev2 p-5 bg-gradient-to-br from-primary via-primary to-primary/70 text-n8 relative overflow-hidden">
+        <section className="rounded-card shadow-elev2 p-5 bg-gradient-to-br from-[hsl(243_75%_42%)] via-[hsl(258_70%_50%)] to-[hsl(270_75%_60%)] text-white relative overflow-hidden">
           <div className="absolute -top-12 -end-12 w-40 h-40 rounded-full bg-white/15 blur-2xl pointer-events-none" />
           <div className="absolute -bottom-10 -start-6 w-32 h-32 rounded-full bg-warning/20 blur-2xl pointer-events-none" />
 
