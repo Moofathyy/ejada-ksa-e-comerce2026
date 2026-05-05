@@ -28,6 +28,7 @@ import ReturnRequests from "./pages/ReturnRequests";
 import Compare from "./pages/Compare";
 import MerchantDashboard from "./pages/merchant/MerchantDashboard";
 import MerchantRegister from "./pages/merchant/MerchantRegister";
+import MerchantPayouts from "./pages/merchant/MerchantPayouts";
 import MerchantProducts from "./pages/merchant/MerchantProducts";
 import MerchantProductForm from "./pages/merchant/MerchantProductForm";
 import MerchantOrders from "./pages/merchant/MerchantOrders";
