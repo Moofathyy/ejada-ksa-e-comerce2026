@@ -86,36 +86,95 @@ const seedProducts = (merchantId: string): MerchantProduct[] => [
 
 const seedOrders = (merchantId: string): MerchantOrder[] => {
   const now = Date.now();
+  const day = 86400000;
+  const at = (daysAgo: number, hour = 12) => now - daysAgo * day + hour * 3600000 - 12 * 3600000;
+
   return [
+    // Today
     {
       id: "mo1", merchantId, orderNumber: "EJ-10342", customerName: "Sarah Al-Nemri",
       customerPhone: "+966501234567", city: "Riyadh",
       items: [{ productId: "mp1", name: "Wireless Earbuds Pro", qty: 1, price: 349 }],
-      total: 349, status: "new", createdAt: now - 3600000, updatedAt: now - 3600000,
+      total: 349, status: "new", createdAt: at(0, 9), updatedAt: at(0, 9),
     },
     {
-      id: "mo2", merchantId, orderNumber: "EJ-10338", customerName: "Ahmed Al-Otaibi",
+      id: "mo2", merchantId, orderNumber: "EJ-10341", customerName: "Layla Al-Mutairi",
+      customerPhone: "+966544455566", city: "Riyadh",
+      items: [{ productId: "mp3", name: "USB-C Fast Charger 65W", qty: 2, price: 89 }],
+      total: 178, status: "new", createdAt: at(0, 14), updatedAt: at(0, 14),
+    },
+    // 1 day ago
+    {
+      id: "mo3", merchantId, orderNumber: "EJ-10338", customerName: "Ahmed Al-Otaibi",
       customerPhone: "+966555678901", city: "Jeddah",
       items: [{ productId: "mp2", name: "Smart Watch Series X", qty: 2, price: 799 }],
-      total: 1598, status: "accepted", createdAt: now - 86400000, updatedAt: now - 7200000,
+      total: 1598, status: "accepted", createdAt: at(1, 11), updatedAt: at(1, 16),
     },
     {
-      id: "mo3", merchantId, orderNumber: "EJ-10311", customerName: "Fatima Al-Harbi",
+      id: "mo4", merchantId, orderNumber: "EJ-10336", customerName: "Mona Al-Shehri",
+      customerPhone: "+966522334411", city: "Riyadh",
+      items: [{ productId: "mp1", name: "Wireless Earbuds Pro", qty: 1, price: 349 }],
+      total: 349, status: "delivered", createdAt: at(1, 18), updatedAt: at(0, 10),
+    },
+    // 2 days ago
+    {
+      id: "mo5", merchantId, orderNumber: "EJ-10311", customerName: "Fatima Al-Harbi",
       customerPhone: "+966533344455", city: "Dammam",
       items: [{ productId: "mp1", name: "Wireless Earbuds Pro", qty: 1, price: 349 }],
-      total: 349, status: "shipped", createdAt: now - 86400000 * 2, updatedAt: now - 86400000,
+      total: 349, status: "shipped", createdAt: at(2, 10), updatedAt: at(1, 9),
+    },
+    // 3 days ago
+    {
+      id: "mo6", merchantId, orderNumber: "EJ-10298", customerName: "Yousef Al-Rashid",
+      customerPhone: "+966599887766", city: "Khobar",
+      items: [{ productId: "mp2", name: "Smart Watch Series X", qty: 1, price: 799 }],
+      total: 799, status: "delivered", createdAt: at(3, 13), updatedAt: at(2, 12),
     },
     {
-      id: "mo4", merchantId, orderNumber: "EJ-10250", customerName: "Khalid Al-Qahtani",
+      id: "mo7", merchantId, orderNumber: "EJ-10295", customerName: "Hessa Al-Dosari",
+      customerPhone: "+966511223344", city: "Mecca",
+      items: [{ productId: "mp3", name: "USB-C Fast Charger 65W", qty: 3, price: 89 }],
+      total: 267, status: "delivered", createdAt: at(3, 17), updatedAt: at(2, 14),
+    },
+    // 4 days ago
+    {
+      id: "mo8", merchantId, orderNumber: "EJ-10280", customerName: "Tariq Al-Zahrani",
+      customerPhone: "+966577665544", city: "Medina",
+      items: [{ productId: "mp1", name: "Wireless Earbuds Pro", qty: 2, price: 349 }],
+      total: 698, status: "delivered", createdAt: at(4, 12), updatedAt: at(3, 10),
+    },
+    // 5 days ago
+    {
+      id: "mo9", merchantId, orderNumber: "EJ-10250", customerName: "Khalid Al-Qahtani",
       customerPhone: "+966512223344", city: "Riyadh",
       items: [{ productId: "mp2", name: "Smart Watch Series X", qty: 1, price: 799 }],
-      total: 799, status: "delivered", createdAt: now - 86400000 * 5, updatedAt: now - 86400000 * 4,
+      total: 799, status: "delivered", createdAt: at(5, 11), updatedAt: at(4, 9),
     },
     {
-      id: "mo5", merchantId, orderNumber: "EJ-10198", customerName: "Noura Al-Sabah",
+      id: "mo10", merchantId, orderNumber: "EJ-10248", customerName: "Reem Al-Ghamdi",
+      customerPhone: "+966566778899", city: "Jeddah",
+      items: [{ productId: "mp3", name: "USB-C Fast Charger 65W", qty: 1, price: 89 }],
+      total: 89, status: "delivered", createdAt: at(5, 19), updatedAt: at(4, 11),
+    },
+    // 6 days ago
+    {
+      id: "mo11", merchantId, orderNumber: "EJ-10220", customerName: "Abdullah Al-Saud",
+      customerPhone: "+966500112233", city: "Riyadh",
+      items: [{ productId: "mp1", name: "Wireless Earbuds Pro", qty: 1, price: 349 }],
+      total: 349, status: "delivered", createdAt: at(6, 14), updatedAt: at(5, 13),
+    },
+    {
+      id: "mo12", merchantId, orderNumber: "EJ-10215", customerName: "Maryam Al-Anzi",
+      customerPhone: "+966555443322", city: "Dammam",
+      items: [{ productId: "mp2", name: "Smart Watch Series X", qty: 1, price: 799 }],
+      total: 799, status: "delivered", createdAt: at(6, 20), updatedAt: at(5, 16),
+    },
+    // 9 days ago — older history (kept)
+    {
+      id: "mo13", merchantId, orderNumber: "EJ-10198", customerName: "Noura Al-Sabah",
       customerPhone: "+966577788899", city: "Mecca",
       items: [{ productId: "mp1", name: "Wireless Earbuds Pro", qty: 2, price: 349 }],
-      total: 698, status: "delivered", createdAt: now - 86400000 * 9, updatedAt: now - 86400000 * 8,
+      total: 698, status: "delivered", createdAt: at(9, 10), updatedAt: at(8, 9),
     },
   ];
 };
