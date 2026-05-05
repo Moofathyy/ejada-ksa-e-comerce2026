@@ -156,7 +156,7 @@ const MerchantDashboard = () => {
               <p className="p-6 text-center text-caption text-n3">{lang === "ar" ? "لا توجد بيانات بعد" : "No sales yet"}</p>
             ) : topProducts.map((p, i) => (
               <div key={i} className="flex items-center gap-3 px-4 py-3 border-b border-n6 last:border-0">
-                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary font-bold flex items-center justify-center text-caption">#{i + 1}</div>
+                <div className={cn("w-8 h-8 rounded-full font-bold flex items-center justify-center text-caption shadow-sm", rankTiles[i] || "bg-primary/10 text-primary")}>#{i + 1}</div>
                 <div className="flex-1 min-w-0">
                   <p className="text-body font-semibold text-n1 truncate">{p.name}</p>
                   <p className="text-caption text-n3">{p.units} {lang === "ar" ? "قطعة مباعة" : "units sold"}</p>
