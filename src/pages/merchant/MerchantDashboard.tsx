@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { TrendingUp, TrendingDown, ShoppingBag, Package, DollarSign, Eye, ArrowUpRight, Bell } from "lucide-react";
+import { TrendingUp, TrendingDown, ShoppingBag, Package, DollarSign, Eye, ArrowUpRight, Bell, Wallet, ChevronRight } from "lucide-react";
 import { MerchantShell } from "@/components/MerchantShell";
 import { useI18n } from "@/lib/i18n";
 import { useMerchant } from "@/lib/merchant";
