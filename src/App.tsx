@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { I18nProvider } from "@/lib/i18n";
 import { StoreProvider } from "@/lib/store";
+import { MerchantProvider } from "@/lib/merchant";
 import { ThemeProvider } from "@/lib/theme";
 import Splash from "./pages/Splash";
 import Onboarding from "./pages/Onboarding";
@@ -25,6 +26,11 @@ import AddCard from "./pages/AddCard";
 import Returns from "./pages/Returns";
 import ReturnRequests from "./pages/ReturnRequests";
 import Compare from "./pages/Compare";
+import MerchantDashboard from "./pages/merchant/MerchantDashboard";
+import MerchantProducts from "./pages/merchant/MerchantProducts";
+import MerchantProductForm from "./pages/merchant/MerchantProductForm";
+import MerchantOrders from "./pages/merchant/MerchantOrders";
+import MerchantProfile from "./pages/merchant/MerchantProfile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -34,6 +40,7 @@ const App = () => (
     <I18nProvider>
       <ThemeProvider>
         <StoreProvider>
+          <MerchantProvider>
           <TooltipProvider>
           <Sonner />
           <BrowserRouter>
@@ -60,10 +67,18 @@ const App = () => (
               <Route path="/compare" element={<Compare />} />
               <Route path="/profile/addresses/new" element={<AddAddress />} />
               <Route path="/profile/payments/new" element={<AddCard />} />
+              <Route path="/merchant" element={<MerchantDashboard />} />
+              <Route path="/merchant/dashboard" element={<MerchantDashboard />} />
+              <Route path="/merchant/products" element={<MerchantProducts />} />
+              <Route path="/merchant/products/new" element={<MerchantProductForm />} />
+              <Route path="/merchant/products/:id" element={<MerchantProductForm />} />
+              <Route path="/merchant/orders" element={<MerchantOrders />} />
+              <Route path="/merchant/profile" element={<MerchantProfile />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
           </TooltipProvider>
+          </MerchantProvider>
         </StoreProvider>
       </ThemeProvider>
     </I18nProvider>
