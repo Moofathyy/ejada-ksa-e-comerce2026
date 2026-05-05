@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { TrendingUp, TrendingDown, ShoppingBag, Package, DollarSign, Eye, ArrowUpRight, Bell } from "lucide-react";
+import { TrendingUp, TrendingDown, ShoppingBag, Package, DollarSign, Eye, ArrowUpRight, Bell, Wallet, ChevronRight } from "lucide-react";
 import { MerchantShell } from "@/components/MerchantShell";
 import { useI18n } from "@/lib/i18n";
 import { useMerchant } from "@/lib/merchant";
@@ -119,6 +119,24 @@ const MerchantDashboard = () => {
             );
           })}
         </div>
+
+        {/* Earnings & Payouts entry */}
+        <button
+          onClick={() => nav("/merchant/payouts")}
+          className="w-full rounded-card shadow-elev1 p-4 bg-gradient-to-br from-primary to-primary/80 text-n8 flex items-center gap-3 active:scale-[0.99] transition relative overflow-hidden"
+        >
+          <div className="absolute -top-8 -end-8 w-28 h-28 rounded-full bg-white/15 blur-2xl pointer-events-none" />
+          <div className="w-11 h-11 rounded-xl bg-white/25 backdrop-blur flex items-center justify-center flex-shrink-0">
+            <Wallet className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0 text-start relative">
+            <p className="text-body font-bold truncate">{lang === "ar" ? "الأرباح والتحويلات" : "Earnings & Payouts"}</p>
+            <p className="text-caption opacity-85 truncate">
+              {lang === "ar" ? "عرض الرصيد وطلب التحويل" : "View balance & request payout"}
+            </p>
+          </div>
+          <ChevronRight className="w-5 h-5 opacity-90 rtl:rotate-180 relative" />
+        </button>
 
         {/* Sales chart */}
         <section className="bg-n8 rounded-card shadow-elev1 p-4">
