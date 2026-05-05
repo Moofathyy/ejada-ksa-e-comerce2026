@@ -133,7 +133,7 @@ const MerchantDashboard = () => {
               <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
                 <div className="w-full bg-n7 rounded-t-md relative" style={{ height: "100%" }}>
                   <div
-                    className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-primary to-primary/70 rounded-t-md transition-all"
+                    className={cn("absolute bottom-0 inset-x-0 bg-gradient-to-t rounded-t-md transition-all", barColors[i % barColors.length])}
                     style={{ height: `${(d.total / maxBar) * 100}%` }}
                   />
                 </div>
