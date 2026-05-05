@@ -357,13 +357,10 @@ const Auth = () => {
               </button>
             </div>
 
-            {/* Merchant entry CTA → routes to register flow as merchant */}
+            {/* Merchant entry CTA → dedicated merchant register flow */}
             <button
               type="button"
-              onClick={() => {
-                setAccountType("merchant");
-                switchMode("signup");
-              }}
+              onClick={() => nav("/merchant/register")}
               className="w-full h-[52px] rounded-full border-2 border-primary/40 bg-primary-bg flex items-center justify-center gap-2 text-body font-bold text-primary hover:bg-primary/10 active:scale-[0.99] transition"
             >
               <Store className="w-5 h-5" />
