@@ -89,7 +89,6 @@ const Auth = () => {
 
   const switchMode = (next: Mode) => {
     setMode(next);
-    if (next === "signin") setAccountType("customer");
     if (next === "signup") resetSignup();
   };
 
