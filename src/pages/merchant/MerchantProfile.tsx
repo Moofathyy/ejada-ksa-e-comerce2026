@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Store, Mail, Phone, MapPin, FileText, LogOut, ArrowLeftRight } from "lucide-react";
+import { Store, Mail, Phone, MapPin, FileText, LogOut, ArrowLeftRight, Wallet, ChevronRight } from "lucide-react";
 import { MerchantShell } from "@/components/MerchantShell";
 import { useI18n } from "@/lib/i18n";
 import { useMerchant } from "@/lib/merchant";
