@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Store, Mail, Phone, MapPin, FileText, LogOut, ArrowLeftRight } from "lucide-react";
+import { Store, Mail, Phone, MapPin, FileText, LogOut, ArrowLeftRight, Wallet, ChevronRight } from "lucide-react";
 import { MerchantShell } from "@/components/MerchantShell";
 import { useI18n } from "@/lib/i18n";
 import { useMerchant } from "@/lib/merchant";
@@ -65,6 +65,20 @@ const MerchantProfile = () => {
             );
           })}
         </section>
+
+        <button
+          onClick={() => nav("/merchant/payouts")}
+          className="w-full bg-n8 rounded-card shadow-elev1 px-4 py-3.5 flex items-center gap-3 active:bg-n7 transition"
+        >
+          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+            <Wallet className="w-5 h-5 text-primary" />
+          </div>
+          <div className="flex-1 text-start">
+            <p className="text-body font-bold text-n1">{lang === "ar" ? "الأرباح والتحويلات" : "Earnings & Payouts"}</p>
+            <p className="text-caption text-n3">{lang === "ar" ? "الرصيد، التحويلات، السجل" : "Balance, payouts, history"}</p>
+          </div>
+          <ChevronRight className="w-5 h-5 text-n4 rtl:rotate-180" />
+        </button>
 
         <button
           onClick={() => { nav("/home"); toast(lang === "ar" ? "تم التحويل لوضع المتسوق" : "Switched to shopper mode"); }}
