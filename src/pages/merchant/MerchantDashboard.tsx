@@ -104,18 +104,19 @@ const MerchantDashboard = () => {
           {stats.map(s => {
             const Icon = s.icon;
             return (
-              <div key={s.label} className="bg-n8 rounded-card shadow-elev1 p-3.5">
-                <div className="flex items-center justify-between">
-                  <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Icon className="w-4.5 h-4.5 text-primary" />
+              <div key={s.label} className={cn("rounded-card shadow-elev1 p-3.5 text-white relative overflow-hidden", s.tile)}>
+                <div className="absolute -top-6 -end-6 w-20 h-20 rounded-full bg-white/15 pointer-events-none" />
+                <div className="flex items-center justify-between relative">
+                  <div className="w-9 h-9 rounded-xl bg-white/25 backdrop-blur flex items-center justify-center">
+                    <Icon className="w-4.5 h-4.5 text-white" />
                   </div>
-                  <span className={cn("text-[10px] font-bold flex items-center gap-0.5", s.up ? "text-success" : "text-n3")}>
+                  <span className="text-[10px] font-bold flex items-center gap-0.5 bg-white/20 backdrop-blur px-1.5 py-0.5 rounded-full">
                     {s.up ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
                     {s.change}
                   </span>
                 </div>
-                <p className="text-[11px] text-n3 mt-2.5">{s.label}</p>
-                <p className="text-h3 font-bold text-n1 mt-0.5 tabular">{s.value}</p>
+                <p className="text-[11px] opacity-90 mt-2.5 relative">{s.label}</p>
+                <p className="text-h3 font-bold mt-0.5 tabular relative">{s.value}</p>
               </div>
             );
           })}
