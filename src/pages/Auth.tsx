@@ -289,8 +289,8 @@ const Auth = () => {
       </header>
 
       <div className="px-6 pt-6 pb-8 flex-1 space-y-5 my-[24px]">
-        {/* Account type toggle (entry views only) */}
-        {(mode === "signin" || (mode === "signup" && step === "info")) && (
+        {/* Merchant signup toggle visible only on signup step 1 */}
+        {mode === "signup" && step === "info" && (
           <div className="bg-n7 p-1 rounded-full flex">
             {([
               { key: "customer", icon: ShoppingBag, en: "Customer", ar: "متسوق" },
