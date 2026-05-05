@@ -140,6 +140,10 @@ const Auth = () => {
       if (name.trim().length < 2) next.name = lang === "ar" ? "أدخل اسمك الكامل" : "Please enter your name";
       if (!validatePhone(phone)) next.phone = ksaPhoneError;
       if (!validateEmail(email)) next.email = lang === "ar" ? "أدخل بريداً إلكترونياً صحيحاً" : "Please enter a valid email";
+      if (accountType === "merchant") {
+        if (businessName.trim().length < 2) (next as FieldErrors & { name?: string }).name = next.name || (lang === "ar" ? "أدخل اسم النشاط التجاري" : "Enter business name");
+        if (!/^\d{10}$/.test(crNumber)) (next as FieldErrors & { phone?: string }).phone = next.phone || (lang === "ar" ? "السجل التجاري 10 أرقام" : "CR number must be 10 digits");
+      }
       setErrors(next);
       if (Object.keys(next).length) return;
       setStep("otp");
