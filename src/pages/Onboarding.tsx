@@ -51,36 +51,41 @@ const Onboarding = () => {
 
   const slides = [
     {
-      eyebrow: { en: "Ahlan wa Sahlan", ar: "أهلاً وسهلاً" },
-      title: { en: "Welcome to Ejada", ar: "مرحباً بك في إجادة" },
+      eyebrow: { en: "Ahlan wa Sahlan, Partner", ar: "أهلاً بك يا شريكنا" },
+      title: { en: "Sell across the Kingdom", ar: "بِع في كل أنحاء المملكة" },
       desc: {
-        en: "Premium electronics curated for the Kingdom — proudly serving Vision 2030.",
-        ar: "إلكترونيات مختارة بعناية للمملكة — نخدم رؤية 2030 بكل فخر.",
-      },
-      chips: ["Apple", "Samsung", "Sony", "Huawei"],
-    },
-    {
-      eyebrow: { en: "Across the Kingdom", ar: "في كل أنحاء المملكة" },
-      title: { en: "Same-day Delivery", ar: "توصيل في نفس اليوم" },
-      desc: {
-        en: "Riyadh, Jeddah & Dammam in hours. We pause respectfully during prayer times.",
-        ar: "الرياض وجدة والدمام خلال ساعات. نوقف التوصيل احتراماً لأوقات الصلاة.",
+        en: "Launch your store on Ejada and reach millions of Saudi shoppers — aligned with Vision 2030.",
+        ar: "أطلق متجرك على إجادة وتواصل مع ملايين المتسوقين في المملكة — انسجاماً مع رؤية 2030.",
       },
       chips: [
-        { en: "Riyadh", ar: "الرياض" },
-        { en: "Jeddah", ar: "جدة" },
-        { en: "Dammam", ar: "الدمام" },
-        { en: "Mecca", ar: "مكة" },
+        { en: "CR Verified", ar: "سجل تجاري موثّق" },
+        { en: "VAT Ready", ar: "جاهز للضريبة" },
+        { en: "Maroof", ar: "معروف" },
+        { en: "Zatca e-Invoice", ar: "فاتورة زاتكا" },
       ],
     },
     {
-      eyebrow: { en: "Pay your way", ar: "ادفع كما يناسبك" },
-      title: { en: "Mada, Tabby & Tamara", ar: "مدى وتابي وتمارا" },
+      eyebrow: { en: "Fulfillment made easy", ar: "شحن وتوصيل بكل سهولة" },
+      title: { en: "We pick, pack & deliver", ar: "نجهّز ونغلّف ونوصّل" },
       desc: {
-        en: "Apple Pay, STC Pay, Mada and interest-free installments — all secured by SAMA.",
-        ar: "آبل باي والسي تي سي باي ومدى وتقسيط بدون فوائد — مرخّص من ساما.",
+        en: "Same-day dispatch in Riyadh, Jeddah & Dammam. Deliveries pause respectfully during prayer times.",
+        ar: "شحن في نفس اليوم بالرياض وجدة والدمام. يتوقف التوصيل احتراماً لأوقات الصلاة.",
       },
-      chips: ["mada", "Apple Pay", "STC Pay", "Tabby", "Tamara"],
+      chips: [
+        { en: "SMSA", ar: "سمسا" },
+        { en: "Aramex", ar: "أرامكس" },
+        { en: "SPL", ar: "البريد السعودي" },
+        { en: "J&T", ar: "جي آند تي" },
+      ],
+    },
+    {
+      eyebrow: { en: "Get paid, your way", ar: "استلم أرباحك كما تريد" },
+      title: { en: "Weekly SAR payouts", ar: "تحويلات أسبوعية بالريال" },
+      desc: {
+        en: "Track sales, commissions and payouts in real time. Direct bank transfers via SARIE, fully SAMA-compliant.",
+        ar: "تابع المبيعات والعمولات والتحويلات لحظياً. تحويلات بنكية مباشرة عبر سريع — متوافق مع ساما.",
+      },
+      chips: ["SARIE", "mada Business", "STC Pay", "Apple Pay"],
     },
   ];
 
