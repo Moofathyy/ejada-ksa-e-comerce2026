@@ -83,9 +83,10 @@
     --gradient-ramadan: linear-gradient(135deg, hsl(148 82% 26%), hsl(45 95% 55%));
     --gradient-eid: linear-gradient(135deg, hsl(270 70% 45%), hsl(220 90% 55%));
     --gradient-success: linear-gradient(135deg, hsl(152 86% 53%), hsl(144 49% 53%));
-    --gradient-onboarding: linear-gradient(160deg, hsl(233 60% 62%) 0%, hsl(252 55% 60%) 55%, hsl(265 50% 55%) 100%);
-    --gradient-onboarding-2: linear-gradient(160deg, hsl(305 80% 75%) 0%, hsl(335 85% 70%) 50%, hsl(5 90% 68%) 100%);
-    --gradient-onboarding-3: linear-gradient(160deg, hsl(180 60% 60%) 0%, hsl(160 55% 55%) 55%, hsl(140 50% 50%) 100%);
+    /* Ejada-branded onboarding gradients with KSA cultural accents */
+    --gradient-onboarding: linear-gradient(160deg, hsl(236 100% 25%) 0%, hsl(236 100% 18%) 55%, hsl(233 60% 30%) 100%);
+    --gradient-onboarding-2: linear-gradient(160deg, hsl(236 100% 25%) 0%, hsl(180 55% 28%) 55%, hsl(145 65% 32%) 100%);
+    --gradient-onboarding-3: linear-gradient(160deg, hsl(145 65% 28%) 0%, hsl(42 90% 45%) 60%, hsl(48 100% 55%) 100%);
 
     /* Shadows */
     --shadow-elev1: 0 1px 4px hsl(236 100% 25% / 0.08);
